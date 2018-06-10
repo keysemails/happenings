@@ -1,13 +1,11 @@
 import React from 'react';
 import PostFeed from './PostFeed';
-import { getAuth } from '../../utils/auth';
 import { updateDiscoverFeeds, getDiscoverFeedPosts } from '../../utils/feed';
 
 // the Router will guarantee that this component only mounts if the user is signed in.
 class DiscoverFeed extends React.Component {
 	constructor() {
 		super();
-		this.auth = getAuth();
 		this.state = {
 			posts: {},
 			nextPage: null,
@@ -17,14 +15,17 @@ class DiscoverFeed extends React.Component {
 	}
 	componentWillMount() {
 		this.setState({ _isMounted: true });
+		console.log(this.props.currentUser)
 		this.initDiscoverFeed();
 	}
 	componentWillUnmount() {
 		this.setState({ _isMounted: false });
 	}
 	initDiscoverFeed = () => {
-		const currentUser = this.auth.currentUser;
-		if (currentUser) {
+		const currentUser = this.props.currentUser;
+		// TODO: better is_logged_in or is_not_logged in logic
+		// bewarned !!{} == true
+		if (currentUser.hasOwnProperty('uid')) {
 			updateDiscoverFeeds(currentUser.uid).then(() => {
 				getDiscoverFeedPosts(currentUser.uid).then(data => {
 					const postIds = Object.keys(data.entries);
@@ -57,6 +58,7 @@ class DiscoverFeed extends React.Component {
 			<PostFeed
 				posts={this.state.posts}
 				nextPage={this.state.nextPage}
+				currentUsername={this.props.currentUser.username}
 			/>
 		);
 		return (

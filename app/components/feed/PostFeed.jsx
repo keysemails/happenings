@@ -21,6 +21,7 @@ class PostFeed extends React.Component {
 					caption={postData.text}
 					thumb_storage_uri={postData.thumb_storage_uri}
 					thumb_url={postData.thumb_url}
+					currentUsername={this.props.currentUsername}
 				/>
 			)
 		});
@@ -35,6 +36,7 @@ class PostFeed extends React.Component {
 PostFeed.propTypes = {
 	posts: PropTypes.object,
 	nextPage: PropTypes.func,
+	currentUsername: PropTypes.string,
 }
 
 export default PostFeed;

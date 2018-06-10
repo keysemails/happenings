@@ -95,11 +95,13 @@ class Post extends React.Component {
 		const commentData = this.state.comments.sort((a, b) => {
 			return a.timestamp - b.timestamp
 		});
+		console.log(commentData);
 		return Object.keys(commentData).map(key => {
 			const comment = commentData[key];
 			return (
 				<Comment
 					key={key}
+					id={key}
 					author={comment.author}
 					text={comment.text}
 				/>
@@ -178,6 +180,7 @@ Post.propTypes = {
 	caption: PropTypes.string,
 	thumb_storage_uri: PropTypes.string,
 	timestamp: PropTypes.number,
+	currentUsername: PropTypes.string,
 };
 
 export default Post;
