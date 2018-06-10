@@ -54,7 +54,7 @@
         ".validate": "root.child('posts').child($postId).exists()", // Check that the post exists
         "$uid": {
           ".write": "auth.uid === $uid",
-          ".validate": "newData.val() === now"
+          ".validate": "newData.val() >= now" // can only attend events in the future
         }
       }
     },

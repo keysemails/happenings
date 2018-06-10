@@ -75,8 +75,9 @@ export function updateLike(postId, value) {
 }
 
 // organized by user then by post to more easily get 'all events a user is attending'
-export function updateAttending(postId, value) {
-	const attendVal = value ? firebase.database.ServerValue.TIMESTAMP : null;
+export function updateAttending(postId, event_timestamp, value) {
+	// we are passing in event_timestamp from the post component so the DB has less work to do
+	const attendVal = value ? event_timestamp : null;
 	const updates = {};
 	updates[`/attends_user/${auth.currentUser.uid}/${postId}`] = attendVal;
 	updates[`/attends_post/${postId}/${auth.currentUser.uid}`] = attendVal;
