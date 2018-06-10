@@ -16,3 +16,8 @@ export const RECEIVE_USER = 'RECEIVE_USER';
 
 // post actions
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
+export const BEGIN_POSTS_FETCH = 'BEGIN_POSTS_FETCH';
+export const COMPLETE_POSTS_FETCH = 'COMPLETE_POSTS_FETCH';
+
+// feed actions
+export const FEED_UPDATED = 'FEED_UPDATED'

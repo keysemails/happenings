@@ -62,23 +62,29 @@ class Post extends React.Component {
 		});
 	}
 	loadPostStats = () => {
-		// I need sagas this is messy
-		if (this.auth.currentUser) {
-			registerUserToLike(this.props.id, isLiked => {
-				this.safeSetState({ isLiked });
-			});
-			registerUserAttendance(this.props.id, isAttending => {
-				this.safeSetState({ isAttending });
-			});
-		} else {
-			this.safeSetState({ isLiked: false, isAttending: false});
-		}
-		registerForLikesCount(this.props.id, likeCount => {
-			this.safeSetState({ likeCount });
-		});
-		registerForAttendingCount(this.props.id, attendingCount => {
-			this.safeSetState({ attendingCount });
-		});
+		// // I need sagas this is messy
+		// if (this.auth.currentUser) {
+		// 	// likes/postId/currentUser.uid
+		// 	registerUserToLike(this.props.id, isLiked => {
+		// 		this.safeSetState({ isLiked });
+		// 	});
+		// 	// attends_post/postid/curuid
+		// 	registerUserAttendance(this.props.id, isAttending => {
+		// 		this.safeSetState({ isAttending });
+		// 	});
+		// } else {
+		// 	this.safeSetState({ isLiked: false, isAttending: false});
+		// }
+		// // likes/post id
+		// registerForLikesCount(this.props.id, likeCount => {
+		// 	this.safeSetState({ likeCount });
+		// });
+		// // attends/post id
+		// registerForAttendingCount(this.props.id, attendingCount => {
+		// 	this.safeSetState({ attendingCount });
+		// });
+		this.props.registerForLikesCount(this.props.id);
+		this.props.registerForAttendingCount(this.props.id);
 	}
 	loadMoreComments = () => {
 		let currentComments = this.state.comments;
@@ -128,6 +134,10 @@ class Post extends React.Component {
 		}
 	}
 	render() {
+		const { attendees, likers } = this.props;
+		const numLikes = likers ? Object.keys(likers).length : 0;
+		const numAttendees = attendees ? Object.keys(attendees).length : 0;
+		
 		const nextPageBtn = this.state.nextPage ? (
 			<div className='more-comments-btn'>
 				<span
@@ -146,8 +156,8 @@ class Post extends React.Component {
 				<div className='post-author'>{authorLink}</div>
 				<img src={this.props.full_url} height="300" width="300"></img>
 				<PostStats
-					likeCount={this.state.likeCount}
-					attendingCount={this.state.attendingCount}
+					likeCount={numLikes}
+					attendingCount={numAttendees}
 					isLiked={this.state.isLiked}
 					isAttending={this.state.isAttending}
 					updateLike={(val) => this.updateLike(this.props.id, val)}

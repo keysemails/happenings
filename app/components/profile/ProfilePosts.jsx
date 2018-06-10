@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Post from '../post/Post.jsx';
+import PostContainer from '../post/PostContainer';
 
 /**
  * Publically viewable page, don't need to be signed in
@@ -21,7 +21,7 @@ class ProfilePosts extends React.Component {
 					Object.keys(posts).map(postId => {
 						let postData = posts[postId];
 						return (
-							<Post
+							<PostContainer
 								key={postId}
 								id={postId}
 								author={postData.author}

@@ -4,55 +4,62 @@ import * as types from '../constants/actionTypes.js'
 
 let db = base.initializedApp.database();
 
-export function listenRequested(metaType, ref) {
+export function listenRequested(metaType, ref, postId) {
   return {
     type: types.FIREBASE_LISTEN_REQUESTED,
     metaType,
-    ref
+    ref,
+    postId
   }
 }
-export function listenRejected(metaType, error) {
+export function listenRejected(metaType, error, postId) {
   return {
     type: types.FIREBASE_LISTEN_REJECTED,
     metaType,
-    error
+    error,
+    postId
   }
 }
-export function listenFulfilled(metaType, items) {
+export function listenFulfilled(metaType, items, postId) {
   return {
     type: types.FIREBASE_LISTEN_FULFILLED,
     metaType,
-    items
+    items,
+    postId
   }
 }
-export function listenChildAdded(metaType, id, value) {
+export function listenChildAdded(metaType, id, value, postId) {
   return {
     type: types.FIREBASE_LISTEN_CHILD_ADDED,
     metaType,
     id,
     value,
+    postId
   }
 }
-export function listenChildChanged(metaType, id, value) {
+export function listenChildChanged(metaType, id, value, postId) {
   return {
     type: types.FIREBASE_LISTEN_CHILD_CHANGED,
     metaType,
     id,
     value,
+    postId
   }
 }
-export function listenChildRemoved(metaType, id) {
+export function listenChildRemoved(metaType, id, postId) {
   return {
     type: types.FIREBASE_LISTEN_CHILD_REMOVED,
     metaType,
     id,
+    postId
   }
 }
 
-export function listenRemoved(metaType) {
+export function listenRemoved(metaType, postId) {
   return {
     type: types.FIREBASE_LISTEN_REMOVED,
     metaType,
+    postId
   }
 }
 
@@ -72,40 +79,45 @@ export function removeListener(metaType) {
   }
 }
 
-export function listenToPath(path, metaType) {
+export function listenToPath(path, metaType, postId) {
   return (dispatch, getState) => {
     const ref = db.ref(path)
-    dispatch(listenRequested(metaType, ref))
+    dispatch(listenRequested(metaType, ref, postId))
+
+
+    const stateSlice = () => (
+      postId ? getState().listeners[metaType][postId] : getState().listeners[metaType]
+    );
 
     ref.on('child_added', (snap) => {
-      if (getState().listeners[metaType].inProgress) {
+      if (stateSlice().inProgress) {
         return
       }
       const val = snap.val()
-      dispatch(listenChildAdded(metaType, snap.key, val))
+      dispatch(listenChildAdded(metaType, snap.key, val, postId))
     })
     ref.on('child_changed', (snap) => {
-      if (getState().listeners[metaType].inProgress) {
+      if (stateSlice().inProgress) {
         return
       }
       const val = snap.val()
-      dispatch(listenChildChanged(metaType, snap.key, val))
+      dispatch(listenChildChanged(metaType, snap.key, val, postId))
     })
     ref.on('child_removed', (snap) => {
-      if (getState().listeners[metaType].inProgress) {
+      if (stateSlice().inProgress) {
         return
       }
-      dispatch(listenChildRemoved(metaType, snap.key))
+      dispatch(listenChildRemoved(metaType, snap.key, postId))
     })
     return ref.once('value').then(snap => {
       //better to have an empty object then a null
       //value if data does not exist
       const val = snap.val()
       const value = val ? val : { }
-      dispatch(listenFulfilled(metaType, value))
+      dispatch(listenFulfilled(metaType, value, postId))
     })
     .catch(error => {
-      dispatch(listenRejected(metaType, error))
+      dispatch(listenRejected(metaType, error, postId))
     })
   }
 }
