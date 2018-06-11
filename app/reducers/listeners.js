@@ -68,81 +68,28 @@ const listenersReducer = (state = initialState, action) => {
   let inProgress, error, ref, items;
   switch(action.type) {
     case types.FIREBASE_LISTEN_REQUESTED:
-      // return {
-      //   ...state,
-      //   [action.metaType]: {
-      //     ...state[action.metaType],
-      //     inProgress: true, error: '', ref: action.ref
-      //   }
-      // };
-      // items = state[action.metaType].items;
       items = getProperty(action, state, 'items');
       return shapeState(state, action, true, '', action.ref, items)
     case types.FIREBASE_LISTEN_FULFILLED:
-      // return {
-      //   ...state,
-      //   [action.metaType]: {
-      //     ...state[action.metaType],
-      //     inProgress: false, error: '', items: action.items
-      //   }
-      // };
-      // ref = state[action.metaType].ref;
       ref = getProperty(action, state, 'ref');
       return shapeState(state, action, false, '', ref, action.items)
     case types.FIREBASE_LISTEN_REJECTED:
-      // return {
-      //   ...state,
-      //   [action.metaType]: {
-      //     ...state[action.metaType], inProgress: false, error
-      //   }
-      // };
-
-      // ref = state[action.metaType].ref;
       ref = getProperty(action, state, 'ref');
-
-      // items = state[action.metaType].items;
       items = getProperty(action, state, 'items');
-
       return shapeState(state, action, false, action.error, ref, items)
     case types.FIREBASE_LISTEN_REMOVED:
-      // return {
-      //   ...state,
-      //   [action.metaType]: {
-      //     ...state[action.metaType],
-      //     inProgress: false, error: '', ref: null
-      //   }
-      // };
       return shapeState(state, action, false, '', null, {})
     case types.FIREBASE_LISTEN_CHILD_ADDED:
     case types.FIREBASE_LISTEN_CHILD_CHANGED:
-      // return {
-      //   ...state,
-      //   [action.metaType]: {
-      //     ...state[action.metaType], inProgress: false, error: '', items
-      //   }
-      // };
-
-      // ref = state[action.metaType].ref;
       ref = getProperty(action, state, 'ref');
-
       let currentItems = getProperty(action, state, 'items');
       items = { ...currentItems, [action.id]: action.value };
       return shapeState(state, action, false, '', ref, items);
-
     case types.FIREBASE_LISTEN_CHILD_REMOVED:
-      // return {
-      //   ...state,
-      //   [action.metaType]: {
-      //     ...state[action.metaType], inProgress: false, error: '', items
-      //   }
-      // };
-
       currentItems = getProperty(action, state, 'items');
       items = { ...currentItems };
       delete items[action.id]
       ref = getProperty(action, state, 'ref');
-
-      // ref = state[action.metaType].ref;
       return shapeState(state, action, false, '', ref, items)
     default:
       return state;

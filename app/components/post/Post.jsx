@@ -24,9 +24,6 @@ class Post extends React.Component {
 			mostRecentComment: null,
 		}
 	}
-	componentWillMount() {
-		this.setState({_isMounted: true});
-	}
 	componentWillUnmount() {
 		this.setState({_isMounted: false});
 	}
@@ -47,7 +44,9 @@ class Post extends React.Component {
 		)
 	}
 	componentDidMount() {
+		this.setState({_isMounted: true});
 		this.loadPostStats();
+
 		const postId = this.props.id;
 		fetchComments(postId).then(data => {
 			const comments = toArray(data.entries);
@@ -62,27 +61,6 @@ class Post extends React.Component {
 		});
 	}
 	loadPostStats = () => {
-		// // I need sagas this is messy
-		// if (this.auth.currentUser) {
-		// 	// likes/postId/currentUser.uid
-		// 	registerUserToLike(this.props.id, isLiked => {
-		// 		this.safeSetState({ isLiked });
-		// 	});
-		// 	// attends_post/postid/curuid
-		// 	registerUserAttendance(this.props.id, isAttending => {
-		// 		this.safeSetState({ isAttending });
-		// 	});
-		// } else {
-		// 	this.safeSetState({ isLiked: false, isAttending: false});
-		// }
-		// // likes/post id
-		// registerForLikesCount(this.props.id, likeCount => {
-		// 	this.safeSetState({ likeCount });
-		// });
-		// // attends/post id
-		// registerForAttendingCount(this.props.id, attendingCount => {
-		// 	this.safeSetState({ attendingCount });
-		// });
 		this.props.registerForLikesCount(this.props.id);
 		this.props.registerForAttendingCount(this.props.id);
 	}
@@ -151,8 +129,6 @@ class Post extends React.Component {
 				{this.props.author.username}
 			</Link>
 		);
-		console.log(currUserLiked)
-		console.log(currUserAttending)
 		return (
 			<div className='post-container'>
 				<div className='post-author'>{authorLink}</div>
