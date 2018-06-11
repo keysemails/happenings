@@ -134,10 +134,10 @@ class Post extends React.Component {
 		}
 	}
 	render() {
-		const { attendees, likers } = this.props;
+		const { attendees, likers, currUserLiked, currUserAttending } = this.props;
 		const numLikes = likers ? Object.keys(likers).length : 0;
 		const numAttendees = attendees ? Object.keys(attendees).length : 0;
-		
+
 		const nextPageBtn = this.state.nextPage ? (
 			<div className='more-comments-btn'>
 				<span
@@ -151,6 +151,8 @@ class Post extends React.Component {
 				{this.props.author.username}
 			</Link>
 		);
+		console.log(currUserLiked)
+		console.log(currUserAttending)
 		return (
 			<div className='post-container'>
 				<div className='post-author'>{authorLink}</div>
@@ -158,8 +160,8 @@ class Post extends React.Component {
 				<PostStats
 					likeCount={numLikes}
 					attendingCount={numAttendees}
-					isLiked={this.state.isLiked}
-					isAttending={this.state.isAttending}
+					isLiked={currUserLiked}
+					isAttending={currUserAttending}
 					updateLike={(val) => this.updateLike(this.props.id, val)}
 					updateAttending={(val) => this.updateAttend(this.props.id, val)}
 				/>

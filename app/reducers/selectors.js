@@ -13,3 +13,19 @@ export const selectAuthoredPosts = (state, authorName) => {
 
   return res;
 }
+
+export const isUserAttendee = (state, ownProps) => {
+  if (state.listeners.attendees[ownProps.id]) {
+    const uid = state.session.currentUser.uid
+    return Object.keys(state.listeners.attendees[ownProps.id].items).includes(uid);
+  }
+  return false;
+}
+
+export const isUserLiker = (state, ownProps) => {
+  if (state.listeners.likers[ownProps.id]) {
+    const uid = state.session.currentUser.uid
+    return Object.keys(state.listeners.likers[ownProps.id].items).includes(uid);
+  }
+  return false;
+}
