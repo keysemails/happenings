@@ -16,7 +16,8 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = dispatch => ({
   registerForLikesCount: (postId) => dispatch(listenToPath(`/likes/${postId}`, 'likers', postId)),
-  registerForAttendingCount: (postId) => dispatch(listenToPath(`/attends_post/${postId}`, 'attendees', postId))
+  registerForAttendingCount: (postId) => dispatch(listenToPath(`/attends_post/${postId}`, 'attendees', postId)),
+  removeListener: (metaType, postId) => dispatch(removeListener(metaType, postId))
 });
 
 export default connect(

@@ -26,6 +26,8 @@ class Post extends React.Component {
 	}
 	componentWillUnmount() {
 		this.setState({_isMounted: false});
+		this.props.removeListener('likers', this.props.id);
+		this.props.removeListener('attendees', this.props.id);
 	}
 	safeSetState = (state) => {
 		if (this.state._isMounted) {

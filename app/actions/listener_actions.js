@@ -63,18 +63,22 @@ export function listenRemoved(metaType, postId) {
   }
 }
 
-export function removeListenerRef(state, metaType) {
+export function removeListenerRef(state, metaType, postId) {
   if (state && state.listeners &&  state.listeners[metaType] &&
     state.listeners[metaType].ref) {
     state.listeners[metaType].ref.off();
+  } else if (postId && state && state.listeners &&
+    state.listeners[metaType] && state.listeners[metaType][postId] &&
+    state.listeners[metaType][postId].ref) {
+      state.listeners[metaType][postId].ref.off();
   }
   return Promise.resolve();
 }
 
-export function removeListener(metaType) {
+export function removeListener(metaType, postId) {
   return (dispatch, getState) => {
-    return removeListenerRef(getState(), metaType).then(() => {
-      dispatch(listenRemoved(metaType))
+    return removeListenerRef(getState(), metaType, postId).then(() => {
+      dispatch(listenRemoved(metaType, postId))
     })
   }
 }
