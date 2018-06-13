@@ -10,7 +10,7 @@ import SignUpForm from './SignUpForm.jsx';
 import LoginFormContainer from './LoginFormContainer.js';
 
 import ProfilePageContainer from './profile/ProfilePageContainer.jsx';
-import PostPage from './PostPage.jsx';
+import PostPage from './post/PostPage.jsx';
 import AccountSettings from './account_settings/AccountSettings.jsx';
 
 import CreateEvent from './create/CreateEvent.jsx';
