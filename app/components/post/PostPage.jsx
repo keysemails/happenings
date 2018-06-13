@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
-import { getPostData } from '../utils/post';
-import Post from './post/Post.jsx';
+import { getPostData as _getPostData } from '../../utils/post';
+import PostContainer from './PostContainer';
 
 /**
  * Publically viewable Event page, don't need to be signed in. Will redirect to
@@ -22,7 +22,7 @@ class PostPage extends React.Component {
 		}
 	}
 	componentDidMount() {
-		getPostData(this.props.match.params.event_id).then(snapshot => {
+		_getPostData(this.props.match.params.event_id).then(snapshot => {
 			const post = snapshot.val();
 			if (!post) {
 				this.setState({
@@ -39,7 +39,7 @@ class PostPage extends React.Component {
 	addPost = () => {
 		const postData = this.state.postData;
 		return (
-			<Post
+			<PostContainer
 				id={this.props.match.params.event_id}
 				author={postData.author}
 				full_storage_uri={postData.full_storage_uri}

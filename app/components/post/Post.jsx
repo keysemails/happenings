@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 import { getAuth } from '../../utils/auth';
 import { toArray } from '../../utils/index';
 import { fetchComments, registerUserToLike, addComment, subscribeToComments,
-	registerForLikesCount, registerForCommentsCount, updateLike as _updateLike,
-	updateAttending, registerUserAttendance, registerForAttendingCount
+	registerForCommentsCount, updateLike as _updateLike,
+	updateAttending, registerUserAttendance
 } from '../../utils/post';
 
 import PostStats from './PostStats.jsx';
@@ -24,11 +24,10 @@ class Post extends React.Component {
 			mostRecentComment: null,
 		}
 	}
-	componentWillMount() {
-		this.setState({_isMounted: true});
-	}
 	componentWillUnmount() {
 		this.setState({_isMounted: false});
+		this.props.removeListener('likers', this.props.id);
+		this.props.removeListener('attendees', this.props.id);
 	}
 	safeSetState = (state) => {
 		if (this.state._isMounted) {
@@ -47,7 +46,9 @@ class Post extends React.Component {
 		)
 	}
 	componentDidMount() {
+		this.setState({_isMounted: true});
 		this.loadPostStats();
+
 		const postId = this.props.id;
 		fetchComments(postId).then(data => {
 			const comments = toArray(data.entries);
@@ -62,23 +63,8 @@ class Post extends React.Component {
 		});
 	}
 	loadPostStats = () => {
-		// I need sagas this is messy
-		if (this.auth.currentUser) {
-			registerUserToLike(this.props.id, isLiked => {
-				this.safeSetState({ isLiked });
-			});
-			registerUserAttendance(this.props.id, isAttending => {
-				this.safeSetState({ isAttending });
-			});
-		} else {
-			this.safeSetState({ isLiked: false, isAttending: false});
-		}
-		registerForLikesCount(this.props.id, likeCount => {
-			this.safeSetState({ likeCount });
-		});
-		registerForAttendingCount(this.props.id, attendingCount => {
-			this.safeSetState({ attendingCount });
-		});
+		this.props.registerForLikesCount(this.props.id);
+		this.props.registerForAttendingCount(this.props.id);
 	}
 	loadMoreComments = () => {
 		let currentComments = this.state.comments;
@@ -130,6 +116,10 @@ class Post extends React.Component {
 		}
 	}
 	render() {
+		const { attendees, likers, currUserLiked, currUserAttending } = this.props;
+		const numLikes = likers ? Object.keys(likers).length : 0;
+		const numAttendees = attendees ? Object.keys(attendees).length : 0;
+
 		const nextPageBtn = this.state.nextPage ? (
 			<div className='more-comments-btn'>
 				<span
@@ -148,10 +138,10 @@ class Post extends React.Component {
 				<div className='post-author'>{authorLink}</div>
 				<img src={this.props.full_url} height="300" width="300"></img>
 				<PostStats
-					likeCount={this.state.likeCount}
-					attendingCount={this.state.attendingCount}
-					isLiked={this.state.isLiked}
-					isAttending={this.state.isAttending}
+					likeCount={numLikes}
+					attendingCount={numAttendees}
+					isLiked={currUserLiked}
+					isAttending={currUserAttending}
 					updateLike={(val) => this.updateLike(this.props.id, val)}
 					updateAttending={(val) => this.updateAttend(this.props.id, val)}
 				/>

@@ -17,7 +17,7 @@ export function getUserFeedPosts(uid) {
 
 // make sure the user's /feed/ is updated with followed user's NEW posts
 // returns a promise once thats done
-export function updateDiscoverFeeds(currentUserUid) {
+export function updateMainFeed(currentUserUid) {
 	const ref = db.ref(`/people/${currentUserUid}/following`);
 	return ref.once('value', data => {
 		const following = data.val();
@@ -31,7 +31,7 @@ export function updateDiscoverFeeds(currentUserUid) {
 		const updateOperations = Object.keys(following).map(followedUid => {
 			let followedUserPostsRef = db.ref(`/people/${followedUid}/posts`);
 			const lastSyncedPostId = following[followedUid];
-			// uhh 
+			// uhh
 			if (lastSyncedPostId instanceof String) {
 				followedUserPostsRef = followedUserPostsRef.orderByKey().startAt(lastSyncedPostId);
 			}
@@ -60,7 +60,7 @@ export function updateDiscoverFeeds(currentUserUid) {
  * We return a `Promise` which resolves with an Map of posts and a function to the next page or
  * `null` if there is no next page.
  */
-export function getDiscoverFeedPosts(currentUserUid) {
+export function getMainFeedPosts(currentUserUid) {
 	return getPaginatedFeed(`/feed/${currentUserUid}`,
 		PAGE_SIZES.DISCOVER_FEED, null, true);
 }
