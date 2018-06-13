@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 import { getAuth } from '../../utils/auth';
 import { toArray } from '../../utils/index';
 import { fetchComments, registerUserToLike, addComment, subscribeToComments,
-	registerForLikesCount, registerForCommentsCount, updateLike as _updateLike,
-	updateAttending, registerUserAttendance, registerForAttendingCount
+	registerForCommentsCount, updateLike as _updateLike,
+	updateAttending, registerUserAttendance
 } from '../../utils/post';
 
 import PostStats from './PostStats.jsx';
