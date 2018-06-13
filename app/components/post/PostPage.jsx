@@ -40,7 +40,7 @@ class PostPage extends React.Component {
 		const postData = this.state.postData;
 		return (
 			<PostContainer
-				id={postId}
+				id={postData.id}
 				author={postData.author}
 				full_storage_uri={postData.full_storage_uri}
 				full_url={postData.full_url}
