@@ -22,6 +22,10 @@ class PostFeed extends React.Component {
 					thumb_storage_uri={postData.thumb_storage_uri}
 					thumb_url={postData.thumb_url}
 					currentUsername={this.props.currentUsername}
+					event_timestamp={postData.event_timestamp}
+					title={postData.title}
+					location={postData.location}
+					description={postData.description}
 				/>
 			)
 		});

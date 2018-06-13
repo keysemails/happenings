@@ -118,7 +118,7 @@ class Post extends React.Component {
 	}
 	updateAttend(postId, val) {
 		if (this.auth.currentUser) {
-			updateAttending(postId, val);
+			updateAttending(postId, this.props.event_timestamp, val);
 		} else {
 			// TODO redirect to the public landing page
 			console.log('make an account!!');
@@ -179,8 +179,11 @@ Post.propTypes = {
 	full_url: PropTypes.string,
 	caption: PropTypes.string,
 	thumb_storage_uri: PropTypes.string,
-	timestamp: PropTypes.number,
 	currentUsername: PropTypes.string,
+	event_timestamp: PropTypes.number,
+	title: PropTypes.string,
+	location: PropTypes.string,
+	description: PropTypes.string,
 };
 
 export default Post;
