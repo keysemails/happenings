@@ -8,8 +8,7 @@ import Post from '../post/Post.jsx';
 
 class PostFeed extends React.Component {
 	addPosts() {
-		const posts = this.props.posts;
-		return Object.keys(posts).map(postId => {
+		return Object.keys(this.props.posts).map(postId => {
 			let postData = posts[postId];
 			return (
 				<Post
