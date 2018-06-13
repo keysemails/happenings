@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { getAuth } from '../../utils/auth';
 import { toArray } from '../../utils/index';
 import { fetchComments, registerUserToLike, addComment, subscribeToComments,
-	registerForCommentsCount, updateLike as _updateLike,
+	registerForCommentsCount, updateLike as _updateLike, deletePost,
 	updateAttending, registerUserAttendance
 } from '../../utils/post';
 
@@ -23,6 +23,23 @@ class Post extends React.Component {
 			nextPage: null,
 			mostRecentComment: null,
 		}
+	}
+	componentDidMount() {
+		this.setState({_isMounted: true});
+		this.loadPostStats();
+
+		const postId = this.props.id;
+		fetchComments(postId).then(data => {
+			const comments = toArray(data.entries);
+			const latestId = Object.keys(data.entries)[comments.length - 1];
+			this.safeSetState({
+				comments: comments,
+				gotComments: true,
+				nextPage: data.nextPage,
+				mostRecentComment: latestId
+			});
+			this.listenForNewComments();
+		});
 	}
 	componentWillUnmount() {
 		this.setState({_isMounted: false});
@@ -45,23 +62,6 @@ class Post extends React.Component {
 			}
 		)
 	}
-	componentDidMount() {
-		this.setState({_isMounted: true});
-		this.loadPostStats();
-
-		const postId = this.props.id;
-		fetchComments(postId).then(data => {
-			const comments = toArray(data.entries);
-			const latestId = Object.keys(data.entries)[comments.length - 1];
-			this.safeSetState({
-				comments: comments,
-				gotComments: true,
-				nextPage: data.nextPage,
-				mostRecentComment: latestId
-			});
-			this.listenForNewComments();
-		});
-	}
 	loadPostStats = () => {
 		this.props.registerForLikesCount(this.props.id);
 		this.props.registerForAttendingCount(this.props.id);
@@ -81,7 +81,6 @@ class Post extends React.Component {
 		const commentData = this.state.comments.sort((a, b) => {
 			return a.timestamp - b.timestamp
 		});
-		console.log(commentData);
 		return Object.keys(commentData).map(key => {
 			const comment = commentData[key];
 			return (
@@ -115,11 +114,23 @@ class Post extends React.Component {
 			addComment(this.auth.currentUser, this.props.id, text)
 		}
 	}
+	deletePost = () => {
+		const {id, picURI, thumbURI } = this.props;
+		deletePost(id, picURI, thumbURI).then(res => {
+			console.log('Deleted post ', id);
+		});
+	}
 	render() {
 		const { attendees, likers, currUserLiked, currUserAttending } = this.props;
 		const numLikes = likers ? Object.keys(likers).length : 0;
 		const numAttendees = attendees ? Object.keys(attendees).length : 0;
-
+		
+		const currUserIsAuthor = (this.props.author.uid === this.auth.currentUser.uid);
+		const deletePostBtn = currUserIsAuthor ? (
+			<div className='delete-post-btn' onClick={this.deletePost}>
+			[x]
+			</div>
+		) : null;
 		const nextPageBtn = this.state.nextPage ? (
 			<div className='more-comments-btn'>
 				<span
@@ -136,6 +147,7 @@ class Post extends React.Component {
 		return (
 			<div className='post-container'>
 				<div className='post-author'>{authorLink}</div>
+				{deletePostBtn}
 				<img src={this.props.full_url} height="300" width="300"></img>
 				<PostStats
 					likeCount={numLikes}
@@ -169,7 +181,6 @@ Post.propTypes = {
 	full_url: PropTypes.string,
 	caption: PropTypes.string,
 	thumb_storage_uri: PropTypes.string,
-	currentUsername: PropTypes.string,
 	event_timestamp: PropTypes.number,
 	title: PropTypes.string,
 	location: PropTypes.string,

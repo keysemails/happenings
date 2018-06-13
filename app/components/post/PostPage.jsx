@@ -40,13 +40,18 @@ class PostPage extends React.Component {
 		const postData = this.state.postData;
 		return (
 			<PostContainer
-				id={this.props.match.params.event_id}
+				id={postId}
 				author={postData.author}
 				full_storage_uri={postData.full_storage_uri}
 				full_url={postData.full_url}
 				caption={postData.text}
-				thumb_storage_uri={postData.thumb_url}
+				thumb_storage_uri={postData.thumb_storage_uri}
 				thumb_url={postData.thumb_url}
+				currentUsername={this.props.currentUsername}
+				event_timestamp={postData.event_timestamp}
+				title={postData.title}
+				location={postData.location}
+				description={postData.description}
 			/>
 		)
 	}
