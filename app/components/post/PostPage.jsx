@@ -23,7 +23,9 @@ class PostPage extends React.Component {
 	}
 	componentDidMount() {
 		_getPostData(this.props.match.params.event_id).then(snapshot => {
+			console.log(snapshot);
 			const post = snapshot.val();
+			console.log(post);
 			if (!post) {
 				this.setState({
 					postNotFound: true
@@ -40,14 +42,13 @@ class PostPage extends React.Component {
 		const postData = this.state.postData;
 		return (
 			<PostContainer
-				id={postData.id}
+				id={this.props.match.params.event_id} // :'(
 				author={postData.author}
 				full_storage_uri={postData.full_storage_uri}
 				full_url={postData.full_url}
 				caption={postData.text}
 				thumb_storage_uri={postData.thumb_storage_uri}
 				thumb_url={postData.thumb_url}
-				currentUsername={this.props.currentUsername}
 				event_timestamp={postData.event_timestamp}
 				title={postData.title}
 				location={postData.location}

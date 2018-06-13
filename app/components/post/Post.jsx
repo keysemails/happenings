@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import { getAuth } from '../../utils/auth';
-import { toArray } from '../../utils/index';
+import { toArray as _toArray } from '../../utils/index';
 import { fetchComments, registerUserToLike, addComment, subscribeToComments,
 	registerForCommentsCount, updateLike as _updateLike, deletePost,
-	updateAttending, registerUserAttendance
+	updateAttending, registerUserAttendance, deleteComment as _deleteComment
 } from '../../utils/post';
 
 import PostStats from './PostStats.jsx';
@@ -30,7 +30,7 @@ class Post extends React.Component {
 
 		const postId = this.props.id;
 		fetchComments(postId).then(data => {
-			const comments = toArray(data.entries);
+			const comments = _toArray(data.entries);
 			const latestId = Object.keys(data.entries)[comments.length - 1];
 			this.safeSetState({
 				comments: comments,
@@ -71,7 +71,7 @@ class Post extends React.Component {
 		let getNextPage = this.state.nextPage;
 		getNextPage().then(data => {
 			this.safeSetState({
-				comments: currentComments.concat(toArray(data.entries)),
+				comments: currentComments.concat(_toArray(data.entries)),
 				gotComments: true,
 				nextPage: data.nextPage,
 			});
@@ -81,14 +81,17 @@ class Post extends React.Component {
 		const commentData = this.state.comments.sort((a, b) => {
 			return a.timestamp - b.timestamp
 		});
-		return Object.keys(commentData).map(key => {
-			const comment = commentData[key];
+		console.log(commentData);
+		return Object.keys(commentData).map(idx => {
+			const comment = commentData[idx];
 			return (
 				<Comment
-					key={key}
-					id={key}
+					key={comment.key}
+					id={comment.key}
 					author={comment.author}
 					text={comment.text}
+					currentUID={this.auth.currentUser.uid}
+					deleteComment={(key) => this.deleteComment(comment.key)}
 				/>
 			)
 		});
@@ -111,8 +114,13 @@ class Post extends React.Component {
 	}
 	submitComment = (text) => {
 		if (this.auth.currentUser) {
-			addComment(this.auth.currentUser, this.props.id, text)
+			addComment(this.props.currentUser, this.props.id, text)
 		}
+	}
+	deleteComment = (commentId) => {
+		_deleteComment(this.props.id, commentId).then(res => {
+			console.log('deleted comment ', commentId);
+		});
 	}
 	deletePost = () => {
 		const {id, picURI, thumbURI } = this.props;

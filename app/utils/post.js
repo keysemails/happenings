@@ -69,6 +69,7 @@ export function registerForAttendingCount(postId, callback) {
  * Updates the like status of a post from the current user.
  */
 export function updateLike(postId, value) {
+	console.log(postId, value);
 	return db.ref(`/likes/${postId}/${auth.currentUser.uid}`).set(
 		value ? firebase.database.ServerValue.TIMESTAMP : null
 	);
@@ -76,6 +77,7 @@ export function updateLike(postId, value) {
 
 // organized by user then by post to more easily get 'all events a user is attending'
 export function updateAttending(postId, event_timestamp, value) {
+	console.log(postId, event_timestamp, value);
 	// we are passing in event_timestamp from the post component so the DB has less work to do
 	const attendVal = value ? event_timestamp : null;
 	const updates = {};
@@ -85,23 +87,21 @@ export function updateAttending(postId, event_timestamp, value) {
 }
 
 export function addComment(currentUser, postId, text) {
-	// TODO: this is sort of unacceptable in terms of performance
-	// should not need to ask the server for the username before we make a comment
-	// is there a way to store username globally without using Redux?
-	getUsername(currentUser.uid).then(snapshot => {
-		const username = snapshot.val();
-		const comment = {
-			text: text,
-			timestamp: Date.now(),
-			author: {
-				uid: currentUser.uid,
-				full_name: currentUser.displayName,
-				profile_picture: currentUser.photoURL,
-				username: username
-			}
-		};
-		return db.ref(`/comments/${postId}`).push(comment);
-	});
+	// :param currentUser comes from the Redux store
+	const comment = {
+		text: text,
+		timestamp: Date.now(),
+		author: {
+			uid: currentUser.uid,
+			username: currentUser.username
+		}
+	};
+	return db.ref(`/comments/${postId}`).push(comment);
+}
+
+export function deleteComment(postId, commentId) {
+	console.log('deleting', postId, commentId);
+	return db.ref(`/comments/${postId}/${commentId}`).set(null);
 }
 
 export function deletePost(postId, picStorageUri, thumbStorageUri) {
