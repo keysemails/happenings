@@ -140,7 +140,6 @@ class Post extends React.Component {
 		});
 	}
 	render() {
-		console.log(this.state.comments);
 		const { attendees, likers, currUserLiked, currUserAttending } = this.props;
 		const numLikes = likers ? Object.keys(likers).length : 0;
 		const numAttendees = attendees ? Object.keys(attendees).length : 0;

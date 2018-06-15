@@ -100,7 +100,6 @@ export function addComment(currentUser, postId, text) {
 }
 
 export function deleteComment(postId, commentId) {
-	console.log('deleting', postId, commentId);
 	return db.ref(`/comments/${postId}/${commentId}`).set(null);
 }
 
