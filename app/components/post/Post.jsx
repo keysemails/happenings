@@ -118,7 +118,17 @@ class Post extends React.Component {
 	}
 	deleteComment = (commentId) => {
 		_deleteComment(this.props.id, commentId).then(res => {
-			console.log('deleted comment ', commentId);
+			// TODO: this is kind of shitty in that
+			// it assumes the DB update succeeds.
+			let newComments = [];
+			this.state.comments.forEach(comment => {
+				if (comment.key !== commentId) {
+					newComments.push(comment);
+				}
+			});
+			this.safeSetState({
+				comments: newComments
+			});
 		});
 	}
 	deletePost = () => {
@@ -130,6 +140,7 @@ class Post extends React.Component {
 		});
 	}
 	render() {
+		console.log(this.state.comments);
 		const { attendees, likers, currUserLiked, currUserAttending } = this.props;
 		const numLikes = likers ? Object.keys(likers).length : 0;
 		const numAttendees = attendees ? Object.keys(attendees).length : 0;
