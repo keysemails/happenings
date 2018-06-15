@@ -125,6 +125,8 @@ class Post extends React.Component {
 		const {id, full_storage_uri, thumb_storage_uri } = this.props;
 		_deletePost(id, full_storage_uri, thumb_storage_uri).then(res => {
 			console.log('Deleted post ', id);
+			//TODO: better handling of this
+			window.location.reload();
 		});
 	}
 	render() {
