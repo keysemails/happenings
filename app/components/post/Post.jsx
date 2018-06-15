@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { getAuth } from '../../utils/auth';
 import { toArray as _toArray } from '../../utils/index';
 import { fetchComments, registerUserToLike, addComment, subscribeToComments,
-	registerForCommentsCount, updateLike as _updateLike, deletePost,
+	registerForCommentsCount, updateLike as _updateLike, deletePost as _deletePost,
 	updateAttending, registerUserAttendance, deleteComment as _deleteComment
 } from '../../utils/post';
 
@@ -81,7 +81,6 @@ class Post extends React.Component {
 		const commentData = this.state.comments.sort((a, b) => {
 			return a.timestamp - b.timestamp
 		});
-		console.log(commentData);
 		return Object.keys(commentData).map(idx => {
 			const comment = commentData[idx];
 			return (
@@ -123,8 +122,8 @@ class Post extends React.Component {
 		});
 	}
 	deletePost = () => {
-		const {id, picURI, thumbURI } = this.props;
-		deletePost(id, picURI, thumbURI).then(res => {
+		const {id, full_storage_uri, thumb_storage_uri } = this.props;
+		_deletePost(id, full_storage_uri, thumb_storage_uri).then(res => {
 			console.log('Deleted post ', id);
 		});
 	}

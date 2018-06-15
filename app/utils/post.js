@@ -106,6 +106,7 @@ export function deleteComment(postId, commentId) {
 
 export function deletePost(postId, picStorageUri, thumbStorageUri) {
 	return db.ref(`/attends_post/${postId}`).once('value', affiliatedUsers => {
+		const peopleGoing = affiliatedUsers.val();
 		const updates = {};
 		updates[`/people/${auth.currentUser.uid}/posts/${postId}`] = null;
 		updates[`/comments/${postId}`] = null;
@@ -114,11 +115,12 @@ export function deletePost(postId, picStorageUri, thumbStorageUri) {
 		updates[`/feed/${auth.currentUser.uid}/${postId}`] = null;
 		updates[`/attends_post/${postId}`] = null;
 
-		// for all users attending, clear this post from the events they are attending
-		Object.keys(affiliatedUsers.val()).forEach(userId => {
-			// TODO: maybe send some kind of notification to let them know its cancelled
-			updates[`/attends_user/${userId}/${postId}`] = null;
-		});
+		if (peopleGoing) {
+			Object.keys(peopleGoing).forEach(userId => {
+				// TODO: maybe send some kind of notification to let them know its cancelled
+				updates[`/attends_user/${userId}/${postId}`] = null;
+			});
+		}
 		return db.ref().update(updates);
 	})
 }
