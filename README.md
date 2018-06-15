@@ -42,7 +42,7 @@ Keeps track of what events a given user is attending. `uid` is first child, `pos
 Our event posters are stored in buckets. When an image is uploaded into our bucket, a Google Cloud Function is triggered. This function uses ImageMagick to create a thumbnail version of the new image. The thumbnail is stored at a deterministic location within the same bucket.
 
 ### Full size images
-`HAPPENINGS_BUCKET/${uid}/full/${new_post_key}/${filename}`
+`<HAPPENINGS_BUCKET>/${uid}/full/${new_post_key}/${filename}`
 
 ### Thumbnails
-`HAPPENINGS_BUCKET`/${uid}/thumb/${new_post_key}/thumb_${filename}`
+`<HAPPENINGS_BUCKET>/${uid}/thumb/${new_post_key}/thumb_${filename}`
