@@ -1,42 +1,35 @@
 import React from 'react';
 import PostFeed from './PostFeed';
-import { getPosts } from '../../utils/feed';
-import { getAuth } from '../../utils/auth';
+import { getDiscoverFeedPosts } from '../../utils/feed';
 
-// TODO: Rename this to TimelineFeed or something
+// the Router will guarantee that this component only mounts if the user is signed in.
 class MainFeed extends React.Component {
 	constructor() {
 		super();
-		this.auth = getAuth();
-		this.URI = '/posts/';
-		this.PAGE_SIZE = 5;
-		this.state = {
-			posts: {},
-			nextPage: null,
-			gotPostData: false,
-		}
 	}
 	componentDidMount() {
-		getPosts(this.URI, this.PAGE_SIZE).then(data => {
-			this.setState({
-				posts: data.entries,
-				gotPostData: true,
-				nextPage: data.nextPage,
-			});
-		});
+		this.props.getMainFeed(this.props.currentUser.uid)
 	}
 	render() {
-		const postFeed = (
+		const { posts, loading, nextPage } = this.props;
+		const noPostMsg = 'no posts yet! go follow some people!';
+
+		if (loading) {
+			return <h1>LOADING</h1>
+		}
+		const ret = Object.keys(posts).length === 0 ? (
+			<div>{noPostMsg}</div>
+		) : (
 			<PostFeed
-				posts={this.state.posts}
-				nextPage={this.state.nextPage}
+				posts={posts}
+				nextPage={nextPage}
 			/>
 		);
 		return (
-			<div>
-				{this.state.gotPostData && postFeed}
-			</div>
-		);
+				<div>
+					{ ret }
+				</div>
+		)
 	}
 }
 

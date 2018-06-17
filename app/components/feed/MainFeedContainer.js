@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { updateMainFeed, getMainFeed } from '../../actions/post_actions';
-import DiscoverFeed from './DiscoverFeed';
+import MainFeed from './MainFeed';
 
 const mapStateToProps = state => ({
   loggedIn: !!state.session.currentUser,
@@ -18,4 +18,4 @@ const mapDispatchToProps = dispatch => ({
 export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(DiscoverFeed));
+)(MainFeed));
