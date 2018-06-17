@@ -39,7 +39,6 @@ class PostFeed extends React.Component {
 PostFeed.propTypes = {
 	posts: PropTypes.object,
 	nextPage: PropTypes.func,
-	currentUsername: PropTypes.string,
 }
 
 export default PostFeed;
