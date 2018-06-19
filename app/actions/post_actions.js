@@ -1,16 +1,16 @@
-import * as feedUtil from '../utils/feed';
+import * as FeedUtil from '../utils/feed';
 import * as types from '../constants/actionTypes.js'
 
 export const getUserPosts = (uid) => dispatch => (
-    feedUtil.getUserFeedPosts(uid).then(data => {
+    FeedUtil.getUserFeedPosts(uid).then(data => {
       dispatch(receivePosts(data))
     })
 );
 
 export const getMainFeed = (uid) => dispatch => {
   dispatch(startLoadingPosts());
-  return feedUtil.updateMainFeed(uid).then(() => {
-    feedUtil.getMainFeedPosts(uid).then((data) => {
+  return FeedUtil.updateMainFeed(uid).then(() => {
+    FeedUtil.getMainFeedPosts(uid).then((data) => {
       dispatch(receivePosts(data))
     })
   })

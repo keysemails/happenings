@@ -1,6 +1,7 @@
 import React from 'react';
 import PostFeed from './PostFeed';
 import { getPosts } from '../../utils/feed';
+import { updateDiscoverFeed } from '../../utils/discover';
 import { getAuth } from '../../utils/auth';
 
 // TODO: Rename this to TimelineFeed or something
