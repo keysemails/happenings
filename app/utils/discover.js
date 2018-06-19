@@ -7,16 +7,17 @@ const db = base.initializedApp.database();
  * We return a `Promise` which resolves with an Map of posts and a function to the next page or
  * `null` if there is no next page.
  */
-export function recordUserActivity(uid, username, postId, event, interactionType) {
-	const timestamp = event.event_timestamp;
-	const discover_uri = `/activity/${uid}`;
+export function recordUserActivity(currentUser, postId, event_timestamp, interactionType) {
+	const discover_uri = `/activity/${currentUser.uid}`;
 	const discover_info = {
 		'postId': postId,
 		'event_timestamp': event_timestamp,
-		'username': username,
-		'interaction_type': interaction_type
+		'username': currentUser.username,
+		'uid': currentUser.uid,
+		'interaction_type': interactionType
 	}
 	// this endpoint will also be indexed on child event_timestamp
+	console.log(currentUser, postId, event_timestamp, interactionType);
 	return db.ref(discover_uri).push(discover_info);
 }
 

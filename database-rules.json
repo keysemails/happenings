@@ -21,6 +21,34 @@
         }
       }
     },
+    "activity": {
+      ".read": true,
+      ".indexOn": ["event_timestamp", "postId"],
+      "$uid": {
+        ".write": "auth.uid === $uid",
+        "$activityId": {
+          "postId": {
+            ".validate": "root.child('posts').child(newData.val()).exists()"
+          },
+          "uid": {
+            ".validate": "auth.uid === newData.val()"
+          }
+        }
+      }
+    },
+    "discover": {
+      "$uid": {
+        ".read": "auth.uid === $uid",
+        ".write": "auth.uid === $uid",
+        "$activityId": {
+          ".write": "auth.uid === data.child('uid').val()",
+          ".validate": "root.child('activity').child(newData.val()).exists()",
+          "postId": {
+            ".validate": "data.exists() && root.child('posts').child(newData.val()).exists()"
+          }
+        }
+      }
+    },
     "comments": {
       ".read": true,
       "$postId": {

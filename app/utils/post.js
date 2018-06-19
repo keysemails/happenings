@@ -1,6 +1,7 @@
 import firebase from 'firebase';
 import base from './rebase';
 import { getPaginatedFeed, subscribeToFeed, getUsername } from './index';
+import { recordUserActivity } from './discover';
 import { getAuth } from './auth';
 import { PAGE_SIZES } from '../constants';
 
@@ -68,16 +69,22 @@ export function registerForAttendingCount(postId, callback) {
 /**
  * Updates the like status of a post from the current user.
  */
-export function updateLike(postId, value) {
+export function updateLike(currentUser, postId, event_timestamp, value) {
 	console.log(postId, value);
+	if (value) {
+		recordUserActivity(currentUser, postId, event_timestamp, 'like');
+	}
 	return db.ref(`/likes/${postId}/${auth.currentUser.uid}`).set(
 		value ? firebase.database.ServerValue.TIMESTAMP : null
 	);
 }
 
 // organized by user then by post to more easily get 'all events a user is attending'
-export function updateAttending(postId, event_timestamp, value) {
+export function updateAttending(currentUser, postId, event_timestamp, value) {
 	console.log(postId, event_timestamp, value);
+	if (value) {
+		recordUserActivity(currentUser, postId, event_timestamp, 'attend');
+	}
 	// we are passing in event_timestamp from the post component so the DB has less work to do
 	const attendVal = value ? event_timestamp : null;
 	const updates = {};
@@ -86,8 +93,8 @@ export function updateAttending(postId, event_timestamp, value) {
 	return db.ref().update(updates);
 }
 
-export function addComment(currentUser, postId, text) {
-	// :param currentUser comes from the Redux store
+export function addComment(currentUser, postId, event_timestamp, text) {
+	recordUserActivity(currentUser, postId, event_timestamp, 'comment');
 	const comment = {
 		text: text,
 		timestamp: Date.now(),

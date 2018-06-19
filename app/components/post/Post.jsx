@@ -95,9 +95,11 @@ class Post extends React.Component {
 			)
 		});
 	}
-	updateLike(postId, val) {
+	updateLike(val) {
 		if (this.auth.currentUser) {
-			_updateLike(postId, val);
+			// _updateLike(currentUser, postId, event_timestamp, value)
+			const { currentUser, id, event_timestamp,} = this.props;
+			_updateLike(currentUser, id, event_timestamp, val);
 		} else {
 			// TODO: redirect to the public landing page
 			console.log('create an account!');
@@ -105,7 +107,8 @@ class Post extends React.Component {
 	}
 	updateAttend(postId, val) {
 		if (this.auth.currentUser) {
-			updateAttending(postId, this.props.event_timestamp, val);
+			const { currentUser, id, event_timestamp } = this.props;
+			updateAttending(currentUser, id, event_timestamp, val);
 		} else {
 			// TODO redirect to the public landing page
 			console.log('make an account!!');
@@ -113,7 +116,8 @@ class Post extends React.Component {
 	}
 	submitComment = (text) => {
 		if (this.auth.currentUser) {
-			addComment(this.props.currentUser, this.props.id, text)
+			const { currentUser, event_timestamp, id } = this.props;
+			addComment(currentUser, id, event_timestamp, text);
 		}
 	}
 	deleteComment = (commentId) => {
@@ -173,7 +177,7 @@ class Post extends React.Component {
 					attendingCount={numAttendees}
 					isLiked={currUserLiked}
 					isAttending={currUserAttending}
-					updateLike={(val) => this.updateLike(this.props.id, val)}
+					updateLike={(val) => this.updateLike(val)}
 					updateAttending={(val) => this.updateAttend(this.props.id, val)}
 				/>
 				<div className='comments-container'>
