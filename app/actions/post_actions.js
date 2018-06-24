@@ -39,3 +39,9 @@ export const receiveFeedData = (data) => ({
 export const startLoadingPosts = () => ({
   type: types.BEGIN_PAGE_FETCH
 });
+
+export const receiveDiscoverFeedData = (data) => ({
+  type: types.RECEIVE_DISCOVER_FEED_PAGE,
+  discoverInfo: data.entries,
+  nextPage: data.nextPage
+})

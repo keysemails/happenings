@@ -1,17 +1,22 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { updateMainFeed, getMainFeed } from '../../actions/post_actions';
+import { getDiscoverFeed } from '../../actions/post_actions';
 import DiscoverFeed from './DiscoverFeed.jsx';
 
 const mapStateToProps = state => ({
 	loggedIn: !!state.session.currentUser,
 	currentUser: state.session.currentUser,
-	posts: state.entries.posts,
+	// friendActivity keys are postIds but the value contains postInfo and friendInfo
+	friendActivity: state.entities.posts,
 	loading: state.ui.postsLoading,
-	nextPage: state.callbacks.nextFeedPage
+	nextPage: state.callbacks.nextFeedPage,
 });
 
 const mapDispatchToProps = dispatch => ({
-	getDiscoverFeedPosts: 
-})
+	getDiscoverFeed: (uid) => dispatch(getDiscoverFeed(uid))
+});
 
+export default withRouter(connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(DiscoverFeed));

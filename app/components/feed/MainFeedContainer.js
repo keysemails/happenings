@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { updateMainFeed, getMainFeed } from '../../actions/post_actions';
+import { getMainFeed } from '../../actions/post_actions';
 import MainFeed from './MainFeed';
 
 const mapStateToProps = state => ({

@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { getAuth } from '../utils/auth';
 
-import DiscoverFeed from './feed/DiscoverFeed.jsx';
+import DiscoverFeedContainer from './feed/DiscoverFeedContainer.js';
 import MainFeedContainer from './feed/MainFeedContainer';
 
 import PublicLanding from './PublicLanding.jsx';
@@ -27,7 +27,7 @@ class Main extends React.Component {
 						this.props.loggedIn ? (<MainFeedContainer />) : (<PublicLanding />)
 					)} />
 					<Route path='/discover' render={() => (
-						this.props.loggedIn ? (<DiscoverFeed />) : (<PublicLanding />)
+						this.props.loggedIn ? (<DiscoverFeedContainer />) : (<PublicLanding />)
 					)} />
 					<Route path='/signup' component={SignUpForm} />
 					<Route path='/login' component={LoginFormContainer} />
