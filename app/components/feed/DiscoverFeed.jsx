@@ -1,7 +1,6 @@
 import React from 'react';
 import PostFeed from './PostFeed';
-import { getPosts } from '../../utils/feed';
-import { updateDiscoverFeed } from '../../utils/discover';
+import { updateDiscoverFeed, getDiscoverFeedPosts } from '../../utils/discover';
 import { getAuth } from '../../utils/auth';
 
 // TODO: Rename this to TimelineFeed or something
@@ -18,24 +17,27 @@ class DiscoverFeed extends React.Component {
 		}
 	}
 	componentDidMount() {
-		getPosts(this.URI, this.PAGE_SIZE).then(data => {
-			this.setState({
-				posts: data.entries,
-				gotPostData: true,
-				nextPage: data.nextPage,
+		updateDiscoverFeed(this.auth.currentUser.uid).then(() => {
+			getDiscoverFeedPosts(this.auth.currentUser.uid).then(data => {
+				this.setState({
+					posts: data.entries,
+					gotPostData: true,
+					nextPage: data.nextPage,
+				});
 			});
 		});
 	}
 	render() {
-		const postFeed = (
-			<PostFeed
-				posts={this.state.posts}
-				nextPage={this.state.nextPage}
-			/>
-		);
+		console.log(this.state.posts);
+		// const postFeed = (
+		// 	<PostFeed
+		// 		posts={this.state.posts}
+		// 		nextPage={this.state.nextPage}
+		// 	/>
+		// );
 		return (
 			<div>
-				{this.state.gotPostData && postFeed}
+				{this.state.gotPostData}
 			</div>
 		);
 	}

@@ -103,7 +103,7 @@ export function toggleFollowUser(currUserUid, followeeUid, val) {
 				followVal;
 
 			// add or remove followed user to the 'following' list.
-			payload[`/people/${currUserUid}/following/${followeeUid}`] =
+			payload[`/people/${currUserUid}/following/${followeeUid}/posts`] =
 				val ? lastPostId : null;
 
 			return db.ref().update(payload);

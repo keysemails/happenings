@@ -31,11 +31,12 @@ export function updateMainFeed(currentUserUid) {
 		// just got all ppl we're following
 		// next, check for NEW posts for each person we're following
 
-		const updateOperations = Object.keys(following).map(followedUid => {
-			let followedUserPostsRef = db.ref(`/people/${followedUid}/posts`);
-			// the followed's latest postID that the user has already synced into their /feed/
-			const lastSyncedPostId = following[followedUid].posts;
-			if (lastSyncedPostId instanceof String) {
+		const updateOperations = Object.keys(following).map(followedUserUid => {
+			let followedUserPostsRef = db.ref(`/people/${followedUserUid}/posts`);
+			const followedData = following[followedUserUid];
+			// the followedUser's latest postID that the currentUser has already synced into their /feed/
+			const lastSyncedPostId = followedData.hasOwnProperty('posts') ? followedData.posts : false;
+			if (!!lastSyncedPostId) {
 				followedUserPostsRef = followedUserPostsRef.orderByKey().startAt(lastSyncedPostId);
 			}
 			return followedUserPostsRef.once('value', postData => {
@@ -47,7 +48,7 @@ export function updateMainFeed(currentUserUid) {
 				Object.keys(postData.val()).forEach(postId => {
 					if (postId !== lastSyncedPostId) {
 						updates[`/feed/${currentUserUid}/${postId}`] = true;
-						updates[`/people/${currentUserUid}/following/${followedUid}/posts`] = postId;
+						updates[`/people/${currentUserUid}/following/${followedUserUid}/posts`] = postId;
 					}
 				});
 				return db.ref().update(updates);
@@ -65,16 +66,5 @@ export function updateMainFeed(currentUserUid) {
  */
 export function getMainFeedPosts(currentUserUid) {
 	return getPaginatedFeed(`/feed/${currentUserUid}`,
-		PAGE_SIZES.DISCOVER_FEED, null, true);
-}
-
-/**
- * Paginates activity from the accounts the user follows.
- *
- * We return a `Promise` which resolves with an Map of posts and a function to the next page or
- * `null` if there is no next page.
- */
-export function getDiscoverFeedPosts(currentUser) {
-	return getPaginatedFeed(`/discover/${currentUser}`,
 		PAGE_SIZES.DISCOVER_FEED, null, true);
 }
