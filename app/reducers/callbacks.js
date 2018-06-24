@@ -3,7 +3,7 @@ import * as types from '../constants/actionTypes.js';
 const callbacksReducer = (state = {}, action) => {
   Object.freeze(state);
   switch(action.type){
-    case types.RECEIVE_POSTS:
+    case types.RECEIVE_FEED_PAGE:
       return { ...state, nextFeedPage: action.nextPage };
     default:
       return state;
