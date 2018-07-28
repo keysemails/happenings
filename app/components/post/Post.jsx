@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import { getAuth } from '../../utils/auth';
-import { toArray } from '../../utils/index';
+import { toArray as _toArray } from '../../utils/index';
 import { fetchComments, registerUserToLike, addComment, subscribeToComments,
-	registerForLikesCount, registerForCommentsCount, updateLike as _updateLike,
-	updateAttending, registerUserAttendance, registerForAttendingCount
+	registerForCommentsCount, updateLike as _updateLike, deletePost as _deletePost,
+	updateAttending, registerUserAttendance, deleteComment as _deleteComment
 } from '../../utils/post';
 
 import PostStats from './PostStats.jsx';
@@ -24,11 +24,27 @@ class Post extends React.Component {
 			mostRecentComment: null,
 		}
 	}
-	componentWillMount() {
+	componentDidMount() {
 		this.setState({_isMounted: true});
+		this.loadPostStats();
+
+		const postId = this.props.id;
+		fetchComments(postId).then(data => {
+			const comments = _toArray(data.entries);
+			const latestId = Object.keys(data.entries)[comments.length - 1];
+			this.safeSetState({
+				comments: comments,
+				gotComments: true,
+				nextPage: data.nextPage,
+				mostRecentComment: latestId
+			});
+			this.listenForNewComments();
+		});
 	}
 	componentWillUnmount() {
 		this.setState({_isMounted: false});
+		this.props.removeListener('likers', this.props.id);
+		this.props.removeListener('attendees', this.props.id);
 	}
 	safeSetState = (state) => {
 		if (this.state._isMounted) {
@@ -46,46 +62,16 @@ class Post extends React.Component {
 			}
 		)
 	}
-	componentDidMount() {
-		this.loadPostStats();
-		const postId = this.props.id;
-		fetchComments(postId).then(data => {
-			const comments = toArray(data.entries);
-			const latestId = Object.keys(data.entries)[comments.length - 1];
-			this.safeSetState({
-				comments: comments,
-				gotComments: true,
-				nextPage: data.nextPage,
-				mostRecentComment: latestId
-			});
-			this.listenForNewComments();
-		});
-	}
 	loadPostStats = () => {
-		// I need sagas this is messy
-		if (this.auth.currentUser) {
-			registerUserToLike(this.props.id, isLiked => {
-				this.safeSetState({ isLiked });
-			});
-			registerUserAttendance(this.props.id, isAttending => {
-				this.safeSetState({ isAttending });
-			});
-		} else {
-			this.safeSetState({ isLiked: false, isAttending: false});
-		}
-		registerForLikesCount(this.props.id, likeCount => {
-			this.safeSetState({ likeCount });
-		});
-		registerForAttendingCount(this.props.id, attendingCount => {
-			this.safeSetState({ attendingCount });
-		});
+		this.props.registerForLikesCount(this.props.id);
+		this.props.registerForAttendingCount(this.props.id);
 	}
 	loadMoreComments = () => {
 		let currentComments = this.state.comments;
 		let getNextPage = this.state.nextPage;
 		getNextPage().then(data => {
 			this.safeSetState({
-				comments: currentComments.concat(toArray(data.entries)),
+				comments: currentComments.concat(_toArray(data.entries)),
 				gotComments: true,
 				nextPage: data.nextPage,
 			});
@@ -95,20 +81,25 @@ class Post extends React.Component {
 		const commentData = this.state.comments.sort((a, b) => {
 			return a.timestamp - b.timestamp
 		});
-		return Object.keys(commentData).map(key => {
-			const comment = commentData[key];
+		return Object.keys(commentData).map(idx => {
+			const comment = commentData[idx];
 			return (
 				<Comment
-					key={key}
+					key={comment.key}
+					id={comment.key}
 					author={comment.author}
 					text={comment.text}
+					currentUID={this.auth.currentUser.uid}
+					deleteComment={(key) => this.deleteComment(comment.key)}
 				/>
 			)
 		});
 	}
-	updateLike(postId, val) {
+	updateLike(val) {
 		if (this.auth.currentUser) {
-			_updateLike(postId, val);
+			// _updateLike(currentUser, postId, event_timestamp, value)
+			const { currentUser, id, event_timestamp,} = this.props;
+			_updateLike(currentUser, id, event_timestamp, val);
 		} else {
 			// TODO: redirect to the public landing page
 			console.log('create an account!');
@@ -116,7 +107,8 @@ class Post extends React.Component {
 	}
 	updateAttend(postId, val) {
 		if (this.auth.currentUser) {
-			updateAttending(postId, this.props.event_timestamp, val);
+			const { currentUser, id, event_timestamp } = this.props;
+			updateAttending(currentUser, id, event_timestamp, val);
 		} else {
 			// TODO redirect to the public landing page
 			console.log('make an account!!');
@@ -124,10 +116,44 @@ class Post extends React.Component {
 	}
 	submitComment = (text) => {
 		if (this.auth.currentUser) {
-			addComment(this.auth.currentUser, this.props.id, text)
+			const { currentUser, event_timestamp, id } = this.props;
+			addComment(currentUser, id, event_timestamp, text);
 		}
 	}
+	deleteComment = (commentId) => {
+		_deleteComment(this.props.id, commentId).then(res => {
+			// TODO: this is kind of shitty in that
+			// it assumes the DB update succeeds.
+			let newComments = [];
+			this.state.comments.forEach(comment => {
+				if (comment.key !== commentId) {
+					newComments.push(comment);
+				}
+			});
+			this.safeSetState({
+				comments: newComments
+			});
+		});
+	}
+	deletePost = () => {
+		const {id, full_storage_uri, thumb_storage_uri } = this.props;
+		_deletePost(id, full_storage_uri, thumb_storage_uri).then(res => {
+			console.log('Deleted post ', id);
+			//TODO: better handling of this
+			window.location.reload();
+		});
+	}
 	render() {
+		const { attendees, likers, currUserLiked, currUserAttending } = this.props;
+		const numLikes = likers ? Object.keys(likers).length : 0;
+		const numAttendees = attendees ? Object.keys(attendees).length : 0;
+		
+		const currUserIsAuthor = (this.props.author.uid === this.auth.currentUser.uid);
+		const deletePostBtn = currUserIsAuthor ? (
+			<div className='delete-post-btn' onClick={this.deletePost}>
+			[x]
+			</div>
+		) : null;
 		const nextPageBtn = this.state.nextPage ? (
 			<div className='more-comments-btn'>
 				<span
@@ -144,13 +170,14 @@ class Post extends React.Component {
 		return (
 			<div className='post-container'>
 				<div className='post-author'>{authorLink}</div>
+				{deletePostBtn}
 				<img src={this.props.full_url} height="300" width="300"></img>
 				<PostStats
-					likeCount={this.state.likeCount}
-					attendingCount={this.state.attendingCount}
-					isLiked={this.state.isLiked}
-					isAttending={this.state.isAttending}
-					updateLike={(val) => this.updateLike(this.props.id, val)}
+					likeCount={numLikes}
+					attendingCount={numAttendees}
+					isLiked={currUserLiked}
+					isAttending={currUserAttending}
+					updateLike={(val) => this.updateLike(val)}
 					updateAttending={(val) => this.updateAttend(this.props.id, val)}
 				/>
 				<div className='comments-container'>

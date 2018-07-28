@@ -52,6 +52,9 @@ class AccountSettings extends React.Component {
 			this.setState(this.initialState);
 		}
 	}
+	deleteAccount = () => {
+		console.log('TODO')
+	}
 	render()  {
 		if (!this.auth.currentUser) {
 			return (<Redirect to='/'/>);
@@ -116,6 +119,9 @@ class AccountSettings extends React.Component {
 					<button
 						type="submit"
 					>Save</button>
+					<button onClick={this.deleteAccount}>
+					Delete ur account
+					</button>
 				</form>
 			</div>
 		)

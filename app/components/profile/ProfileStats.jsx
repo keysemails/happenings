@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { updateFollow } from '../../utils/user';
+import { updateFollow as _updateFollow } from '../../utils/user';
 
 const ProfileStats = ({
 	isCurrUser,
@@ -15,7 +15,7 @@ const ProfileStats = ({
 	const toggleFollow = () => {
 		if (loggedIn) {
 			const newVal = !isFollowing;
-			updateFollow(currentUser.uid, user.uid, newVal);
+			_updateFollow(currentUser.uid, user.uid, newVal);
 		} else {
 			history.push('/');
 		}

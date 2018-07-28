@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
-import { getPostData } from '../utils/post';
-import Post from './post/Post.jsx';
+import { getPostData as _getPostData } from '../../utils/post';
+import PostContainer from './PostContainer';
 
 /**
  * Publically viewable Event page, don't need to be signed in. Will redirect to
@@ -22,8 +22,10 @@ class PostPage extends React.Component {
 		}
 	}
 	componentDidMount() {
-		getPostData(this.props.match.params.event_id).then(snapshot => {
+		_getPostData(this.props.match.params.event_id).then(snapshot => {
+			console.log(snapshot);
 			const post = snapshot.val();
+			console.log(post);
 			if (!post) {
 				this.setState({
 					postNotFound: true
@@ -39,14 +41,18 @@ class PostPage extends React.Component {
 	addPost = () => {
 		const postData = this.state.postData;
 		return (
-			<Post
-				id={this.props.match.params.event_id}
+			<PostContainer
+				id={this.props.match.params.event_id} // :'(
 				author={postData.author}
 				full_storage_uri={postData.full_storage_uri}
 				full_url={postData.full_url}
 				caption={postData.text}
-				thumb_storage_uri={postData.thumb_url}
+				thumb_storage_uri={postData.thumb_storage_uri}
 				thumb_url={postData.thumb_url}
+				event_timestamp={postData.event_timestamp}
+				title={postData.title}
+				location={postData.location}
+				description={postData.description}
 			/>
 		)
 	}

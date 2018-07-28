@@ -21,6 +21,35 @@
         }
       }
     },
+    "activity": {
+      ".read": true,
+      ".indexOn": ["event_timestamp", "postId"],
+      "$uid": {
+        ".write": "auth.uid === $uid",
+        "$activityId": {
+          "postId": {
+            ".validate": "root.child('posts').child(newData.val()).exists()"
+          },
+          "uid": {
+            ".validate": "auth.uid === newData.val()"
+          }
+        }
+      }
+    },
+    "discover": {
+      "$uid": {
+        ".indexOn": ["event_timestamp"],
+        ".read": "auth.uid === $uid",
+        ".write": "auth.uid === $uid",
+        "$postId": {
+          ".validate": "root.child('posts').child($postId).exists()",
+          "uid": {
+            // make sure the records here are only for people you follow
+            ".validate": "root.child('people').child(auth.uid).child('following').child(newData.val()).exists()"
+          }
+        }
+      }
+    },
     "comments": {
       ".read": true,
       "$postId": {
@@ -104,7 +133,12 @@
         },
         "following": {
           "$followedUid": {
-            ".validate": "newData.parent().parent().parent().parent().child('followers').child($followedUid).child($uid).val() === true" // Makes sure /followers is in sync
+            "activity": {
+              ".validate": "root.child('activity').child($followedUid).child(newData.val()).exists()"
+            },
+            "posts": {
+              ".validate": "root.child('followers').child($followedUid).child($uid).val() === true" // Makes sure /followers is in sync
+            }
           }
         }
       }

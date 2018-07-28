@@ -2,9 +2,9 @@ import * as types from '../constants/actionTypes.js';
 
 const postsReducer = (state = {}, action) => {
   switch(action.type){
-    case types.RECEIVE_POSTS:
+    case types.RECEIVE_FEED_PAGE:
     // TODO normalize state and put authors in user slice of state
-      return Object.assign({}, state, action.posts)
+      return action.posts;
     default:
       return state;
   }

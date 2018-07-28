@@ -43,9 +43,6 @@ exports.default = functions.storage.object().onChange((event) => {
   const fileDir = path.dirname(filePath);
   const fileName = path.basename(filePath);
 
-  const thumbDir = path.normalize(fileDir.replace(FULL_PATH_KEY, THUMB_PATH_KEY));
-  const thumbFilePathOut = path.normalize(path.join(thumbDir, `${THUMB_PREFIX}${fileName}`));
-
   const thumbFilePath = path.normalize(path.join(fileDir, `${THUMB_PREFIX}${fileName}`));
 
   const tempLocalFile = path.join(os.tmpdir(), filePath);
@@ -75,8 +72,6 @@ exports.default = functions.storage.object().onChange((event) => {
     // 'Cache-Control': 'public,max-age=3600',
   };
 
-  // `${auth.currentUser.uid}/full/${newPostKey}/${fileName}
-
   let parts = filePath.split(path.sep); // '/'
   let newPostKey = parts[2];
   
@@ -91,7 +86,7 @@ exports.default = functions.storage.object().onChange((event) => {
   }).then(() => {
     console.log('Thumbnail created at', tempLocalThumbFile);
     // Uploading the Thumbnail.
-    return bucket.upload(tempLocalThumbFile, {destination: thumbFilePathOut, metadata: metadata});
+    return bucket.upload(tempLocalThumbFile, {destination: thumbFilePath, metadata: metadata});
   }).then(() => {
     console.log('Thumbnail uploaded to Storage at', thumbFilePath);
     // Once the image has been uploaded delete the local files to free up disk space.
