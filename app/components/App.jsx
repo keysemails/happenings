@@ -1,5 +1,5 @@
 import React from 'react';
-import HeaderContainer from './HeaderContainer';
+import HeaderContainer from './header/HeaderContainer';
 import Main from './Main';
 import { getAuth } from '../utils/auth';
 
