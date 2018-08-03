@@ -25,7 +25,14 @@ class DrawArea extends React.Component {
     }
 
     const point = this.relativeCoordinatesForEvent(e);
-    w
+    this.setState(prevState => {
+      const nextState = prevState.lines.slice();
+      nextState.push([point])
+      return {
+        lines: nextState,
+        isDrawing: true
+      }
+    });
   }
 
   handleMouseMove = (e) => {
@@ -34,7 +41,6 @@ class DrawArea extends React.Component {
     }
 
     const point = this.relativeCoordinatesForEvent(e);
-
     this.setState(prevState =>  {
       const updatedLines = prevState.lines.slice();
       updatedLines[prevState.lines.length - 1].push(point)
