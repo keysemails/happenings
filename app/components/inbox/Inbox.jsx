@@ -5,6 +5,7 @@ class Inbox extends React.Component {
 	render() {
 		return (
 			<div>
+				hey
 			</div>
 		)
 	}

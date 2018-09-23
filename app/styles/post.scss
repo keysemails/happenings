@@ -33,8 +33,18 @@
 	}
 }
 
+.post-header {
+	@include pad-vertical(20px);
+	border-bottom: 3px solid black;
+}
+
 .post-author {
-	font-family: courier;
 	font-weight: bold;
-	@include pad-vertical(10px);
+	float: left;
+}
+
+.modal-btn {
+	float: right;
+	font-weight: bold;
+	cursor: pointer;
 }

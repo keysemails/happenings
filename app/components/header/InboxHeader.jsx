@@ -11,8 +11,8 @@ class InboxHeader extends React.Component {
 			<div className='nav-bar-container'>
 				<header>
 					<div className='inline-centered'>
-						{backLink}
-						<h1 className='logo inline-centered'>INBOX</h1>
+						<div className='inbox-link'>{backLink}</div>
+						<h1 className='logo inline-centered'>HAPPENINGS</h1>
 					</div>
 				</header>
 				{subtext}

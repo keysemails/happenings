@@ -97,7 +97,6 @@ class Post extends React.Component {
 	}
 	updateLike(val) {
 		if (this.auth.currentUser) {
-			// _updateLike(currentUser, postId, event_timestamp, value)
 			const { currentUser, id, event_timestamp,} = this.props;
 			_updateLike(currentUser, id, event_timestamp, val);
 		} else {
@@ -143,17 +142,23 @@ class Post extends React.Component {
 			window.location.reload();
 		});
 	}
+
+	toggleModal = () => {
+		console.log('sick');
+	}
 	render() {
 		const { attendees, likers, currUserLiked, currUserAttending } = this.props;
 		const numLikes = likers ? Object.keys(likers).length : 0;
 		const numAttendees = attendees ? Object.keys(attendees).length : 0;
 		
 		const currUserIsAuthor = (this.props.author.uid === this.auth.currentUser.uid);
+
 		const deletePostBtn = currUserIsAuthor ? (
 			<div className='delete-post-btn' onClick={this.deletePost}>
 			[x]
 			</div>
 		) : null;
+
 		const nextPageBtn = this.state.nextPage ? (
 			<div className='more-comments-btn'>
 				<span
@@ -162,16 +167,39 @@ class Post extends React.Component {
 				>~ load more comments ~</span>
 			</div>
 		) : null;
+
+
 		const authorLink = (
 			<Link to={`/user/${this.props.author.username}`}>
 				{this.props.author.username}
 			</Link>
 		);
+
+		const modalBtn = (
+			<div className='three-dots-btn' onClick={this.toggleModal}>
+				...
+			</div>
+		)
+
+		const postHeader = (
+			<div className='post-header'>
+				<div className='post-author'>
+					<Link to={`/user/${this.props.author.username}`}>
+						{this.props.author.username}
+					</Link>
+				</div>
+				<div className='modal-btn' onClick={this.toggleModal}>
+					&middot;&middot;&middot;
+				</div>
+			</div>
+		);
+
 		return (
 			<div className='post-container'>
-				<div className='post-author'>{authorLink}</div>
-				{deletePostBtn}
-				<img src={this.props.full_url} height="300" width="300"></img>
+				{postHeader}
+				<Link to={`/event/${this.props.id}`}>
+					<img src={this.props.full_url} height="300" width="300"></img>
+				</Link>
 				<PostStats
 					likeCount={numLikes}
 					attendingCount={numAttendees}

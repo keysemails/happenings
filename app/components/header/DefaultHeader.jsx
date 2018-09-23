@@ -23,7 +23,7 @@ class DefaultHeader extends React.Component {
 					<div className='inline-centered'>
 					{authLink}
 					<NavLink to='/' ><h1 className='logo'>HAPPENINGS</h1></NavLink>
-					{inboxLink}
+					<div className='inbox-link'>{inboxLink}</div>
 					</div>
 				</header>
 
