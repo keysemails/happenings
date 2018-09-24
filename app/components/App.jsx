@@ -1,6 +1,7 @@
 import React from 'react';
 import HeaderContainer from './header/HeaderContainer';
 import Main from './Main';
+import ModalContainer from './modals/ModalContainer';
 import { getAuth } from '../utils/auth';
 
 class App extends React.Component {
@@ -34,6 +35,8 @@ class App extends React.Component {
 				<div>
 					<HeaderContainer />
 					<Main loggedIn={this.props.loggedIn} />
+					<ModalContainer />
+
 				</div>
 			)
 		}

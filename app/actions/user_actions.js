@@ -1,6 +1,6 @@
 import { loadUserByUsername } from '../utils/user';
 import { getUsername } from '../utils/index';
-import * as types from '../constants/actionTypes.js'
+import * as types from '../constants/actionTypes.js';
 
 export const fetchUserByUsername = (username) => dispatch => (
   loadUserByUsername(username).then(snapshot => {
