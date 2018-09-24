@@ -29,3 +29,11 @@ export const isUserLiker = (state, ownProps) => {
   }
   return false;
 }
+
+export const selectOpenModal = (modals) => {
+  Object.keys(modals).forEach(key => {
+    if (modals[key]) {
+      return key
+    }
+  });
+}
