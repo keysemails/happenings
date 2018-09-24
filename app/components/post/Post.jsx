@@ -9,6 +9,7 @@ import { fetchComments, registerUserToLike, addComment, subscribeToComments,
 	updateAttending, registerUserAttendance, deleteComment as _deleteComment
 } from '../../utils/post';
 
+import PostHeader from './PostHeader.jsx';
 import PostStats from './PostStats.jsx';
 import Comment from './Comment.jsx';
 import AddCommentInput from './AddCommentInput.jsx';
@@ -16,7 +17,7 @@ import AddCommentInput from './AddCommentInput.jsx';
 class Post extends React.Component {
 	constructor() {
 		super();
-		this.auth = getAuth();
+		this.auth = getAuth() ;
 		this.state = {
 			comments: [],
 			gotComments: false,
@@ -142,23 +143,25 @@ class Post extends React.Component {
 			window.location.reload();
 		});
 	}
-
-	toggleModal = () => {
-		console.log('sick');
+	toggleModal = (currUserIsAuthor) => {
+		if (currUserIsAuthor) {
+			console.log('my sick event');
+			this.props.openPostOptionsModal(this.props.id);
+		} else {
+			this.props.openPostOptionsModal(this.props.id);
+			console.log('cool event');
+		}
 	}
 	render() {
 		const { attendees, likers, currUserLiked, currUserAttending } = this.props;
 		const numLikes = likers ? Object.keys(likers).length : 0;
 		const numAttendees = attendees ? Object.keys(attendees).length : 0;
-		
 		const currUserIsAuthor = (this.props.author.uid === this.auth.currentUser.uid);
-
 		const deletePostBtn = currUserIsAuthor ? (
 			<div className='delete-post-btn' onClick={this.deletePost}>
 			[x]
 			</div>
 		) : null;
-
 		const nextPageBtn = this.state.nextPage ? (
 			<div className='more-comments-btn'>
 				<span
@@ -167,36 +170,17 @@ class Post extends React.Component {
 				>~ load more comments ~</span>
 			</div>
 		) : null;
-
-
 		const authorLink = (
 			<Link to={`/user/${this.props.author.username}`}>
 				{this.props.author.username}
 			</Link>
 		);
-
-		const modalBtn = (
-			<div className='three-dots-btn' onClick={this.toggleModal}>
-				...
-			</div>
-		)
-
-		const postHeader = (
-			<div className='post-header'>
-				<div className='post-author'>
-					<Link to={`/user/${this.props.author.username}`}>
-						{this.props.author.username}
-					</Link>
-				</div>
-				<div className='modal-btn' onClick={this.toggleModal}>
-					&middot;&middot;&middot;
-				</div>
-			</div>
-		);
-
 		return (
 			<div className='post-container'>
-				{postHeader}
+				<PostHeader
+					username={this.props.author.username}
+					toggleModal={() => this.toggleModal(currUserIsAuthor)}
+				/>
 				<Link to={`/event/${this.props.id}`}>
 					<img src={this.props.full_url} height="300" width="300"></img>
 				</Link>
