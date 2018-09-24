@@ -13,3 +13,10 @@ export const receiveUser = user => ({
   type: types.RECEIVE_USER,
   user
 });
+
+// need search user 
+// export const searchUsers = (query) => dispatch => (
+//   searchUsers(query).then(
+//     (users) => dispatch(receiveSearchedUsers(users))
+//   )
+// );

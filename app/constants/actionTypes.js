@@ -21,4 +21,9 @@ export const BEGIN_PAGE_FETCH = 'BEGIN_PAGE_FETCH';
 export const COMPLETE_POSTS_FETCH = 'COMPLETE_POSTS_FETCH';
 
 // feed actions
-export const FEED_UPDATED = 'FEED_UPDATED'
+export const FEED_UPDATED = 'FEED_UPDATED';
+
+// search actions
+export const RECEIVE_SEARCHED_USERS = 'RECEIVE_SEARCHED_USERS';
+export const RECEIVE_SEARCHED_POSTS = 'RECEIVE_SEARCHED_POSTS';
+export const CLEAR_SEARCH = 'CLEAR_SEARCH';
