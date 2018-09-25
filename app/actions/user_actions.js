@@ -14,9 +14,25 @@ export const receiveUser = user => ({
   user
 });
 
-// need search user 
-// export const searchUsers = (query) => dispatch => (
-//   searchUsers(query).then(
-//     (users) => dispatch(receiveSearchedUsers(users))
-//   )
-// );
+export const searchUsers = (query) => dispatch => (
+  testUtil(query).then(
+    (users) => dispatch(receiveSearchedUsers(users))
+  )
+)
+
+export const receiveSearchedUsers = users => ({
+  type: types.RECEIVE_SEARCHED_USERS,
+  users
+});
+
+// export const testUtil = (query) => {
+//   console.log(query)
+//   return {uid1: { username: 'egg' }, uid2: {username: 'duck'} }
+// }
+
+export const testUtil = query => (
+  new Promise((resolve, reject) => {
+    console.log(query)
+    resolve({uid1: { username: 'egg' }, uid2: {username: 'duck'} })
+  })
+)

@@ -45,3 +45,21 @@ export const receiveDiscoverFeedData = (data) => ({
   discoverInfo: data.entries,
   nextPage: data.nextPage
 })
+
+export const searchPosts = (query) => dispatch => (
+  testUtil(query).then(
+    (posts) => dispatch(receiveSearchedPosts(posts))
+  )
+)
+
+export const receiveSearchedPosts = posts => ({
+  type: types.RECEIVE_SEARCHED_POSTS,
+  posts
+})
+
+export const testUtil = query => (
+  new Promise((resolve, reject) => {
+    console.log(query)
+    resolve({postid1: { title: 'egg' }, posti2: {title: 'duck'} })
+  })
+)

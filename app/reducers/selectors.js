@@ -29,3 +29,15 @@ export const isUserLiker = (state, ownProps) => {
   }
   return false;
 }
+
+export const selectUserResults = state => (
+  state.ui.search.userIds.map(userId => (
+    state.entities.users[userId]
+  ))
+)
+
+export const selectPostResults = state => (
+  state.ui.search.postIds.map(postId => (
+    state.entities.users[postId]
+  ))
+)

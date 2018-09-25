@@ -1,6 +1,8 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
 
+import SearchContainer from './search/SearchContainer';
+
 const Header = ({currentUser, logOut, loggedIn}) => {
 	const logOutBtn = (<button onClick={logOut}>Sign out</button>);
 	const logInBtn = (<NavLink to='/login'>Log in</NavLink>);
@@ -18,6 +20,7 @@ const Header = ({currentUser, logOut, loggedIn}) => {
 						<li><NavLink to='/create'>Create</NavLink></li>
 						<li><NavLink to={`/user/${currentUser.username}`}>Profile</NavLink></li>
 					</ul>
+					<SearchContainer />
 				</nav>
 			}
 		</div>

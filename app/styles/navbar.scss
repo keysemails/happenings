@@ -33,5 +33,19 @@
 				border-top: solid 1px $red;
 			}
 		}
+
+		.search-container {
+			.search-field-container {
+				display: flex;
+				justify-content: center;
+				padding-top: 20px;
+
+				.search-field {
+					border: solid 1px $neon-green;
+			    padding: 5px 15px;
+					width: 360px;
+				}
+			}
+		}
 	}
 }

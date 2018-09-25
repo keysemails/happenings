@@ -1,15 +1,11 @@
-import * as types from '../constants/actionTypes.js';
+import { combineReducers } from 'redux';
 
-const uiReducer = (state = {}, action) => {
-  Object.freeze(state);
-  switch(action.type){
-    case types.BEGIN_PAGE_FETCH:
-      return { ...state, postsLoading: true };
-    case types.RECEIVE_FEED_PAGE:
-      return { ...state, postsLoading: false };
-    default:
-      return state;
-  }
-};
+import loading from './loading';
+import search from './search';
+
+const uiReducer = combineReducers({
+  loading,
+  search
+});
 
 export default uiReducer;

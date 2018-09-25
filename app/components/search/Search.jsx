@@ -1,5 +1,5 @@
 import React from 'react';
-import SearchResultDropdownContainer from '../menus/search_result_dropdown_container';
+import SearchResultDropdownContainer from '../menus/SearchDropdownContainer';
 
 class Search extends React.Component {
   constructor(props) {
@@ -15,7 +15,7 @@ class Search extends React.Component {
 
   executeQuery() {
     this.props.searchUsers(this.state.query);
-    this.props.searchAlbums(this.state.query);
+    this.props.searchPosts(this.state.query);
   }
 
   handleEsc(e) {
@@ -41,14 +41,13 @@ class Search extends React.Component {
           <input
             className='search-field'
             type='text'
-            placeholder='search bandland    '
+            placeholder='Search   '
             onChange={ this.handleChange }
             onKeyDown={ this.handleEsc }
             onBlur={ () => this.setState({ query: ''})}
             value={ this.state.query }
             >
           </input>
-          <FontAwesome name='search' />
         </div>
         <SearchResultDropdownContainer />
       </div>

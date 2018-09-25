@@ -8,7 +8,7 @@ const mapStateToProps = state => ({
 	currentUser: state.session.currentUser,
 	// friendActivity keys are postIds but the value contains postInfo and friendInfo
 	friendActivity: state.entities.posts,
-	loading: state.ui.postsLoading,
+	loading: state.ui.loading.postsLoading,
 	nextPage: state.callbacks.nextFeedPage,
 });
 
