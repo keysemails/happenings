@@ -1,7 +1,10 @@
 import { connect } from 'react-redux';
 import { updateMainFeed, getMainFeed } from '../../actions/post_actions';
 import { listenToPath, removeListener } from '../../actions/listener_actions';
+import { openModal } from '../../actions/ui_actions';
 import { isUserAttendee, isUserLiker } from '../../reducers/selectors';
+
+import { modalTypes as MODAL_TYPES } from '../../constants/modalTypes';
 import Post from './Post';
 
 const mapStateToProps = (state, ownProps) => ({
@@ -15,6 +18,7 @@ const mapStateToProps = (state, ownProps) => ({
 // nextCommentPage: state.callbacks.nextCommentPage[ownProps.id]
 
 const mapDispatchToProps = dispatch => ({
+  openPostOptionsModal: (postId) => dispatch(openModal(MODAL_TYPES.POST_OPTIONS_MODAL, postId)),
   registerForLikesCount: (postId) => dispatch(listenToPath(`/likes/${postId}`, 'likers', postId)),
   registerForAttendingCount: (postId) => dispatch(listenToPath(`/attends_post/${postId}`, 'attendees', postId)),
   removeListener: (metaType, postId) => dispatch(removeListener(metaType, postId))

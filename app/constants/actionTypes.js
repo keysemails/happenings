@@ -4,6 +4,7 @@ export const CLEAR_CURRENT_USER = 'CLEAR_CURRENT_USER';
 
 // ui actions
 export const TOGGLE_MODAL = 'TOGGLE_MODAL';
+export const CLOSE_MODAL = 'CLOSE_MODAL';
 
 // listener actions
 export const FIREBASE_LISTEN_REQUESTED = 'FIREBASE_LISTEN_REQUESTED';

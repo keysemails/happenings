@@ -4,8 +4,12 @@ const modalsReducer = (state = {}, action) => {
 	switch(action.type) {
 		case types.TOGGLE_MODAL:
 			return {
-				...state, [action.modalName]: !!!(state[action.modalName])
+				...state, [action.modalName]: action.value
 			};
+		case types.CLOSE_MODAL:
+			return {
+				...state, [action.modalName]: false
+			}
 		default:
 			return state;
 	}
