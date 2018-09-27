@@ -8,15 +8,16 @@ class Modal extends React.Component {
 	}
 
 	resetModal = () => {
-		this.props.toggleModal(this.props.modalName);
+		this.props.closeModal(this.props.modalName);
 	}
 
 	render() {
 		let modalShown;
 		switch(this.props.modalName) {
 			case MODAL_TYPES.POST_OPTIONS_MODAL:
-			modalShown = 'bitchh';
-			break;
+				modalShown = 'bitchh';
+			default:
+				modalShown = '';
 		}
 		return (
 			<div className={`modal`}>

@@ -7,7 +7,7 @@ export const closeModal = (modalName) => ({
 });
 
 export const openModal = (modalName, value) => ({
-	type: types.TOGGLE_MODAL,
+	type: types.OPEN_MODAL,
 	modalName,
 	value
 });

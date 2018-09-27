@@ -30,11 +30,15 @@ export const isUserLiker = (state, ownProps) => {
   return false;
 }
 
-export const selectOpenModal = (modals) => {
-  Object.keys(modals).forEach(key => {
+export const selectOpenModal = (state) => {
+  let retVal;
+  Object.keys(state.ui.modals).forEach(key => {
     // modals[key] is either a stringtype (postId) or boolean (false)
-    if (!!modals[key]) {
-      return key
+    if (state.ui.modals[key] != false) {
+      retVal = key;
+    } else {
+      retVal = false;
     }
   });
+  return retVal;
 }

@@ -13,7 +13,11 @@ const uiReducer = (state = INITIAL_UI_STATE, action) => {
       return { ...state, postsLoading: true };
     case types.RECEIVE_FEED_PAGE:
       return { ...state, postsLoading: false };
-    case types.TOGGLE_MODAL:
+    case types.OPEN_MODAL:
+      return {
+        ...state, modals: modalsReducer(state.modals, action)
+      };
+    case types.CLOSE_MODAL:
       return {
         ...state, modals: modalsReducer(state.modals, action)
       }

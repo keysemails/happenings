@@ -1,17 +1,18 @@
 import { connect } from 'react-redux';
-import { openModal } from '../../actions/ui_actions';
+import { closeModal } from '../../actions/ui_actions';
 import { selectOpenModal } from '../../reducers/selectors';
 
 import Modal from './Modal';
 
 const mapStateToProps = (state) => ({
-	modalName: selectOpenModal(state.ui.modals)
+	modalName: selectOpenModal(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	openModal: (modalName) => dispatch(openModal(modalName)),
+	closeModal: (modalName) => dispatch(closeModal(modalName)),
 });
 
 export default connect(
+	mapStateToProps,
 	mapDispatchToProps
 )(Modal);

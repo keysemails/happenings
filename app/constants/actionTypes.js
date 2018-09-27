@@ -3,7 +3,7 @@ export const RECEIVE_CURRENT_USER = 'RECEIVE_CURRENT_USER';
 export const CLEAR_CURRENT_USER = 'CLEAR_CURRENT_USER';
 
 // ui actions
-export const TOGGLE_MODAL = 'TOGGLE_MODAL';
+export const OPEN_MODAL = 'OPEN_MODAL';
 export const CLOSE_MODAL = 'CLOSE_MODAL';
 
 // listener actions
