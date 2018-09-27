@@ -86,9 +86,9 @@ export function subscribeToFeed(uri, callback, latestEntryId = null, fetchPostDe
  * If the user is now followed we'll add all his posts to the home feed of the follower.
  * If the user is now not followed anymore all his posts are removed from the follower home feed.
  */
-export function toggleFollowUser(currUserUid, followeeUid, val) {
+export function toggleFollowUser(currUserUid, followedUid, val) {
 	const followVal = val ? !!val : null;
-	return db.ref(`/people/${followeeUid}/posts`).once('value').then(
+	return db.ref(`/people/${followedUid}/posts`).once('value').then(
 		data => {
 			const payload = {};
 			let lastPostId = true;
@@ -99,14 +99,17 @@ export function toggleFollowUser(currUserUid, followeeUid, val) {
 				lastPostId = post.key;
 			});
 			// add or remove the signed-in user to the list of followers.
-			payload[`/followers/${followeeUid}/${currUserUid}`] =
-				followVal;
+			payload[`/followers/${followedUid}/${currUserUid}`] = followVal;
 
-			// add or remove followed user to the 'following' list.
-			payload[`/people/${currUserUid}/following/${followeeUid}/posts`] =
-				val ? lastPostId : null;
-
-			return db.ref().update(payload);
+			/*  this is a dependency graph issue with the DB rules, I believe
+			*	/people/$uid/following/$followedUid/posts has the following policy:
+			*	".validate": "root.child('followers').child($followedUid).child($uid).val() === true"
+			*/
+			return db.ref().update(payload).then(res => {
+				const payload = {};
+				payload[`/people/${currUserUid}/following/${followedUid}/posts`] = val ? lastPostId : null;
+				return db.ref().update(payload)
+			});
 		}
 	);
 }
