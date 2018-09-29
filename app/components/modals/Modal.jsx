@@ -24,8 +24,8 @@ class Modal extends React.Component {
 		const modalClass = classNames('modal', {'is-open': !!this.props.modalName});
 		return (
 			<div className={modalClass}>
-				<div className='modal-box' onClick={this.resetModal}>
-					[x]
+				<div className='modal-box's>
+					<span onClick={this.resetModal}>[x]</span>
 					{modalShown}
 				</div>
 			</div>

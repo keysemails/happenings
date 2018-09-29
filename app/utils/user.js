@@ -14,6 +14,9 @@ export function loadUserData(uid) {
 	return db.ref(`/people/${uid}`).once('value');
 }
 
+export function getUserByPostId(postId) {
+	return db.ref(`/posts/${postId}/author`).once('value');
+}
 
 /**
  * Listens to updates on the followers of a person and calls the callback with followers counts.
