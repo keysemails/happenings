@@ -10,6 +10,9 @@ import { getUserByPostId, updateFollow } from '../../utils/user';
 // 4 - report event
 
 class PostOptionsModal extends React.Component {
+	state = {
+		copied: false
+	}
 	unfollowAuthor = () => {
 		return getUserByPostId(this.props.postId).then(res => {
 			const authorUid = res.val().uid;
@@ -20,7 +23,8 @@ class PostOptionsModal extends React.Component {
 		});
 	}
 	render() {
-		const copyText = `${window.location.host}/event/${this.props.postId}`;
+		const eventURL = `${window.location.host}/event/${this.props.postId}`;
+		const copyText = this.state.copied ? 'copied!' : '[copy to clipboard]';
 		return (
 			<div>
 				<div>
@@ -29,8 +33,9 @@ class PostOptionsModal extends React.Component {
 				<div onClick={this.unfollowAuthor}>
 					[unfollow the author]
 				</div>
-				<CopyToClipboard text={copyText}>
-					<span>[copy to clipboard]</span>
+				<CopyToClipboard text={eventURL}
+					onCopy={() => this.setState({copied: true})}>
+					<span>{copyText}</span>
 				</CopyToClipboard>
 			</div>
 		)

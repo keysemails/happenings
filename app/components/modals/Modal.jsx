@@ -5,10 +5,6 @@ import { modalTypes as MODAL_TYPES } from '../../constants/modalTypes.js';
 import PostOptionModalContainer from './PostOptionModalContainer';
 
 class Modal extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-
 	resetModal = () => {
 		this.props.closeModal(this.props.modalName);
 	}
