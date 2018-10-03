@@ -11,14 +11,15 @@ import { getUserByPostId, updateFollow } from '../../utils/user';
 
 class PostOptionsModal extends React.Component {
 	state = {
-		copied: false
+		copied: false,
+		unfollowText: 'unfollow the author'
 	}
 	unfollowAuthor = () => {
 		return getUserByPostId(this.props.postId).then(res => {
 			const authorUid = res.val().uid;
 			return updateFollow(this.props.currentUser.uid, authorUid, false);
 		}).then(() => {
-			console.log('unfollowed');
+			this.setState({unfollowText: 'unfollowed!'});
 			window.location.reload();
 		});
 	}
@@ -31,7 +32,7 @@ class PostOptionsModal extends React.Component {
 					I am a modal for {this.props.postId}
 				</div>
 				<div onClick={this.unfollowAuthor}>
-					[unfollow the author]
+					{this.state.unfollowText}
 				</div>
 				<CopyToClipboard text={eventURL}
 					onCopy={() => this.setState({copied: true})}>
