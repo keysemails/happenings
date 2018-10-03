@@ -38,6 +38,6 @@ export const selectUserResults = state => (
 
 export const selectPostResults = state => (
   state.ui.search.postIds.map(postId => (
-    state.entities.users[postId]
+    state.entities.posts[postId]
   ))
 )

@@ -132,7 +132,7 @@ export function deletePost(postId, picStorageUri, thumbStorageUri) {
 }
 
 export function searchByTitle(query) {
-	return db.ref('/posts/').orderByChild('text')
+	return db.ref('/posts/').orderByChild('title')
     .startAt(query)
     .endAt(query+"\uf8ff").once('value');
 }

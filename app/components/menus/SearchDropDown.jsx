@@ -32,11 +32,11 @@ class SearchResultDropdown extends React.Component {
         </li>
       </Link>
     ));
-
+    console.log(this.props.postResults)
     const postResults = this.props.postResults.map((post, idx) => (
       <Link to={ `/posts/${post.id}` } key={ idx }>
         <li>
-          <img src={ post.thumbnailCoverUrl } />
+          <img src={ post.thumb_url } />
             <p>
               <span>{ post.title }</span>
               <span>Post</span>
