@@ -1,6 +1,7 @@
 import * as FeedUtil from '../utils/feed';
 import * as DiscoverUtil from '../utils/discover';
 import * as types from '../constants/actionTypes.js'
+import { searchByTitle } from '../utils/post';
 
 export const getUserPosts = (uid) => dispatch => (
     FeedUtil.getUserFeedPosts(uid).then(data => {
@@ -47,19 +48,17 @@ export const receiveDiscoverFeedData = (data) => ({
 })
 
 export const searchPosts = (query) => dispatch => (
-  testUtil(query).then(
-    (posts) => dispatch(receiveSearchedPosts(posts))
-  )
-)
+  searchByTitle(query).then(snapshot => {
+    let posts = snapshot.val()
+    console.log(posts)
+    if (!posts || !query) {
+      posts = {}
+    }
+    dispatch(receiveSearchedPosts(posts))
+  })
+);
 
 export const receiveSearchedPosts = posts => ({
   type: types.RECEIVE_SEARCHED_POSTS,
   posts
 })
-
-export const testUtil = query => (
-  new Promise((resolve, reject) => {
-    console.log(query)
-    resolve({postid1: { title: 'egg' }, posti2: {title: 'duck'} })
-  })
-)

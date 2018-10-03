@@ -15,10 +15,10 @@ const Header = ({currentUser, logOut, loggedIn}) => {
 			{ loggedIn &&
 				<nav className='main-nav'>
 					<ul>
-						<li><NavLink exact to='/'>Feed</NavLink></li>
-						<li><NavLink to='/discover'>Discover</NavLink></li>
-						<li><NavLink to='/create'>Create</NavLink></li>
-						<li><NavLink to={`/user/${currentUser.username}`}>Profile</NavLink></li>
+						<li><NavLink className='nav-button' exact to='/'>Feed</NavLink></li>
+						<li><NavLink className='nav-button' to='/discover'>Discover</NavLink></li>
+						<li><NavLink className='nav-button' to='/create'>Create</NavLink></li>
+						<li><NavLink className='nav-button' to={`/user/${currentUser.username}`}>Profile</NavLink></li>
 					</ul>
 					<SearchContainer />
 				</nav>

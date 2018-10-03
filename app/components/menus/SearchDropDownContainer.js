@@ -1,17 +1,19 @@
 import { connect } from 'react-redux';
 
-import SearchResultDropdown from './SearchDropdown';
+import SearchResultDropdown from './SearchDropdown.jsx';
 import { selectUserResults, selectPostResults } from '../../reducers/selectors';
-import { clearSearch } from '../../actions/ui_actions';
+import { clearSearch, updateSearchedEntity } from '../../actions/ui_actions';
 
 
 const mapStateToProps = state => ({
   userResults: selectUserResults(state),
-  albumResults: selectPostResults(state)
+  postResults: selectPostResults(state),
+  searchedEntity: state.ui.search.searchedEntity
 });
 
 const mapDispatchToProps = dispatch => ({
-  clearSearch: () => dispatch(clearSearch())
+  clearSearch: () => dispatch(clearSearch()),
+  updateSearchedEntity: (entity) => dispatch(updateSearchedEntity(entity))
 });
 
 

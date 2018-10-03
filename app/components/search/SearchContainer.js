@@ -6,7 +6,7 @@ import { searchPosts } from '../../actions/post_actions';
 import { clearSearch } from '../../actions/ui_actions';
 
 const mapStateToProps = state => ({
-
+  searchedEntity: state.ui.search.searchedEntity
 });
 
 const mapDispatchToProps = dispatch => ({

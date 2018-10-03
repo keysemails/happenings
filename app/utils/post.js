@@ -130,3 +130,9 @@ export function deletePost(postId, picStorageUri, thumbStorageUri) {
 		return db.ref().update(updates);
 	})
 }
+
+export function searchByTitle(query) {
+	return db.ref('/posts/').orderByChild('text')
+    .startAt(query)
+    .endAt(query+"\uf8ff").once('value');
+}

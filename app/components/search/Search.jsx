@@ -14,8 +14,11 @@ class Search extends React.Component {
   }
 
   executeQuery() {
-    this.props.searchUsers(this.state.query);
-    this.props.searchPosts(this.state.query);
+    if (this.props.searchedEntity == 'users') {
+      this.props.searchUsers(this.state.query);
+    } else {
+      this.props.searchPosts(this.state.query);
+    }
   }
 
   handleEsc(e) {
@@ -35,24 +38,27 @@ class Search extends React.Component {
   }
 
   render() {
+    console.log(this.props.searchedEntity)
     return(
       <div className='search-container'>
         <div className='search-field-container'>
           <input
             className='search-field'
             type='text'
-            placeholder='Search   '
+            placeholder='Search'
             onChange={ this.handleChange }
             onKeyDown={ this.handleEsc }
-            onBlur={ () => this.setState({ query: ''})}
+            onClick={ e => e.stopPropagation() }
             value={ this.state.query }
             >
           </input>
+          <div className='search-offset-box'></div>
         </div>
         <SearchResultDropdownContainer />
       </div>
     );
   }
 }
+// onBlur={ () => this.setState({ query: ''})}
 
 export default Search;

@@ -13,42 +13,54 @@ class SearchResultDropdown extends React.Component {
     }
   }
 
+  handleClick(entity) {
+    return e => {
+      e.preventDefault()
+      e.stopPropagation()
+      this.props.updateSearchedEntity(entity)
+    }
+  }
+
   render() {
     const userResults = this.props.userResults.map((user, idx) => (
-      // <Link to={ `/users/${user.id}` } key={ idx }>
-      // <li>
-      //     <img src={ user.thumbnailProfileImgUrl } />
-      //     <p>
-      //       <span>{ user.username }</span>
-      //       <span>User</span>
-      //     </p>
-      // </li>
-      // </Link>
-      <li key={ idx }>{user.username}</li>
+      <Link to={ `/user/${user.username}` } key={ idx }>
+        <li>
+            <p>
+              <span>{ user.username }</span>
+              <span>User</span>
+            </p>
+        </li>
+      </Link>
     ));
 
     const postResults = this.props.postResults.map((post, idx) => (
-      // <Link to={ `/posts/${post.id}` } key={ idx }>
-      // <li>
-      //   <img src={ post.thumbnailCoverUrl } />
-      //     <p>
-      //       <span>{ post.title }</span>
-      //       <span>{ post.artist }</span>
-      //       <span>Album</span>
-      //     </p>
-      // </li>
-      // </Link>
-      <li key={ idx }>{post.title}</li>
+      <Link to={ `/posts/${post.id}` } key={ idx }>
+        <li>
+          <img src={ post.thumbnailCoverUrl } />
+            <p>
+              <span>{ post.title }</span>
+              <span>Post</span>
+            </p>
+        </li>
+      </Link>
     ));
+
+    const results = (this.props.searchedEntity == 'users') ?
+      userResults : postResults;
 
     const hidden = (this.props.userResults.length === 0 &&
       this.props.postResults.length === 0) ? 'hidden' : '';
 
     return (
-      <ul className={ `search-dropdown ${hidden}` }>
-        { userResults }
-        { postResults }
-      </ul>
+      <section className={ `search-dropdown ${hidden}`}>
+        <ul className='entity-picker'>
+          <li onClick={this.handleClick('users')}>Users</li>
+          <li onClick={this.handleClick('posts')}>Posts</li>
+        </ul>
+        <ul className='results'>
+        { results }
+        </ul>
+      </section>
     );
   }
 }
