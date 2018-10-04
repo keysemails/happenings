@@ -34,6 +34,7 @@
 			}
 			img {
 				width: 15px;
+				cursor: pointer;
 			}
 		}
 
@@ -41,6 +42,8 @@
 			width: 360px;
 			margin: auto;
 			position: relative;
+			animation: slide-down;
+			animation-duration: 2s;
 
 			.search-field-container {
 				display: flex;
@@ -84,12 +87,14 @@
 						padding: 10px;
 						width: 100%;
 						text-align: center;
-						&:first-child {
-							border-right: solid 1px black;
-						}
-						&:hover {
+
+						&.selected {
 							background-color: $black;
 							color: white;
+						}
+
+						&:first-child {
+							border-right: solid 1px black;
 						}
 					}
 
@@ -141,4 +146,13 @@
 			}
 		}
 	}
+}
+
+@keyframes slide-down {
+  0% {
+    transform: translate(0, -100%);
+  }
+  100% {
+    transform: translate(0,0);
+  }
 }

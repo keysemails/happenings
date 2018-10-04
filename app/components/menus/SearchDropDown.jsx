@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames'
 
 class SearchResultDropdown extends React.Component {
   // install single use click handler on window only when the dropdown appears
@@ -22,7 +23,9 @@ class SearchResultDropdown extends React.Component {
   }
 
   render() {
-    const userResults = this.props.userResults.map((user, idx) => (
+    const { searchedEntity, userResults, postResults } = this.props
+
+    const userList = userResults.map((user, idx) => (
       <Link to={ `/user/${user.username}` } key={ idx }>
         <li>
             <p>
@@ -32,8 +35,8 @@ class SearchResultDropdown extends React.Component {
         </li>
       </Link>
     ));
-    console.log(this.props.postResults)
-    const postResults = this.props.postResults.map((post, idx) => (
+
+    const postList = postResults.map((post, idx) => (
       <Link to={ `/posts/${post.id}` } key={ idx }>
         <li>
           <img src={ post.thumb_url } />
@@ -48,17 +51,18 @@ class SearchResultDropdown extends React.Component {
       </Link>
     ));
 
-    const results = (this.props.searchedEntity == 'users') ?
-      userResults : postResults;
+    const usersSelected = (searchedEntity == 'users') ? 'selected' : ''
+    const postsSelected = (searchedEntity == 'posts') ? 'selected' : ''
+    const results = (searchedEntity == 'users') ? userList : postList
 
-    const hidden = (this.props.userResults.length === 0 &&
-      this.props.postResults.length === 0) ? 'hidden' : '';
+    const hidden = (userResults.length === 0 &&
+      postResults.length === 0) ? 'hidden' : '';
 
     return (
       <section className={ `search-dropdown ${hidden}`}>
         <ul className='entity-picker'>
-          <li onClick={this.handleClick('users')}>Users</li>
-          <li onClick={this.handleClick('posts')}>Posts</li>
+          <li className={ usersSelected } onClick={this.handleClick('users')}>Users</li>
+          <li className={ postsSelected } onClick={this.handleClick('posts')}>Posts</li>
         </ul>
         <ul className='results'>
         { results }
