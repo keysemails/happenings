@@ -80,7 +80,8 @@ SearchResultDropdown.defaultProps = {
 SearchResultDropdown.propTypes = {
 	userResults: PropTypes.array,
 	postResults: PropTypes.array,
-  clearSearch: PropTypes.func
+  clearSearch: PropTypes.func,
+  updateSearchedEntity: PropTypes.func
 }
 
 export default SearchResultDropdown;

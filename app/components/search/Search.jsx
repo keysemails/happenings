@@ -15,11 +15,8 @@ class Search extends React.Component {
   }
 
   executeQuery() {
-    if (this.props.searchedEntity == 'users') {
-      this.props.searchUsers(this.state.query);
-    } else {
-      this.props.searchPosts(this.state.query);
-    }
+    this.props.searchUsers(this.state.query);
+    this.props.searchPosts(this.state.query);
   }
 
   handleEsc(e) {
