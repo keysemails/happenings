@@ -1,5 +1,6 @@
 import React from 'react';
 import SearchResultDropdownContainer from '../menus/SearchDropdownContainer';
+import classNames from 'classnames'
 
 class Search extends React.Component {
   constructor(props) {
@@ -38,12 +39,10 @@ class Search extends React.Component {
   }
 
   render() {
-    if (!this.props.barOpen) {
-      return null
-    }
-    
+    const containerClass = classNames('search-container', { folded: !this.props.barOpen })
+
     return(
-      <div className='search-container'>
+      <div className={ containerClass }>
         <div className='search-field-container'>
           <input
             className='search-field'
