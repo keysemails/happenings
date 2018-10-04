@@ -7,4 +7,8 @@ export const clearSearch = () => ({
 export const updateSearchedEntity = (searchedEntity) => ({
   type: types.UPDATE_SEARCHED_ENTITY,
   searchedEntity
-})
+});
+
+export const toggleBar = () => ({
+  type: types.TOGGLE_BAR
+});

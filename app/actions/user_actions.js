@@ -17,7 +17,6 @@ export const receiveUser = user => ({
 export const searchUsers = (query) => dispatch => (
   searchByUsername(query).then( snapshot => {
     let users = snapshot.val()
-    console.log(users)
     if (!users || !query) {
       users = {}
     }

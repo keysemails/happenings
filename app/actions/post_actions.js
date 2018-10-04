@@ -50,7 +50,6 @@ export const receiveDiscoverFeedData = (data) => ({
 export const searchPosts = (query) => dispatch => (
   searchByTitle(query).then(snapshot => {
     let posts = snapshot.val()
-    console.log(posts)
     if (!posts || !query) {
       posts = {}
     }

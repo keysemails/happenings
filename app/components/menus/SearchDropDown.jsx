@@ -38,8 +38,11 @@ class SearchResultDropdown extends React.Component {
         <li>
           <img src={ post.thumb_url } />
             <p>
-              <span>{ post.title }</span>
-              <span>Post</span>
+              <h4>{ post.title }</h4>
+                <section className='post-details'>
+                  <span>Post</span>
+                  <span>Post</span>
+                </section>
             </p>
         </li>
       </Link>

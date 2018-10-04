@@ -3,7 +3,8 @@ import * as types from '../constants/actionTypes.js';
 const defaultState = {
   searchedEntity: 'users',
   userIds: [],
-  postIds: []
+  postIds: [],
+  barOpen: false
 };
 
 const searchResultsReducer = (state = defaultState, action) => {
@@ -17,6 +18,8 @@ const searchResultsReducer = (state = defaultState, action) => {
       return { ...state, searchedEntity: action.searchedEntity };
     case types.CLEAR_SEARCH:
       return defaultState;
+    case types.TOGGLE_BAR:
+      return { ...state, barOpen: !state.barOpen }
     default:
       return state;
   }

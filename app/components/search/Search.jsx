@@ -38,7 +38,10 @@ class Search extends React.Component {
   }
 
   render() {
-    console.log(this.props.searchedEntity)
+    if (!this.props.barOpen) {
+      return null
+    }
+    
     return(
       <div className='search-container'>
         <div className='search-field-container'>

@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
 
 import SearchContainer from './search/SearchContainer';
+import SearchToggle from './search/SearchToggle';
 
 const Header = ({currentUser, logOut, loggedIn}) => {
 	const logOutBtn = (<button onClick={logOut}>Sign out</button>);
@@ -19,6 +20,7 @@ const Header = ({currentUser, logOut, loggedIn}) => {
 						<li><NavLink className='nav-button' to='/discover'>Discover</NavLink></li>
 						<li><NavLink className='nav-button' to='/create'>Create</NavLink></li>
 						<li><NavLink className='nav-button' to={`/user/${currentUser.username}`}>Profile</NavLink></li>
+						<SearchToggle />
 					</ul>
 					<SearchContainer />
 				</nav>
