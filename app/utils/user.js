@@ -18,6 +18,12 @@ export function getUserByPostId(postId) {
 	return db.ref(`/posts/${postId}/author`).once('value');
 }
 
+export function searchByUsername(query) {
+	return db.ref('/people/').orderByChild('username')
+		.startAt(query)
+		.endAt(query+"\uf8ff").once('value');
+}
+
 /**
  * Listens to updates on the followers of a person and calls the callback with followers counts.
  * TODO: This won't scale if a user has a huge amount of followers. We need to keep track of a

@@ -1,6 +1,11 @@
 import * as types from '../constants/actionTypes.js';
 
-const modalsReducer = (state = {}, action) => {
+const INITIAL_UI_STATE = {
+	postOptionsModal: false,
+	authorOptionsModal: false
+};
+
+const modalsReducer = (state = INITIAL_UI_STATE, action) => {
 	switch(action.type) {
 		case types.OPEN_MODAL:
 			return {

@@ -40,3 +40,15 @@ export const selectOpenModal = (state) => {
   });
   return retVal;
 }
+
+export const selectUserResults = state => (
+  state.ui.search.userIds.map(userId => (
+    state.entities.users[userId]
+  ))
+)
+
+export const selectPostResults = state => (
+  state.ui.search.postIds.map(postId => (
+    state.entities.posts[postId]
+  ))
+)

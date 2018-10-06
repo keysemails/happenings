@@ -11,21 +11,21 @@ form {
     font-family: "Courier New", Courier, monospace;
   }
   .form-input {
-    border: solid 1px $red;
-    color: $red;
+    border: solid 1px $black;
+    color: $black;
     padding: 16px 10px 16px 10px;
 
     &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: $red;
+    color: $black;
     opacity: 1; /* Firefox */
     }
 
     &:-ms-input-placeholder { /* Internet Explorer 10-11 */
-        color: $red;
+        color: $black;
     }
 
     &::-ms-input-placeholder { /* Microsoft Edge */
-        color: $red;
+        color: $black;
     }
   }
 
@@ -35,7 +35,7 @@ form {
   }
 
   button {
-    background-color: $red;
+    background-color: $black;
     color:white;
     font-size: 14px;
     text-align: center;
@@ -45,6 +45,6 @@ form {
     font-family: verdana, sans-serif;
     text-align: center;
     margin-top: 22px;
-    color: $red;
+    color: $black;
   }
 }

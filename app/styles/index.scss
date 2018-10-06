@@ -14,7 +14,7 @@ $theme-font: verdana, sans-serif;
 body {
 	@include pad-horizontal(20px);
 	font: $theme-font;
-	color: $red;
+	color: $black;
 	background-color: $themeColor-Light;
 
 	.underline {
