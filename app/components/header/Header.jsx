@@ -12,10 +12,10 @@ const Header = ({currentUser, logOut, loggedIn}) => {
 	);
 	const defaultHeader = (
 		<div className='nav-bar-container'>
-			<header>
+			<header className='inline-centered'>
 				{ loggedIn ? logOutBtn : logInBtn }
 				<Link to='/' ><h1 className='logo'>HAPPENINGS</h1></Link>
-				{ loggedIn ? <NavLink to='/inbox'>Inbox</NavLink> : null }
+				{ loggedIn ? <Link to='/inbox'>Inbox</Link> : null }
 			</header>
 
 			{ loggedIn &&

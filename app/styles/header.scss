@@ -9,16 +9,12 @@
 	}
 	.inline-centered {
 		display: flex;
+		align-items: center;
 		justify-content: center;
 	}
 
 	header {
 		border-bottom: 1px solid $black;
-	}
-
-	.inbox-link {
-		padding-top: 15px;
-		vertical-align: middle;
 	}
 
 	.main-nav {

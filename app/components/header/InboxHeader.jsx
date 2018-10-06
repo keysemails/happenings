@@ -5,13 +5,12 @@ import { NavLink, Link } from 'react-router-dom';
 class InboxHeader extends React.Component {
 	render() {
 		const back = '< back';
-		const backLink = (<NavLink to='/'>{back}</NavLink>)
-		const subtext = `You have been invited to ${this.props.inviteCount} events`;
+		const subtext = `You have ${this.props.inviteCount} unread notifications`;
 		return (
 			<div className='nav-bar-container'>
 				<header>
 					<div className='inline-centered'>
-						<div className='inbox-link'>{backLink}</div>
+						<Link to='/'>{back}</Link>
 						<h1 className='logo inline-centered'>HAPPENINGS</h1>
 					</div>
 				</header>
