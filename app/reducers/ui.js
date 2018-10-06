@@ -3,7 +3,8 @@ import modalsReducer from './modals';
 
 const INITIAL_UI_STATE = {
   modals: {
-    postOptionsModal: false
+    postOptionsModal: false,
+    authorOptionsModal: false
   }
 };
 

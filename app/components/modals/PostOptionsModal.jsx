@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import CopyEventLink from './CopyEventLink';
 import { getUserByPostId, updateFollow } from '../../utils/user';
 
 // functionalities:
@@ -11,7 +11,6 @@ import { getUserByPostId, updateFollow } from '../../utils/user';
 
 class PostOptionsModal extends React.Component {
 	state = {
-		copied: false,
 		unfollowText: 'unfollow the author'
 	}
 	unfollowAuthor = () => {
@@ -23,21 +22,24 @@ class PostOptionsModal extends React.Component {
 			window.location.reload();
 		});
 	}
+	reportEvent = () => {
+		console.log('have not implemented this yet!')
+	}
 	render() {
-		const eventURL = `${window.location.host}/event/${this.props.postId}`;
-		const copyText = this.state.copied ? 'copied!' : '[copy to clipboard]';
 		return (
 			<div>
-				<div>
-					I am a modal for {this.props.postId}
-				</div>
-				<div onClick={this.unfollowAuthor}>
+				<div className='modal-option border-bottom' onClick={this.unfollowAuthor}>
 					{this.state.unfollowText}
 				</div>
-				<CopyToClipboard text={eventURL}
-					onCopy={() => this.setState({copied: true})}>
-					<span>{copyText}</span>
-				</CopyToClipboard>
+				<div className='modal-option border-bottom'>
+					<CopyEventLink postId={this.props.postId} />
+				</div>
+				<div className='modal-option border-bottom' onClick={this.reportEvent}>
+					[report event]
+				</div>
+				<div className='modal-option'>
+					[send invites]
+				</div>
 			</div>
 		)
 	}

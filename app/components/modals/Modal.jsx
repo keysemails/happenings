@@ -2,27 +2,32 @@ import React from 'react';
 import classNames from 'classnames';
 
 import { modalTypes as MODAL_TYPES } from '../../constants/modalTypes.js';
-import PostOptionModalContainer from './PostOptionModalContainer';
+import PostOptionsModalContainer from './PostOptionsModalContainer';
+import AuthorOptionsModalContainer from './AuthorOptionsModalContainer';
 
 class Modal extends React.Component {
 	resetModal = () => {
 		this.props.closeModal(this.props.modalName);
 	}
-
-	render() {
+	getModal(modalName) {
 		let modalShown;
-		switch(this.props.modalName) {
+		switch(modalName) {
 			case MODAL_TYPES.POST_OPTIONS_MODAL:
-				modalShown = (<PostOptionModalContainer />);
+				modalShown = (<PostOptionsModalContainer />);
 				break;
+			case MODAL_TYPES.AUTHOR_OPTIONS_MODAL:
+				modalShown = (<AuthorOptionsModalContainer />);
 			// do not put a default, it will always get reset to this
 		}
+		return modalShown;
+	}
+	render() {
 		const modalClass = classNames('modal', {'is-open': !!this.props.modalName});
 		return (
 			<div className={modalClass}>
 				<div className='modal-box'>
 					<span onClick={this.resetModal}>[x]</span>
-					{modalShown}
+					{this.getModal(this.props.modalName)}
 				</div>
 			</div>
 		)

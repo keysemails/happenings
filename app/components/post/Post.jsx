@@ -144,12 +144,14 @@ class Post extends React.Component {
 		});
 	}
 	toggleModal = (currUserIsAuthor) => {
-		if (currUserIsAuthor) {
-			console.log('my sick event');
-			this.props.openPostOptionsModal(this.props.id);
+		if (this.props.postOptionsModalOpen) {
+			this.props.closePostOptionsModal();
 		} else {
-			this.props.openPostOptionsModal(this.props.id);
-			console.log('cool event');
+			if (currUserIsAuthor) {
+				this.props.openAuthorOptionsModal(this.props.id);
+			} else {
+				this.props.openPostOptionsModal(this.props.id);
+			}
 		}
 	}
 	render() {
