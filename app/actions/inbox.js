@@ -3,7 +3,6 @@ import * as types from '../constants/actionTypes.js';
 import { ALL_NOTIFICATION_TYPES } from '../constants/notificationTypes.js';
 
 export const getUserNotifications = (uid) => dispatch => {
-	console.log('getting notifications for ', uid);
 	dispatch(beginNotificationFetch());
 	InboxUtil.getUserNotifications(uid).then(data => {
 		dispatch(receiveNotificationData(data));
@@ -19,4 +18,15 @@ export const receiveNotificationData = (data) => ({
 	notifications: data.entries,
 	nextPage: data.nextPage
 });
+
+export const readNotification = (id) => ({
+	type: types.MARK_NOTIFICATION_AS_READ,
+	notificationId: id
+});
+
+export const markAsRead = (currUserUid, notificationId) => dispatch => {
+	InboxUtil.markNotificationAsRead(currUserUid, notificationId).then(res => {
+		dispatch(readNotification(notificationId));
+	});
+};
 
