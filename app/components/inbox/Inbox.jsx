@@ -5,12 +5,6 @@ import { toArray } from '../../utils/index';
 import Notification from './Notification';
 
 class Inbox extends React.Component {
-	getNotifications() {
-		this.props.getUserNotifications(this.props.currentUser.uid);
-	}
-	componentDidMount() {
-		this.getNotifications();
-	}
 	markAsRead = (id) => {
 		this.props.markAsRead(this.props.currentUser.uid, id);
 	}

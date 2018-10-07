@@ -4,7 +4,7 @@ import { ALL_NOTIFICATION_TYPES } from '../constants/notificationTypes.js';
 
 export const getUserNotifications = (uid) => dispatch => {
 	dispatch(beginNotificationFetch());
-	InboxUtil.getUserNotifications(uid).then(data => {
+	return InboxUtil.getUserNotifications(uid).then(data => {
 		dispatch(receiveNotificationData(data));
 	});
 };
@@ -21,7 +21,12 @@ export const receiveNotificationData = (data) => ({
 
 export const readNotification = (id) => ({
 	type: types.MARK_NOTIFICATION_AS_READ,
-	notificationId: id
+	id: id
+});
+
+export const setUnreadNotifications = (count) => ({
+	type: types.SET_UNREAD_NOTIFICATION_COUNT,
+	count
 });
 
 export const markAsRead = (currUserUid, notificationId) => dispatch => {
@@ -29,4 +34,3 @@ export const markAsRead = (currUserUid, notificationId) => dispatch => {
 		dispatch(readNotification(notificationId));
 	});
 };
-

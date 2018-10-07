@@ -52,3 +52,9 @@ export const selectPostResults = state => (
     state.entities.posts[postId]
   ))
 )
+
+export const countUnreadNotifications = state => {
+  return Object.keys(state.entities.inbox.notifications).filter(
+    notification => state.entities.inbox.notifications[notification].read == false
+    ).length
+}

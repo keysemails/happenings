@@ -14,7 +14,6 @@ class InboxHeader extends React.Component {
 						<h1 className='logo inline-centered'>HAPPENINGS</h1>
 					</div>
 				</header>
-				{subtext}
 			</div>
 		)
 	}

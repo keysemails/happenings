@@ -4,7 +4,7 @@ import InboxHeader from './InboxHeader';
 import SearchContainer from '../search/SearchContainer';
 import SearchToggle from '../search/SearchToggle';
 
-const Header = ({currentUser, logOut, loggedIn}) => {
+const Header = ({currentUser, logOut, loggedIn, unreadNotificationCount}) => {
 	const logOutBtn = (<button onClick={logOut}>Sign out</button>);
 	const logInBtn = (<NavLink to='/login'>Log in</NavLink>);
 	const inboxHeader = (
@@ -15,7 +15,7 @@ const Header = ({currentUser, logOut, loggedIn}) => {
 			<header className='inline-centered'>
 				{ loggedIn ? logOutBtn : logInBtn }
 				<Link to='/' ><h1 className='logo'>HAPPENINGS</h1></Link>
-				{ loggedIn ? <Link to='/inbox'>Inbox</Link> : null }
+				{ loggedIn ? <Link to='/inbox'>Inbox[{unreadNotificationCount}]</Link> : null }
 			</header>
 
 			{ loggedIn &&

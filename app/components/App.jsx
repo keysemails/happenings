@@ -16,7 +16,12 @@ class App extends React.Component {
 		// out normally
 		const unsubscribe = getAuth().onAuthStateChanged((user) => {
 		  if (user) {
-				this.props.fetchUser(user.email, user.uid).then(() => {
+		  		let tasks = [
+		  			this.props.fetchUser(user.email, user.uid),
+		  			this.props.getUserNotifications(user.uid)
+	  			];
+				Promise.all(tasks).then(() => {
+					console.log('done');
 					this.setState({loading: false});
 				});
 				unsubscribe();

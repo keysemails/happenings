@@ -6,13 +6,13 @@ import Inbox from './Inbox.jsx';
 const mapStateToProps = state => ({
 	loggedIn: !!state.session.currentUser,
 	currentUser: state.session.currentUser,
-	notifications: state.entities.inbox,
+	notifications: state.entities.inbox.notifications,
 	loaded: state.ui.loading.notificationsLoading === false
 });
 
 const mapDispatchToProps = dispatch => ({
 	getUserNotifications: (uid) => dispatch(getUserNotifications(uid)),
-	markAsRead: (uid, notificationId) => dispatch(markAsRead(uid, notificationId))
+	markAsRead: (uid, notificationId) => dispatch(markAsRead(uid, notificationId)),
 });
 
 export default withRouter(connect(

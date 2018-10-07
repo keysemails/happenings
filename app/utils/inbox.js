@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 import base from './rebase';
-import { getPaginatedFeed } from './index';
+import { getPaginatedFeed, toArray } from './index';
 import { ALL_NOTIFICATION_TYPES } from '../constants/notificationTypes';
 
 let db = base.initializedApp.database();
@@ -33,4 +33,3 @@ export function removeNotification(userId, notificationId) {
 	return db.ref(`/notifications/${userId}/${notificationId}`).set(null);
 
 }
-
