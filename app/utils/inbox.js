@@ -6,13 +6,15 @@ import { ALL_NOTIFICATION_TYPES } from '../constants/notificationTypes';
 let db = base.initializedApp.database();
 
 export function addUserNotification(uid, notifier, notificationType, postId) {
-	const ref = db.ref(`/notifications/${uid}`);
 	if (ALL_NOTIFICATION_TYPES.includes(notificationType)) {
+		const ref = db.ref(`/notifications/${uid}`);
+		const timestamp = firebase.database.ServerValue.TIMESTAMP;
 		const notification = {
 			username: notifier.username,
 			uid: notifier.uid,
 			type: notificationType,
 			postId: postId,
+			timestamp: timestamp,
 			read: false
 		}
 		return ref.push(notification);
@@ -31,5 +33,4 @@ export function markNotificationAsRead(userId, notificationId) {
 
 export function removeNotification(userId, notificationId) {
 	return db.ref(`/notifications/${userId}/${notificationId}`).set(null);
-
 }

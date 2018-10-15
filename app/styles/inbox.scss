@@ -1,8 +1,27 @@
 .notification {
 	border: 1px solid black;
 	padding: 10px;
+	width: 380px;
+	height: auto;
+}
+.notification-body {
+	display: flex;
+}
+.notification-title {
+	padding-bottom: 10px;
 }
 .unread {
-	font-weight: bold;
-	background-color: #fafafa;
+	background-color: #eee;
+}
+
+.notification-img {
+	align-self: start;
+	max-width: 100px;
+	height: auto;
+	// float: left;
+	display: inline-block;
+}
+.event-details {
+	padding-left: 10px;
+	display: inline-block;
 }
