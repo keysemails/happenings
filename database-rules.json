@@ -146,7 +146,9 @@
     "notifications": {
       ".read": true,
       "$uid": {
-        ".write": "root.child('people').child($uid).exists()"
+        "$notificationId": {
+          ".write": "root.child('people').child($uid).exists()"
+        }
       }
     },
     "$other": {

@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 
 import { getAuth } from '../../utils/auth';
 import { toArray as _toArray } from '../../utils/index';
-import { fetchComments, registerUserToLike, addComment, subscribeToComments,
-	registerForCommentsCount, updateLike as _updateLike, deletePost as _deletePost,
-	updateAttending, registerUserAttendance, deleteComment as _deleteComment
+import { fetchComments, addComment, subscribeToComments,
+	updateLike as _updateLike, deletePost as _deletePost,
+	updateAttending, deleteComment as _deleteComment
 } from '../../utils/post';
 
 import PostHeader from './PostHeader.jsx';

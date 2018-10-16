@@ -1,12 +1,13 @@
 import firebase from 'firebase';
 import base from './rebase';
+import { Link } from 'react-router-dom';
 import { getPaginatedFeed, toArray } from './index';
-import { ALL_NOTIFICATION_TYPES } from '../constants/notificationTypes';
+import * as NotificationTypes from '../constants/notificationTypes';
 
 let db = base.initializedApp.database();
 
 export function addUserNotification(uid, notifier, notificationType, postId) {
-	if (ALL_NOTIFICATION_TYPES.includes(notificationType)) {
+	if (NotificationTypes.ALL_NOTIFICATION_TYPES.includes(notificationType)) {
 		const ref = db.ref(`/notifications/${uid}`);
 		const timestamp = firebase.database.ServerValue.TIMESTAMP;
 		const notification = {

@@ -4,8 +4,10 @@ const postsReducer = (state = {}, action) => {
   switch(action.type) {
     case types.RECEIVE_FEED_PAGE:
     // TODO normalize state and put authors in user slice of state
-      return action.posts;
+      return { ...state, ...action.posts }
     case types.RECEIVE_SEARCHED_POSTS:
+      return { ...state, ...action.posts }
+    case types.RECEIVE_INBOX_EVENTS:
       return { ...state, ...action.posts }
     default:
       return state;

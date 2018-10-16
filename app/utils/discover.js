@@ -20,7 +20,6 @@ export function recordUserActivity(currentUser, postId, event_timestamp, interac
 		'interaction_type': interactionType
 	}
 	// this endpoint will also be indexed on child event_timestamp
-	console.log(currentUser, postId, event_timestamp, interactionType);
 	return db.ref(activity_uri).push(activity_info);
 }
 
