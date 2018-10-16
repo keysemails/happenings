@@ -1,3 +1,4 @@
+import _ from 'underscore';
 import * as InboxUtil from '../utils/inbox';
 import * as types from '../constants/actionTypes.js';
 import { ALL_NOTIFICATION_TYPES } from '../constants/notificationTypes.js';
@@ -27,10 +28,13 @@ export const receiveNotificationData = (data) => ({
 
 export const getNotificationEventData = (notifications) => dispatch => {
 	dispatch(beginInboxFetch());
-	const queries = Object.values(notifications).map(notification => {
-		return getPostData(notification.postId).then(data => {
+	// can have multiple notifications on a given event.
+	// only fetch the bare minimum amt of data we need.
+	const uniquePostIds = _.uniq(_.pluck(notifications, 'postId'));
+	const queries = uniquePostIds.map(postId => {
+		return getPostData(postId).then(data => {
 			return {
-				...data.val(), postId: notification.postId
+				...data.val(), postId
 			}
 		});
 	});
