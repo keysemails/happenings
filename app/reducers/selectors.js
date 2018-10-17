@@ -14,10 +14,10 @@ export const selectAuthoredPosts = (state, authorName) => {
   return res;
 }
 
-export const isUserAttendee = (state, ownProps) => {
-  if (state.listeners.attendees[ownProps.id]) {
+export const isUserAttendee = (state, postId) => {
+  if (state.listeners.attendees[postId]) {
     const uid = state.session.currentUser.uid
-    return Object.keys(state.listeners.attendees[ownProps.id].items).includes(uid);
+    return Object.keys(state.listeners.attendees[postId].items).includes(uid);
   }
   return false;
 }

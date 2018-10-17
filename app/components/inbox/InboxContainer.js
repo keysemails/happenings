@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import {
-	getUserNotifications, markAsRead, getNotificationEventData
+	getUserNotifications, getNotificationEventData
 } from '../../actions/inbox';
 import { countUnreadNotifications } from '../../reducers/selectors';
 import Inbox from './Inbox.jsx';
@@ -18,7 +18,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
 	getNotificationEventData: (notifications) => dispatch(getNotificationEventData(notifications)),
 	getUserNotifications: (uid) => dispatch(getUserNotifications(uid)),
-	markAsRead: (uid, notificationId) => dispatch(markAsRead(uid, notificationId)),
 });
 
 export default withRouter(connect(

@@ -3,8 +3,15 @@ import classNames from 'classnames';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import * as NotificationTypes from '../../constants/notificationTypes';
+import { updateAttending } from '../../utils/post';
 
 class Notification extends React.Component {
+	componentWillMount() {
+		this.props.registerForAttendingCount(this.props.postId);
+	}
+	componentWillUnmount() {
+		this.props.removeListener('attendees', this.props.postId)
+	}
 	formatDate = (datestr) => {
 		const DATE_FORMAT_STRING = 'YYYY-MM-DD HH:mm';
 		let parsed = moment(datestr, DATE_FORMAT_STRING);
@@ -42,17 +49,25 @@ class Notification extends React.Component {
 				)
 		}
 	}
+	markAsRead = () => {
+		const { read, markAsRead, currentUser, id } = this.props;
+		return  read ? null : markAsRead(currentUser.uid, id);
+	}
+	updateAttend = () => {
+		const { currentUser, event, currUserAttending, postId } = this.props;
+		return updateAttending(currentUser, postId, event.event_timestamp, !!!currUserAttending);
+	}
 	render() {
-		const { id, notification, event, markAsRead } = this.props;
-		const classname = classNames('notification', {'unread': !notification.read});
+		const { read, postId, event, notification, id, currUserAttending } = this.props;
+		const classname = classNames('notification', {'unread': !read});
 		return (
-			<div className={classname} onClick={() => notification.read ? null : markAsRead(id)}>
+			<div className={classname} onClick={() => this.markAsRead(id)} >
 				<div className='notification-title'>
 					{this.conjugateNotification(notification, event)}
 				</div>
 				<div className='notification-body'>
 					<div>
-						<Link to={`/event/${notification.postId}`}>
+						<Link to={`/event/${postId}`}>
 							<img className='notification-img' src={event.thumb_url}></img>
 						</Link>
 					</div>
@@ -60,7 +75,8 @@ class Notification extends React.Component {
 						{event.title}<br/>
 						{event.description}<br/>
 						&#176;{event.location}<br/>
-						{this.formatDate(event.date_string)}
+						{this.formatDate(event.date_string)}<br/><br/>
+						<div onClick={this.updateAttend}>{ currUserAttending ? 'attending!' : 'attend' }</div>
 					</div>
 				</div>
 			</div>

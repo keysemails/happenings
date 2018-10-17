@@ -12,7 +12,7 @@ const mapStateToProps = (state, ownProps) => ({
   comments: state.entities.comments,
   attendees: state.listeners.attendees[ownProps.id] ? state.listeners.attendees[ownProps.id].items : {},
   likers: state.listeners.likers[ownProps.id] ? state.listeners.likers[ownProps.id].items : {},
-  currUserAttending: isUserAttendee(state, ownProps),
+  currUserAttending: isUserAttendee(state, ownProps.id),
   currUserLiked: isUserLiker(state, ownProps),
   postOptionsModalOpen: !!state.ui.modals.postOptionsModal
 });

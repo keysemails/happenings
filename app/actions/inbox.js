@@ -2,7 +2,7 @@ import _ from 'underscore';
 import * as InboxUtil from '../utils/inbox';
 import * as types from '../constants/actionTypes.js';
 import { ALL_NOTIFICATION_TYPES } from '../constants/notificationTypes.js';
-import { getPostData } from '../utils/post';
+import { getPostData, updateAttending } from '../utils/post';
 
 
 export const getUserNotifications = (uid) => dispatch => {

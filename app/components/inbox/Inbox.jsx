@@ -3,14 +3,11 @@ import { Route, Redirect } from 'react-router-dom';
 import { toArray } from '../../utils/index';
 import { getPostData } from './../../utils/post';
 
-import Notification from './Notification';
+import NotificationContainer from './NotificationContainer.js';
 
 class Inbox extends React.Component {
 	componentWillMount() {
 		this.props.getNotificationEventData(this.props.notifications);
-	}
-	markAsRead = (notificationId) => {
-		this.props.markAsRead(this.props.currentUser.uid, notificationId);
 	}
 	addNotifications = () => {
 		const { notifications, events } = this.props;
@@ -19,12 +16,10 @@ class Inbox extends React.Component {
 			const ref = notifications[notification.key];
 			const event = events[notification.postId];
 			return (
-				<Notification
+				<NotificationContainer
 					key={notification.key}
 					id={notification.key}
-					notification={ref}
-					event={event}
-					markAsRead={this.markAsRead}
+					postId={notification.postId}
 				/>
 			)
 		});
