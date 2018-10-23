@@ -76,7 +76,9 @@ class Notification extends React.Component {
 						{event.description}<br/>
 						&#176;{event.location}<br/>
 						{this.formatDate(event.date_string)}<br/><br/>
-						<div onClick={this.updateAttend}>{ currUserAttending ? 'attending!' : 'attend' }</div>
+						<div className='attend-btn' onClick={this.updateAttend}>
+							{ currUserAttending ? 'attending!' : 'attend' }
+						</div>
 					</div>
 				</div>
 			</div>
