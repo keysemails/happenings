@@ -41,7 +41,7 @@ class Notification extends React.Component {
 				)
 			case (NotificationTypes.USER_ATTENDING):
 				return (
-					<span>{userLink} is attending:</span>
+					<span>{userLink} will attend:</span>
 				)
 			case (NotificationTypes.USER_COMMENTED):
 				return (
@@ -55,7 +55,9 @@ class Notification extends React.Component {
 	}
 	updateAttend = () => {
 		const { currentUser, event, currUserAttending, postId } = this.props;
-		return updateAttending(currentUser, postId, event.event_timestamp, !!!currUserAttending);
+		return updateAttending(
+			currentUser, postId, event.author.uid, event.event_timestamp, !!!currUserAttending
+		);
 	}
 	render() {
 		const { read, postId, event, notification, id, currUserAttending } = this.props;

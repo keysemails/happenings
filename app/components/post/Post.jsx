@@ -107,8 +107,8 @@ class Post extends React.Component {
 	}
 	updateAttend(postId, val) {
 		if (this.auth.currentUser) {
-			const { currentUser, id, event_timestamp } = this.props;
-			updateAttending(currentUser, id, event_timestamp, val);
+			const { currentUser, id, author, event_timestamp } = this.props;
+			updateAttending(currentUser, id, author.uid, event_timestamp, val);
 		} else {
 			// TODO redirect to the public landing page
 			console.log('make an account!!');

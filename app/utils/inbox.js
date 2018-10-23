@@ -6,9 +6,10 @@ import * as NotificationTypes from '../constants/notificationTypes';
 
 let db = base.initializedApp.database();
 
-export function addUserNotification(uid, notifier, notificationType, postId) {
+export function addUserNotification(notifiedUid, notifier, notificationType, postId) {
+	console.log(notifiedUid, notifier, notificationType, postId);
 	if (NotificationTypes.ALL_NOTIFICATION_TYPES.includes(notificationType)) {
-		const ref = db.ref(`/notifications/${uid}`);
+		const ref = db.ref(`/notifications/${notifiedUid}`);
 		const timestamp = firebase.database.ServerValue.TIMESTAMP;
 		const notification = {
 			username: notifier.username,

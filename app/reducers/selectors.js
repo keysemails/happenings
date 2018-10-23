@@ -54,7 +54,8 @@ export const selectPostResults = state => (
 )
 
 export const countUnreadNotifications = state => {
-  return Object.keys(state.entities.inbox.notifications).filter(
+  var count = Object.keys(state.entities.inbox.notifications).filter(
     notification => state.entities.inbox.notifications[notification].read == false
-    ).length
+    ).length;
+  return count ? count : 0;
 }

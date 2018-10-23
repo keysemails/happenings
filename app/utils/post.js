@@ -2,8 +2,10 @@ import firebase from 'firebase';
 import base from './rebase';
 import { getPaginatedFeed, subscribeToFeed, getUsername } from './index';
 import { recordUserActivity } from './discover';
+import { addUserNotification } from './inbox';
 import { getAuth } from './auth';
 import { PAGE_SIZES } from '../constants';
+import { USER_ATTENDING } from '../constants/notificationTypes';
 
 /**
  * Functions for handling all things related to an individual post
@@ -80,10 +82,10 @@ export function updateLike(currentUser, postId, event_timestamp, value) {
 }
 
 // organized by user then by post to more easily get 'all events a user is attending'
-export function updateAttending(currentUser, postId, event_timestamp, value) {
-	console.log(postId, event_timestamp, value);
+export function updateAttending(currentUser, postId, authorUid, event_timestamp, value) {
 	if (value) {
 		recordUserActivity(currentUser, postId, event_timestamp, 'attend');
+		addUserNotification(authorUid, currentUser, USER_ATTENDING, postId);
 	}
 	// we are passing in event_timestamp from the post component so the DB has less work to do
 	const attendVal = value ? event_timestamp : null;
