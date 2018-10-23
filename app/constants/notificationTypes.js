@@ -1,6 +1,6 @@
 // event notification types
-export const INVITE_TO_EVENT = 'INVITE_TO_EVENT';
-export const SHARE_EVENT = 'SHARE_EVENT';
+export const INVITE_TO_EVENT = 'INVITE_TO_EVENT'; // host invited u to event
+export const SHARE_EVENT = 'SHARE_EVENT'; // someone shared someone elses event with u
 export const EVENT_TIME_CHANGE = 'EVENT_TIME_CHANGE';
 export const EVENT_CANCELLED = 'EVENT_CANCELLED';
 

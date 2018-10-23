@@ -116,8 +116,8 @@ class Post extends React.Component {
 	}
 	submitComment = (text) => {
 		if (this.auth.currentUser) {
-			const { currentUser, event_timestamp, id } = this.props;
-			addComment(currentUser, id, event_timestamp, text);
+			const { currentUser, id, author, event_timestamp } = this.props;
+			addComment(currentUser, id, author.uid, event_timestamp, text);
 		}
 	}
 	deleteComment = (commentId) => {

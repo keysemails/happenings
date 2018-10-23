@@ -10,7 +10,7 @@ class Notification extends React.Component {
 		this.props.registerForAttendingCount(this.props.postId);
 	}
 	componentWillUnmount() {
-		this.props.removeListener('attendees', this.props.postId)
+		this.props.removeListener('attendees', this.props.postId);
 	}
 	formatDate = (datestr) => {
 		const DATE_FORMAT_STRING = 'YYYY-MM-DD HH:mm';

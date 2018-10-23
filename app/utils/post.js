@@ -5,7 +5,7 @@ import { recordUserActivity } from './discover';
 import { addUserNotification } from './inbox';
 import { getAuth } from './auth';
 import { PAGE_SIZES } from '../constants';
-import { USER_ATTENDING } from '../constants/notificationTypes';
+import { USER_ATTENDING, USER_COMMENTED } from '../constants/notificationTypes';
 
 /**
  * Functions for handling all things related to an individual post
@@ -83,20 +83,23 @@ export function updateLike(currentUser, postId, event_timestamp, value) {
 
 // organized by user then by post to more easily get 'all events a user is attending'
 export function updateAttending(currentUser, postId, authorUid, event_timestamp, value) {
-	if (value) {
-		recordUserActivity(currentUser, postId, event_timestamp, 'attend');
-		addUserNotification(authorUid, currentUser, USER_ATTENDING, postId);
+	if (event_timestamp > Date.now()) {
+		if (value) {
+			recordUserActivity(currentUser, postId, event_timestamp, 'attend');
+			addUserNotification(authorUid, currentUser, USER_ATTENDING, postId);
+		}
+		// we are passing in event_timestamp from the post component so the DB has less work to do
+		const attendVal = value ? event_timestamp : null;
+		const updates = {};
+		updates[`/attends_user/${auth.currentUser.uid}/${postId}`] = attendVal;
+		updates[`/attends_post/${postId}/${auth.currentUser.uid}`] = attendVal;
+		return db.ref().update(updates);
+	} else {
+		console.log('attending past events currently unsupported :)');
 	}
-	// we are passing in event_timestamp from the post component so the DB has less work to do
-	const attendVal = value ? event_timestamp : null;
-	const updates = {};
-	updates[`/attends_user/${auth.currentUser.uid}/${postId}`] = attendVal;
-	updates[`/attends_post/${postId}/${auth.currentUser.uid}`] = attendVal;
-	return db.ref().update(updates);
 }
 
-export function addComment(currentUser, postId, event_timestamp, text) {
-	recordUserActivity(currentUser, postId, event_timestamp, 'comment');
+export function addComment(currentUser, postId, authorUid, event_timestamp, text) {
 	const comment = {
 		text: text,
 		timestamp: Date.now(),
@@ -105,7 +108,10 @@ export function addComment(currentUser, postId, event_timestamp, text) {
 			username: currentUser.username
 		}
 	};
-	return db.ref(`/comments/${postId}`).push(comment);
+	return db.ref(`/comments/${postId}`).push(comment).then(res => {
+		recordUserActivity(currentUser, postId, event_timestamp, 'comment');
+		addUserNotification(authorUid, currentUser, USER_COMMENTED, postId);
+	});
 }
 
 export function deleteComment(postId, commentId) {
