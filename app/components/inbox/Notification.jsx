@@ -6,6 +6,9 @@ import * as NotificationTypes from '../../constants/notificationTypes';
 import { updateAttending } from '../../utils/post';
 
 class Notification extends React.Component {
+	state = {
+		willRemove: false
+	}
 	componentWillMount() {
 		this.props.registerForAttendingCount(this.props.postId);
 	}
@@ -57,9 +60,12 @@ class Notification extends React.Component {
 	}
 	updateAttend = () => {
 		const { currentUser, event, currUserAttending, postId } = this.props;
-		return updateAttending(
-			currentUser, postId, event.author.uid, event.event_timestamp, !!!currUserAttending
-		);
+		// only allow to attend if not yet attending
+		if (!currUserAttending) {
+			return updateAttending(
+				currentUser, postId, event.author.uid, event.event_timestamp, !!!currUserAttending
+			);
+		}
 	}
 	removeNotification = () => {
 		const { currentUser, id } = this.props;
@@ -71,6 +77,7 @@ class Notification extends React.Component {
 	render() {
 		const { read, postId, event, notification, id, currUserAttending } = this.props;
 		const classname = classNames('notification', {'unread': !read});
+		const attendBtn = classNames('attend-btn', {'cursor-pointer': !currUserAttending});
 		return (
 			<div className={classname} onClick={() => this.markAsRead(id)} >
 				<div className='notification-title'>
@@ -78,18 +85,21 @@ class Notification extends React.Component {
 				</div>
 				<div className='notification-body'>
 					<div>
-						<img className='notification-img' src={event.thumb_url}></img>
+						<Link to={`/event/${postId}`}>
+							<img className='notification-img' src={event.thumb_url}></img>
+						</Link>
 					</div>
 					<div className='event-details'>
 						{event.title}<br/>
 						{event.description}<br/>
 						&#176;{event.location}<br/>
-						{this.formatDate(event.date_string)}<br/><br/>
+						{this.formatDate(event.date_string)}<br/>
+						<br/>
 						<div className='notification-btn-container'>
-							<div className='attend-btn' onClick={this.updateAttend}>
+							<div className={attendBtn} onClick={this.updateAttend}>
 								{ currUserAttending ? 'attending!' : 'attend' }
 							</div>
-							<div className='attend-btn' onClick={this.removeNotification}>
+							<div className='attend-btn cursor-pointer' onClick={this.removeNotification}>
 								X
 							</div>
 						</div>

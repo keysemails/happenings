@@ -13,15 +13,28 @@
 .unread {
 	background-color: #eee;
 }
+.inbox-header {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+.notification-count {
+	width: 20px;
+	height: 20px;
+	background-color: black;
+	color: white;
+	display: inline-block;
+	text-align: center;
+}
 
 .notification-img {
 	align-self: start;
-	max-width: 150px;
+	max-width: 120px;
 	float: left;
-	height: 100%;
+	height: auto;
 	display: inline-block;
 }
 .event-details {
+	min-height: 120px;
 	padding-left: 10px;
 	display: inline-block;
 	position: relative;
@@ -36,4 +49,8 @@
 	border: 1px solid #1bf068;;
 	display: inline;
 	margin-right: 10px;
+}
+
+.cursor-pointer {
+	cursor: pointer;
 }

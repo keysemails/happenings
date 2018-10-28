@@ -15,7 +15,7 @@ const Header = ({currentUser, logOut, loggedIn, unreadNotificationCount}) => {
 			<header className='inline-centered'>
 				{ loggedIn ? logOutBtn : logInBtn }
 				<Link to='/' ><h1 className='logo'>HAPPENINGS</h1></Link>
-				{ loggedIn ? <Link to='/inbox'>Inbox[{unreadNotificationCount}]</Link> : null }
+				{ loggedIn ? <Link to='/inbox' className='notification-count'>{unreadNotificationCount}</Link> : null }
 			</header>
 
 			{ loggedIn &&

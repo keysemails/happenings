@@ -11,7 +11,7 @@ class InboxHeader extends React.Component {
 				<header>
 					<div className='inline-centered'>
 						<Link to='/'>{back}</Link>
-						<h1 className='logo inline-centered'>HAPPENINGS</h1>
+						<h1 className='logo inline-centered'>Inbox</h1>
 					</div>
 				</header>
 			</div>
