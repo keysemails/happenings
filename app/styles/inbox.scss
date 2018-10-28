@@ -16,16 +16,24 @@
 
 .notification-img {
 	align-self: start;
-	max-width: 100px;
-	height: auto;
-	// float: left;
+	max-width: 150px;
+	float: left;
+	height: 100%;
 	display: inline-block;
 }
 .event-details {
 	padding-left: 10px;
 	display: inline-block;
+	position: relative;
+}
+.notification-btn-container {
+	position: absolute;
+	bottom: 0;
+	padding-bottom: 5px;
 }
 .attend-btn {
 	padding: 5px;
-	border: 1px solid black;
+	border: 1px solid #1bf068;;
+	display: inline;
+	margin-right: 10px;
 }
