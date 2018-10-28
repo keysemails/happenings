@@ -30,7 +30,8 @@ export const getNotificationEventData = (notifications) => dispatch => {
 	dispatch(beginInboxFetch());
 	// can have multiple notifications on a given event.
 	// only fetch the bare minimum amt of data we need.
-	const uniquePostIds = _.uniq(_.pluck(notifications, 'postId'));
+	// also, only some notifications have postIds.
+	const uniquePostIds = _.uniq(_.pluck(notifications, 'postId')).filter(id => !!id);
 	const queries = uniquePostIds.map(postId => {
 		return getPostData(postId).then(data => {
 			return {

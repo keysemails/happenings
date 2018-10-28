@@ -3,6 +3,8 @@ import base from './rebase';
 import latinize from 'latinize';
 import { getAuth } from './auth';
 import { toggleFollowUser } from './index';
+import { addUserNotification } from './inbox';
+import { FOLLOWED_BY_USER } from '../constants/notificationTypes';
 
 let db = base.initializedApp.database();
 
@@ -14,7 +16,7 @@ export function loadUserData(uid) {
 	return db.ref(`/people/${uid}`).once('value');
 }
 
-export function getUserByPostId(postId) {
+export function getAuthorByPostId(postId) {
 	return db.ref(`/posts/${postId}/author`).once('value');
 }
 
@@ -56,8 +58,13 @@ export function trackFollowStatus(uid, callback) {
 	}
 }
 
-export function updateFollow(currentUserUid, followeeUid, val) {
-	toggleFollowUser(currentUserUid, followeeUid, val);
+export function updateFollow(currentUser, followeeUid, val) {
+	// only add notification for follow, not unfollow
+	if (val) {
+		const postId = undefined;
+		addUserNotification(followeeUid, currentUser, FOLLOWED_BY_USER, postId);
+	}
+	toggleFollowUser(currentUser.uid, followeeUid, val);
 }
 
 /**

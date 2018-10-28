@@ -7,10 +7,10 @@ import Notification from './Notification';
 
 const mapStateToProps = (state, ownProps) => ({
 	currentUser: state.session.currentUser,
-	event: state.entities.posts[ownProps.postId],
 	notification: state.entities.inbox.notifications[ownProps.id],
 	read: state.entities.inbox.notifications[ownProps.id].read,
-	currUserAttending: isUserAttendee(state, ownProps.postId),
+	event: ownProps.postId ? state.entities.posts[ownProps.postId] : null,
+	currUserAttending: ownProps.postId ? isUserAttendee(state, ownProps.postId) : null,
 
 });
 

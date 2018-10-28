@@ -15,7 +15,7 @@ const ProfileStats = ({
 	const toggleFollow = () => {
 		if (loggedIn) {
 			const newVal = !isFollowing;
-			_updateFollow(currentUser.uid, user.uid, newVal);
+			_updateFollow(currentUser, user.uid, newVal);
 		} else {
 			history.push('/');
 		}

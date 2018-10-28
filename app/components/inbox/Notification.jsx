@@ -4,6 +4,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import * as NotificationTypes from '../../constants/notificationTypes';
 import { updateAttending } from '../../utils/post';
+import FollowNotification from './FollowNotification';
 
 class Notification extends React.Component {
 	state = {
@@ -75,7 +76,20 @@ class Notification extends React.Component {
 		return this.props.removeNotification(currentUser.uid, id);
 	}
 	render() {
-		const { read, postId, event, notification, id, currUserAttending } = this.props;
+		const {
+			currentUser, read, postId, event, notification, id, currUserAttending
+		} = this.props;
+		if (notification.type == NotificationTypes.FOLLOWED_BY_USER) {
+			return (
+				<FollowNotification
+					notificationId={id}
+					currentUser={currentUser}
+					followerUid={notification.uid}
+					followerName={notification.username}
+					read={read}
+				/>
+			)
+		}
 		const classname = classNames('notification', {'unread': !read});
 		const attendBtn = classNames('attend-btn', {'cursor-pointer': !currUserAttending});
 		return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import CopyEventLink from './CopyEventLink';
-import { getUserByPostId, updateFollow } from '../../utils/user';
+import { getAuthorByPostId, updateFollow } from '../../utils/user';
 
 // functionalities:
 // 1 - copy post URL
@@ -14,9 +14,9 @@ class PostOptionsModal extends React.Component {
 		unfollowText: 'unfollow the author'
 	}
 	unfollowAuthor = () => {
-		return getUserByPostId(this.props.postId).then(res => {
-			const authorUid = res.val().uid;
-			return updateFollow(this.props.currentUser.uid, authorUid, false);
+		return getAuthorByPostId(this.props.postId).then(res => {
+			const author = res.val();
+			return updateFollow(this.props.currentUser, author.uid, false);
 		}).then(() => {
 			this.setState({unfollowText: 'unfollowed!'});
 			window.location.reload();
