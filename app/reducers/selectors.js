@@ -54,8 +54,10 @@ export const selectPostResults = state => (
 )
 
 export const countUnreadNotifications = state => {
-  var count = Object.keys(state.entities.inbox.notifications).filter(
-    notification => state.entities.inbox.notifications[notification].read == false
-    ).length;
-  return count ? count : 0;
+  if (state.session.currentUser) {
+    var count = Object.keys(state.entities.inbox.notifications).filter(
+      notification => state.entities.inbox.notifications[notification].read == false
+      ).length;
+    return count ? count : 0;
+  }
 }
