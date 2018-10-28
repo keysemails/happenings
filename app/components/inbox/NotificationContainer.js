@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { listenToPath, removeListener } from '../../actions/listener_actions';
-import { markAsRead } from '../../actions/inbox';
+import { markAsRead, removeNotification } from '../../actions/inbox';
 import { isUserAttendee } from '../../reducers/selectors';
 
 import Notification from './Notification';
@@ -18,6 +18,7 @@ const mapDispatchToProps = (dispatch) => ({
 	markAsRead: (uid, notificationId) => dispatch(markAsRead(uid, notificationId)),
 	registerForAttendingCount: (postId) => dispatch(listenToPath(`/attends_post/${postId}`, 'attendees', postId)),
 	removeListener: (metaType, postId) => dispatch(removeListener(metaType, postId)),
+	removeNotification: (uid, notificationId) => dispatch(removeNotification(uid, notificationId)),
 });
 
 export default connect(

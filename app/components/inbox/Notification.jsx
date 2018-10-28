@@ -59,6 +59,10 @@ class Notification extends React.Component {
 			currentUser, postId, event.author.uid, event.event_timestamp, !!!currUserAttending
 		);
 	}
+	removeNotification = () => {
+		const { currentUser, id } = this.props;
+		return this.props.removeNotification(currentUser.uid, id);
+	}
 	render() {
 		const { read, postId, event, notification, id, currUserAttending } = this.props;
 		const classname = classNames('notification', {'unread': !read});
@@ -80,6 +84,9 @@ class Notification extends React.Component {
 						{this.formatDate(event.date_string)}<br/><br/>
 						<div className='attend-btn' onClick={this.updateAttend}>
 							{ currUserAttending ? 'attending!' : 'attend' }
+						</div>
+						<div className='attend-btn' onClick={this.removeNotification}>
+							[x]
 						</div>
 					</div>
 				</div>

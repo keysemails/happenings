@@ -67,3 +67,10 @@ export const markAsRead = (currUserUid, notificationId) => dispatch => {
 		dispatch(readNotification(notificationId));
 	});
 };
+
+export const removeNotification = (userId, notificationId) => dispatch => {
+	console.log('here it goes with deletion');
+	InboxUtil.removeNotification(userId, notificationId).then(res => {
+		dispatch(getUserNotifications(userId));
+	});
+}
