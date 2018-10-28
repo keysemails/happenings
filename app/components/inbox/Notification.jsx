@@ -7,9 +7,6 @@ import { updateAttending } from '../../utils/post';
 import FollowNotification from './FollowNotification';
 
 class Notification extends React.Component {
-	state = {
-		willRemove: false
-	}
 	componentWillMount() {
 		this.props.registerForAttendingCount(this.props.postId);
 	}
@@ -55,9 +52,7 @@ class Notification extends React.Component {
 	}
 	markAsRead = () => {
 		const { read, markAsRead, currentUser, id } = this.props;
-		if (this.state && !this.state.willRemove) {
-			return  read ? null : markAsRead(currentUser.uid, id);
-		}
+		return  read ? null : markAsRead(currentUser.uid, id);
 	}
 	updateAttend = () => {
 		const { currentUser, event, currUserAttending, postId } = this.props;
@@ -68,16 +63,16 @@ class Notification extends React.Component {
 			);
 		}
 	}
-	removeNotification = () => {
+	removeNotification = e => {
+		// don't let the outer markAsRead fire if trying to delete
+		e.stopPropagation();
 		const { currentUser, id } = this.props;
-		this.setState({
-			willRemove: true
-		});
 		return this.props.removeNotification(currentUser.uid, id);
 	}
 	render() {
 		const {
-			currentUser, read, postId, event, notification, id, currUserAttending
+			currentUser, read, postId, event, notification, id,
+			currUserAttending, removeNotification, markAsRead
 		} = this.props;
 		if (notification.type == NotificationTypes.FOLLOWED_BY_USER) {
 			return (
@@ -87,6 +82,8 @@ class Notification extends React.Component {
 					followerUid={notification.uid}
 					followerName={notification.username}
 					read={read}
+					removeNotification={this.removeNotification}
+					markAsRead={markAsRead}
 				/>
 			)
 		}

@@ -61,7 +61,7 @@ export function trackFollowStatus(uid, callback) {
 export function updateFollow(currentUser, followeeUid, val) {
 	// only add notification for follow, not unfollow
 	if (val) {
-		const postId = undefined;
+		const postId = null;
 		addUserNotification(followeeUid, currentUser, FOLLOWED_BY_USER, postId);
 	}
 	toggleFollowUser(currentUser.uid, followeeUid, val);
