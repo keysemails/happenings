@@ -41,7 +41,7 @@ class Notification extends React.Component {
 				)
 			case (NotificationTypes.USER_ATTENDING):
 				return (
-					<span>{userLink} will attend:</span>
+					<span>{userLink} will attend your event:</span>
 				)
 			case (NotificationTypes.USER_COMMENTED):
 				return (
@@ -51,7 +51,9 @@ class Notification extends React.Component {
 	}
 	markAsRead = () => {
 		const { read, markAsRead, currentUser, id } = this.props;
-		return  read ? null : markAsRead(currentUser.uid, id);
+		if (this.state && !this.state.willRemove) {
+			return  read ? null : markAsRead(currentUser.uid, id);
+		}
 	}
 	updateAttend = () => {
 		const { currentUser, event, currUserAttending, postId } = this.props;
@@ -61,6 +63,9 @@ class Notification extends React.Component {
 	}
 	removeNotification = () => {
 		const { currentUser, id } = this.props;
+		this.setState({
+			willRemove: true
+		});
 		return this.props.removeNotification(currentUser.uid, id);
 	}
 	render() {
@@ -73,20 +78,20 @@ class Notification extends React.Component {
 				</div>
 				<div className='notification-body'>
 					<div>
-						<Link to={`/event/${postId}`}>
-							<img className='notification-img' src={event.thumb_url}></img>
-						</Link>
+						<img className='notification-img' src={event.thumb_url}></img>
 					</div>
 					<div className='event-details'>
 						{event.title}<br/>
 						{event.description}<br/>
 						&#176;{event.location}<br/>
 						{this.formatDate(event.date_string)}<br/><br/>
-						<div className='attend-btn' onClick={this.updateAttend}>
-							{ currUserAttending ? 'attending!' : 'attend' }
-						</div>
-						<div className='attend-btn' onClick={this.removeNotification}>
-							[x]
+						<div className='notification-btn-container'>
+							<div className='attend-btn' onClick={this.updateAttend}>
+								{ currUserAttending ? 'attending!' : 'attend' }
+							</div>
+							<div className='attend-btn' onClick={this.removeNotification}>
+								X
+							</div>
 						</div>
 					</div>
 				</div>
