@@ -7,7 +7,7 @@ import { updateAttending } from '../../utils/post';
 import FollowNotification from './FollowNotification';
 
 class Notification extends React.Component {
-	componentWillMount() {
+	componentDidMount() {
 		this.props.registerForAttendingCount(this.props.postId);
 	}
 	componentWillUnmount() {
