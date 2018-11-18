@@ -1,39 +1,15 @@
 import React from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import InboxHeader from './InboxHeader';
-import SearchContainer from '../search/SearchContainer';
-import SearchToggle from '../search/SearchToggle';
+import DefaultHeader from './DefaultHeader';
 
-const Header = ({currentUser, logOut, loggedIn, unreadNotificationCount}) => {
-	const logOutBtn = (<button onClick={logOut}>Sign out</button>);
-	const logInBtn = (<NavLink to='/login'>Log in</NavLink>);
-	const inboxHeader = (
-		<InboxHeader />
-	);
-	const defaultHeader = (
-		<div className='nav-bar-container'>
-			<header className='inline-centered'>
-				{ loggedIn ? logOutBtn : logInBtn }
-				<Link to='/' ><h1 className='logo'>HAPPENINGS</h1></Link>
-				{ loggedIn ? <Link to='/inbox' className='notification-count'>{unreadNotificationCount}</Link> : null }
-			</header>
-
-			{ loggedIn &&
-				<nav className='main-nav'>
-					<ul>
-						<li><NavLink className='nav-button' exact to='/'>Feed</NavLink></li>
-						<li><NavLink className='nav-button' to='/discover'>Discover</NavLink></li>
-						<li><NavLink className='nav-button' to='/create'>Create</NavLink></li>
-						<li><NavLink className='nav-button' to={`/user/${currentUser.username}`}>Profile</NavLink></li>
-						<SearchToggle />
-					</ul>
-					<SearchContainer />
-				</nav>
-			}
-		</div>
+const Header = (props) => {
+	return (
+		<Switch>
+			<Route path='/inbox' component={InboxHeader} />
+			<Route path='/' render={() => (<DefaultHeader {...props} />)} />
+		</Switch>
 	)
-	const isInbox = window.location.pathname === '/inbox';
-	return ( isInbox ? inboxHeader : defaultHeader)
 }
 
 export default Header;
