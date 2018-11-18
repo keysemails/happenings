@@ -73,13 +73,13 @@ class SearchResultDropdown extends React.Component {
 }
 
 SearchResultDropdown.defaultProps = {
-	userResults: [],
-	postResults: []
+  userResults: [],
+  postResults: []
 }
 
 SearchResultDropdown.propTypes = {
-	userResults: PropTypes.array,
-	postResults: PropTypes.array,
+  userResults: PropTypes.array,
+  postResults: PropTypes.array,
   clearSearch: PropTypes.func,
   updateSearchedEntity: PropTypes.func
 }
