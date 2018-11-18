@@ -41,13 +41,13 @@ class SearchResultDropdown extends React.Component {
       <Link to={ `/events/${idx}` } key={ idx }>
         <li>
           <img src={ post.thumb_url } />
-            <p>
-              <h4>{ post.title }</h4>
-                <section className='post-details'>
+            <section className='post-result'>
+              <strong className='post-title'>{ post.title }</strong>
+                <p className='post-details'>
                   <span>Post</span>
                   <span>Post</span>
-                </section>
-            </p>
+                </p>
+            </section>
         </li>
       </Link>
     ));
@@ -74,14 +74,15 @@ class SearchResultDropdown extends React.Component {
 }
 
 SearchResultDropdown.defaultProps = {
-	userResults: [],
-	postResults: []
+  userResults: [],
+  postResults: []
 }
 
 SearchResultDropdown.propTypes = {
-	userResults: PropTypes.array,
-	postResults: PropTypes.array,
-  clearSearch: PropTypes.func
+  userResults: PropTypes.array,
+  postResults: PropTypes.array,
+  clearSearch: PropTypes.func,
+  updateSearchedEntity: PropTypes.func
 }
 
 export default SearchResultDropdown;
