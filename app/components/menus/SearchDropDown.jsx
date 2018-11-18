@@ -40,8 +40,8 @@ class SearchResultDropdown extends React.Component {
       <Link to={ `/posts/${post.id}` } key={ idx }>
         <li>
           <img src={ post.thumb_url } />
-            <section>
-              <strong>{ post.title }</strong>
+            <section className='post-result'>
+              <strong className='post-title'>{ post.title }</strong>
                 <p className='post-details'>
                   <span>Post</span>
                   <span>Post</span>
