@@ -44,5 +44,5 @@ Our event posters are stored in buckets. When an image is uploaded into our buck
 ### Full size images
 `<HAPPENINGS_BUCKET>/${uid}/full/${new_post_key}/${filename}`
 
-### Thumbnails
-`<HAPPENINGS_BUCKET>/${uid}/thumb/${new_post_key}/thumb_${filename}`
+### Thumbnails (only difference is a `thumb_` prefix)
+`<HAPPENINGS_BUCKET>/${uid}/full/${new_post_key}/thumb_${filename}`
