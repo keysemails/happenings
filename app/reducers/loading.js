@@ -1,7 +1,7 @@
 import * as types from '../constants/actionTypes.js';
 
 const INITIAL_STATE = {
-  inboxLoading: true
+  inboxLoading: false
 };
 const loadingReducer = (state = INITIAL_STATE, action) => {
   switch(action.type) {
@@ -17,6 +17,10 @@ const loadingReducer = (state = INITIAL_STATE, action) => {
       return { ...state, inboxLoading: true };
     case types.RECEIVE_INBOX_EVENTS:
       return { ...state, inboxLoading: false };
+    case types.BEGIN_USER_INFO_FETCH:
+      return {...state, userLoading: true };
+    case types.RECEIVE_CURRENT_USER:
+      return {...state, userLoading: false };
     default:
       return state;
   }

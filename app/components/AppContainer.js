@@ -5,8 +5,9 @@ import { fetchCurrentUser } from '../actions/session_actions';
 import { getUserNotifications } from '../actions/inbox';
 
 const mapStateToProps = state => ({
-  loggedIn: !!state.session.currentUser
-})
+  loggedIn: !!state.session.currentUser,
+  loading: state.ui.loading.userLoading && state.ui.loading.notificationsLoading
+});
 
 const mapDispatchToProps = dispatch => ({
   fetchUser: (email, uid) => dispatch(fetchCurrentUser(email, uid)),
