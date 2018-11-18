@@ -36,7 +36,7 @@ class Main extends React.Component {
 					<Route path='/event/:event_id' component={PostPage} />
 					<Route path='/settings' component={AccountSettings} />
 					<Route path='/create' component={CreateEvent} />
-					<Route path='/inbox' component={InboxContainer} />
+					{ this.props.loaded && <Route path='/inbox' component={InboxContainer} /> }
 				</Switch>
 			</main>
 		);

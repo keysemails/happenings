@@ -6,7 +6,7 @@ import { getPostData } from './../../utils/post';
 import NotificationContainer from './NotificationContainer.js';
 
 class Inbox extends React.Component {
-	componentWillMount() {
+	componentDidMount() {
 		this.props.getNotificationEventData(this.props.notifications);
 	}
 	addNotifications = () => {
@@ -28,7 +28,6 @@ class Inbox extends React.Component {
 	render() {
 		let notification = this.props.unreadNotificationCount == 1 ? 'notification' : 'notifications';
 		let count = this.props.unreadNotificationCount > 9 ? '9+' : this.props.unreadNotificationCount;
-
 		return (
 			<div>
 				<div className='inbox-header'>

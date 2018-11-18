@@ -6,7 +6,9 @@ import { getUserNotifications } from '../actions/inbox';
 
 const mapStateToProps = state => ({
   loggedIn: !!state.session.currentUser,
-  loading: state.ui.loading.userLoading && state.ui.loading.notificationsLoading
+  loaded: state.ui.loading.userLoading == false && state.ui.loading.notificationsLoading == false,
+  userLoading: state.ui.loading.userLoading,
+  notificationsLoading: state.ui.loading.notificationsLoading,
 });
 
 const mapDispatchToProps = dispatch => ({

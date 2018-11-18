@@ -8,7 +8,7 @@ const Header = ({currentUser, logOut, loggedIn, unreadNotificationCount}) => {
 	const logOutBtn = (<button onClick={logOut}>Sign out</button>);
 	const logInBtn = (<NavLink to='/login'>Log in</NavLink>);
 	const inboxHeader = (
-		<InboxHeader inviteCount={3} />
+		<InboxHeader />
 	);
 	const defaultHeader = (
 		<div className='nav-bar-container'>

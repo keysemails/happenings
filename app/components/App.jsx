@@ -20,18 +20,17 @@ class App extends React.Component {
   }
 
   render() {
-    if (this.props.loading) {
-      return (<div className='loader' />)
-    }
-    else {
+    if (this.props.loaded) {
       return (
         <div>
           <HeaderContainer />
-          <Main loggedIn={this.props.loggedIn} />
+          <Main loggedIn={this.props.loggedIn} loaded={this.props.loaded}/>
           <ModalContainer />
-				</div>
-			)
-		}
+        </div>
+      )
+    } else {
+      return (<div className='loader' />)
+    }
 	}
 }
 

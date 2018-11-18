@@ -5,7 +5,6 @@ import { NavLink, Link } from 'react-router-dom';
 class InboxHeader extends React.Component {
 	render() {
 		const back = '< back';
-		const subtext = `You have ${this.props.inviteCount} unread notifications`;
 		return (
 			<div className='nav-bar-container'>
 				<header>

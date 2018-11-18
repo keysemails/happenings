@@ -1,7 +1,9 @@
 import * as types from '../constants/actionTypes.js';
 
 const INITIAL_STATE = {
-  inboxLoading: false
+  inboxLoading: true,
+  notificationsLoading: true,
+  userLoading: true
 };
 const loadingReducer = (state = INITIAL_STATE, action) => {
   switch(action.type) {
