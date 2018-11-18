@@ -57,11 +57,6 @@ export const readNotification = (id) => ({
 	id: id
 });
 
-export const setUnreadNotifications = (count) => ({
-	type: types.SET_UNREAD_NOTIFICATION_COUNT,
-	count
-});
-
 export const markAsRead = (currUserUid, notificationId) => dispatch => {
 	InboxUtil.markNotificationAsRead(currUserUid, notificationId).then(res => {
 		dispatch(readNotification(notificationId));

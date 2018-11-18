@@ -9,7 +9,7 @@ import Inbox from './Inbox.jsx';
 const mapStateToProps = state => ({
 	loggedIn: !!state.session.currentUser,
 	currentUser: state.session.currentUser,
-	notifications: state.entities.inbox.notifications,
+	notifications: state.entities.notifications,
 	events: state.entities.posts,
 	loadin: state.ui.loading,
 	loaded: state.ui.loading.inboxLoading == false && state.ui.loading.userLoading == false && state.ui.loading.notificationsLoading == false,

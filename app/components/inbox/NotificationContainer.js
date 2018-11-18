@@ -2,13 +2,12 @@ import { connect } from 'react-redux';
 import { listenToPath, removeListener } from '../../actions/listener_actions';
 import { markAsRead, removeNotification } from '../../actions/inbox';
 import { isUserAttendee } from '../../reducers/selectors';
-
 import Notification from './Notification';
 
 const mapStateToProps = (state, ownProps) => ({
 	currentUser: state.session.currentUser,
-	notification: state.entities.inbox.notifications[ownProps.id],
-	read: state.entities.inbox.notifications[ownProps.id].read,
+	notification: state.entities.notifications[ownProps.id],
+	read: state.entities.notifications[ownProps.id].read,
 	event: ownProps.postId ? state.entities.posts[ownProps.postId] : null,
 	currUserAttending: ownProps.postId ? isUserAttendee(state, ownProps.postId) : null,
 
