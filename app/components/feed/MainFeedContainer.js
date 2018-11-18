@@ -7,7 +7,7 @@ const mapStateToProps = state => ({
   loggedIn: !!state.session.currentUser,
   currentUser: state.session.currentUser,
   posts: state.entities.posts,
-  loading: state.ui.postsLoading,
+  loading: state.ui.loading.postsLoading,
   nextPage: state.callbacks.nextFeedPage
 });
 

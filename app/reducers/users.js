@@ -13,7 +13,9 @@ const usersReducer = (state = {}, action) => {
       }
       shapedUser.uid = uid;
 
-      return Object.assign({}, state, { [action.user[uid].username]: shapedUser });
+      return { ...state, [action.user[uid].username]: shapedUser };
+    case types.RECEIVE_SEARCHED_USERS:
+      return { ...state, ...action.users }
     default:
       return state;
   }

@@ -1,4 +1,4 @@
-import { loadUserByUsername } from '../utils/user';
+import { loadUserByUsername, searchByUsername } from '../utils/user';
 import { getUsername } from '../utils/index';
 import * as types from '../constants/actionTypes.js'
 
@@ -12,4 +12,19 @@ export const fetchUserByUsername = (username) => dispatch => (
 export const receiveUser = user => ({
   type: types.RECEIVE_USER,
   user
+});
+
+export const searchUsers = (query) => dispatch => (
+  searchByUsername(query).then( snapshot => {
+    let users = snapshot.val()
+    if (!users || !query) {
+      users = {}
+    }
+    dispatch(receiveSearchedUsers(users))
+  })
+);
+
+export const receiveSearchedUsers = users => ({
+  type: types.RECEIVE_SEARCHED_USERS,
+  users
 });
