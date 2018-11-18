@@ -51,12 +51,13 @@ class SearchResultDropdown extends React.Component {
       </Link>
     ));
 
-    const usersSelected = (searchedEntity == 'users') ? 'selected' : ''
-    const postsSelected = (searchedEntity == 'posts') ? 'selected' : ''
+    const usersSelected = classNames({'selected': searchedEntity === 'users'});
+    const postsSelected = classNames({'selected': searchedEntity === 'posts'});
     const results = (searchedEntity == 'users') ? userList : postList
 
-    const hidden = (userResults.length === 0 &&
-      postResults.length === 0) ? 'hidden' : '';
+    const hidden = classNames({
+      'hidden': userResults.length === 0 && postResults.length === 0
+    });
 
     return (
       <section className={ `search-dropdown ${hidden}`}>
