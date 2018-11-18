@@ -40,13 +40,13 @@ class SearchResultDropdown extends React.Component {
       <Link to={ `/posts/${post.id}` } key={ idx }>
         <li>
           <img src={ post.thumb_url } />
-            <p>
-              <h4>{ post.title }</h4>
-                <section className='post-details'>
+            <section>
+              <strong>{ post.title }</strong>
+                <p className='post-details'>
                   <span>Post</span>
                   <span>Post</span>
-                </section>
-            </p>
+                </p>
+            </section>
         </li>
       </Link>
     ));
