@@ -10,8 +10,11 @@ class Comment extends React.Component {
 	}
 	render() {
 		const authorUrl = `/user/${this.props.author.username}`
+		const showDelete = (
+			!!this.props.currentUser &&
+			this.props.currentUser.uid === this.props.author.uid
+		);
 		const authorName = this.props.author.username;
-		const showDelete = this.props.author.uid === this.props.currentUID;
 		const deleteBtn = showDelete ? (
 			<button onClick={this.props.deleteComment}>
 			[x]
@@ -19,7 +22,9 @@ class Comment extends React.Component {
 		) : null;
 		return (
 			<div className='comment'>
-				<Link to={authorUrl}>{authorName}</Link> {this.props.text} <span>{deleteBtn}</span>
+				<Link
+					to={authorUrl}>{authorName}
+				</Link> {this.props.text} <span>{deleteBtn}</span>
 			</div>
 		)
 	}
@@ -30,6 +35,6 @@ Comment.propTypes = {
 	author: PropTypes.object,
 	text: PropTypes.string,
 	deleteComment: PropTypes.func,
-	currentUID: PropTypes.string,
+	showDelete: PropTypes.bool,
 };
 export default Comment;

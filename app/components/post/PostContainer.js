@@ -14,7 +14,11 @@ const mapStateToProps = (state, ownProps) => ({
   likers: state.listeners.likers[ownProps.id] ? state.listeners.likers[ownProps.id].items : {},
   currUserAttending: isUserAttendee(state, ownProps.id),
   currUserLiked: isUserLiker(state, ownProps),
-  postOptionsModalOpen: !!state.ui.modals.postOptionsModal
+  postOptionsModalOpen: !!state.ui.modals.postOptionsModal,
+  currUserIsAuthor: (
+    !!state.session.currentUser
+    && state.session.currentUser.uid === ownProps.author.uid
+  )
 });
 // nextCommentPage: state.callbacks.nextCommentPage[ownProps.id]
 

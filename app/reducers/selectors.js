@@ -15,7 +15,7 @@ export const selectAuthoredPosts = (state, authorName) => {
 }
 
 export const isUserAttendee = (state, postId) => {
-  if (state.listeners.attendees[postId]) {
+  if (state.listeners.attendees[postId] && !!state.session.currentUser) {
     const uid = state.session.currentUser.uid
     return Object.keys(state.listeners.attendees[postId].items).includes(uid);
   }
@@ -23,7 +23,7 @@ export const isUserAttendee = (state, postId) => {
 }
 
 export const isUserLiker = (state, ownProps) => {
-  if (state.listeners.likers[ownProps.id]) {
+  if (state.listeners.likers[ownProps.id] && state.session.currentUser) {
     const uid = state.session.currentUser.uid
     return Object.keys(state.listeners.likers[ownProps.id].items).includes(uid);
   }
