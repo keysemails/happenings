@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-
-import { getAuth } from '../../utils/auth';
-import { toArray as _toArray } from '../../utils/index';
+import { toArray } from '../../utils/index';
 import { fetchComments, addComment, subscribeToComments,
 	updateLike as _updateLike, deletePost as _deletePost,
 	updateAttending, deleteComment as _deleteComment
@@ -17,7 +15,6 @@ import AddCommentInput from './AddCommentInput.jsx';
 class Post extends React.Component {
 	constructor() {
 		super();
-		this.auth = getAuth() ;
 		this.state = {
 			comments: [],
 			gotComments: false,
@@ -31,7 +28,7 @@ class Post extends React.Component {
 
 		const postId = this.props.id;
 		fetchComments(postId).then(data => {
-			const comments = _toArray(data.entries);
+			const comments = toArray(data.entries);
 			const latestId = Object.keys(data.entries)[comments.length - 1];
 			this.safeSetState({
 				comments: comments,
@@ -90,14 +87,14 @@ class Post extends React.Component {
 					id={comment.key}
 					author={comment.author}
 					text={comment.text}
-					currentUID={this.auth.currentUser.uid}
+					currentUser={this.props.currentUser}
 					deleteComment={(key) => this.deleteComment(comment.key)}
 				/>
 			)
 		});
 	}
 	updateLike(val) {
-		if (this.auth.currentUser) {
+		if (this.props.currentUser) {
 			const { currentUser, id, event_timestamp,} = this.props;
 			_updateLike(currentUser, id, event_timestamp, val);
 		} else {
@@ -106,7 +103,7 @@ class Post extends React.Component {
 		}
 	}
 	updateAttend(postId, val) {
-		if (this.auth.currentUser) {
+		if (this.props.currentUser) {
 			const { currentUser, id, author, event_timestamp } = this.props;
 			updateAttending(currentUser, id, author.uid, event_timestamp, val);
 		} else {
@@ -115,7 +112,7 @@ class Post extends React.Component {
 		}
 	}
 	submitComment = (text) => {
-		if (this.auth.currentUser) {
+		if (this.props.currentUser) {
 			const { currentUser, id, author, event_timestamp } = this.props;
 			addComment(currentUser, id, author.uid, event_timestamp, text);
 		}
@@ -158,8 +155,7 @@ class Post extends React.Component {
 		const { attendees, likers, currUserLiked, currUserAttending } = this.props;
 		const numLikes = likers ? Object.keys(likers).length : 0;
 		const numAttendees = attendees ? Object.keys(attendees).length : 0;
-		const currUserIsAuthor = (this.props.author.uid === this.auth.currentUser.uid);
-		const deletePostBtn = currUserIsAuthor ? (
+		const deletePostBtn = this.props.currUserIsAuthor ? (
 			<div className='delete-post-btn' onClick={this.deletePost}>
 			[x]
 			</div>
@@ -181,7 +177,7 @@ class Post extends React.Component {
 			<div className='post-container'>
 				<PostHeader
 					username={this.props.author.username}
-					toggleModal={() => this.toggleModal(currUserIsAuthor)}
+					toggleModal={() => this.toggleModal(this.props.currUserIsAuthor)}
 				/>
 				<Link to={`/event/${this.props.id}`}>
 					<img src={this.props.full_url} height="300" width="300"></img>

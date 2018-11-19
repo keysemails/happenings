@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { toArray } from '../../utils/index';
-import { getPostData } from './../../utils/post';
 
 import NotificationContainer from './NotificationContainer.js';
 

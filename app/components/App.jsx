@@ -14,6 +14,8 @@ class App extends React.Component {
       if (user) {
         this.props.fetchUser(user.email, user.uid);
         this.props.getUserNotifications(user.uid);
+      } else {
+        this.props.proceedWithoutLogin()
       }
       unsubscribe();
     });

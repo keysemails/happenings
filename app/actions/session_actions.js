@@ -40,3 +40,7 @@ export const clearCurrentUser = () => ({
 export const beginUserFetch = () => ({
   type: types.BEGIN_USER_INFO_FETCH
 });
+
+export const proceedWithoutLogin = () => ({
+  type: types.PROCEED_WITHOUT_USER_LOGIN
+});

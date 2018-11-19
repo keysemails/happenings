@@ -11,8 +11,11 @@ const mapStateToProps = state => ({
 	currentUser: state.session.currentUser,
 	notifications: state.entities.notifications,
 	events: state.entities.posts,
-	loadin: state.ui.loading,
-	loaded: state.ui.loading.inboxLoading == false && state.ui.loading.userLoading == false && state.ui.loading.notificationsLoading == false,
+	loaded: (
+		state.ui.loading.notificationsLoaded &&
+		state.ui.loading.userLoaded &&
+		state.ui.loading.inboxLoaded
+	),
 	unreadNotificationCount: countUnreadNotifications(state)
 });
 

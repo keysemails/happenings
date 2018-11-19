@@ -1,7 +1,7 @@
 import * as FeedUtil from '../utils/feed';
 import * as DiscoverUtil from '../utils/discover';
-import * as types from '../constants/actionTypes.js'
-import { searchByTitle } from '../utils/post';
+import * as PostUtil from '../utils/post';
+import * as types from '../constants/actionTypes.js';
 
 export const getUserPosts = (uid) => dispatch => (
     FeedUtil.getUserFeedPosts(uid).then(data => {
@@ -48,7 +48,7 @@ export const receiveDiscoverFeedData = (data) => ({
 })
 
 export const searchPosts = (query) => dispatch => (
-  searchByTitle(query).then(snapshot => {
+  PostUtil.searchByTitle(query).then(snapshot => {
     let posts = snapshot.val()
     if (!posts || !query) {
       posts = {}
@@ -60,4 +60,24 @@ export const searchPosts = (query) => dispatch => (
 export const receiveSearchedPosts = posts => ({
   type: types.RECEIVE_SEARCHED_POSTS,
   posts
-})
+});
+
+export const beginPostFetch = () => ({
+  type: types.BEGIN_PAGE_FETCH
+});
+
+export const receivePostData = (post) => ({
+  type: types.RECEIVE_POST_DATA,
+  post
+});
+
+// the postID here comes from a URL so 404's are definitely possible
+export const getPostData = (postID) => (dispatch) => {
+  dispatch(beginPostFetch());
+  PostUtil.getPostData(postID)
+    .then(snap => snap.val())
+    // TODO need redux thunk-y 404 handling here
+    // the 404 action should clear out the store and go to a 404 page
+    .then(post => ({[postID]: post}))
+    .then(post => dispatch(receivePostData(post)));
+};

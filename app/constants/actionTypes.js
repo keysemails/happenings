@@ -1,6 +1,7 @@
 // session actions
 export const RECEIVE_CURRENT_USER = 'RECEIVE_CURRENT_USER';
 export const CLEAR_CURRENT_USER = 'CLEAR_CURRENT_USER';
+export const PROCEED_WITHOUT_USER_LOGIN = 'PROCEED_WITHOUT_USER_LOGIN';
 
 // ui actions
 export const OPEN_MODAL = 'OPEN_MODAL';
