@@ -5,9 +5,10 @@ import {getPostData } from '../../actions/post_actions';
 
 import PostPage from './PostPage';
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
 	loggedIn: !!state.session.currentUser,
-	loaded: state.ui.loading.postsLoading === false
+	loaded: state.ui.loading.postsLoading === false,
+	posts: state.entities.posts
 });
 
 const mapDispatchToProps = dispatch => ({
