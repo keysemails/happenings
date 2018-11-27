@@ -14,6 +14,8 @@ const postsReducer = (state = {}, action) => {
       return { ...state, ...addId(action.posts) }
     case types.RECEIVE_INBOX_EVENTS:
       return { ...state, ...addId(action.posts) }
+    case types.RECEIVE_POST_DATA:
+      return {...state, ...action.post}
     default:
       return state;
   }

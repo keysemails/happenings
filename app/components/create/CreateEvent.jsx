@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import ImageUploader from './ImageUploader.jsx';
-import NewEventForm from './NewEventForm.jsx';
+import EventInfoForm from './EventInfoForm.jsx';
 
 import { uploadEvent } from '../../utils/upload';
 
@@ -58,7 +58,7 @@ class CreateEvent extends React.Component {
 				<ImageUploader
 					onDrop={this.imageUploadCallback}
 				/>
-				<NewEventForm
+				<EventInfoForm
 					imgLoaded={this.state.imageLoaded}
 					handleFormInput={this.handleFormInput}
 				/>
