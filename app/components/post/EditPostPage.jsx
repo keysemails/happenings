@@ -26,13 +26,22 @@ class EditPostPage extends React.Component {
     }
   }
   addPost = () => {
-    const id = this.props.match.params.event_id;
-    return this.props.posts[id];
+    const postId = this.props.match.params.event_id;
+    // passing in postId so the component can redirect if needed
+    return { ...this.props.posts[postId], postId };
+  }
+  redirectToEventPage = () => {
+    return (<Redirect to={`/event/${this.props.match.params.event_id}`} />)
   }
   render() {
+    const infoForm = (
+      <EventInfoForm
+        post={this.addPost()}
+      />
+    )
     return (
       <div>
-        {this.props.loaded && (<EventInfoForm post={this.addPost()}/>)}
+        {this.props.loaded && infoForm}
       </div>
     )
   }
