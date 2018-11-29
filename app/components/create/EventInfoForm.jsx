@@ -19,7 +19,7 @@ class EventInfoForm extends React.Component {
       description: '',
       errorMsg: '',
 
-      isPastEvent: false
+      redirectToEventPage: false
     }
     // the ISO 8601 supported string format we use.
     this.DATE_FORMAT_STRING = 'YYYY-MM-DD HH:mm';
@@ -48,12 +48,12 @@ class EventInfoForm extends React.Component {
       title, description, location,
       year, month, day, hour, minute
     });
-    if (!this.isFutureEvent(this.parseDate(this.state))) {
-      this.setState({isPastEvent: true});
+    if (!this.isFutureEvent(this.parseDate(year, month, day, hour, minute))) {
+      this.setState({redirectToEventPage: true});
       console.error('cant edit past events!! they are immutably frozen in time :)');
     }
   }
-  parseDate = ({year, month, day, hour, minute}) => {
+  parseDate = (year, month, day, hour, minute) => {
     let dateStr = `${year}-${month}-${day} ${hour}:${minute}`;
     return moment(dateStr, this.DATE_FORMAT_STRING);
   }
@@ -98,7 +98,7 @@ class EventInfoForm extends React.Component {
   }
   render() {
     // can't edit past events
-    if (this.state.isPastEvent) {
+    if (this.state.redirectToEventPage) {
       return (<Redirect to={`/event/${this.props.post.postId}`} />)
     }
     return (

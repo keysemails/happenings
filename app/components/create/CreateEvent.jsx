@@ -56,7 +56,7 @@ class CreateEvent extends React.Component {
 			<div className='img-upload-container'>
 				create event here
 				<ImageUploader
-					onDrop={this.imageUploadCallback}
+					onDrop={(f) => this.setState({eventImage: f, imageLoaded: true})}
 				/>
 				<EventInfoForm
 					imgLoaded={this.state.imageLoaded}
