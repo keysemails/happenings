@@ -5,14 +5,14 @@ import { selectOpenModal } from '../../reducers/selectors';
 import Modal from './Modal';
 
 const mapStateToProps = (state) => ({
-	modalName: selectOpenModal(state),
+  modalName: selectOpenModal(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	closeModal: (modalName) => dispatch(closeModal(modalName)),
+  closeModal: (modalName) => dispatch(closeModal(modalName)),
 });
 
 export default connect(
-	mapStateToProps,
-	mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Modal);

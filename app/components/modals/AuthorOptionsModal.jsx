@@ -26,4 +26,3 @@ class AuthorOptionsModal extends React.Component {
 }
 
 export default AuthorOptionsModal;
-

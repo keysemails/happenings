@@ -17,33 +17,33 @@ import InboxContainer from './inbox/InboxContainer';
 import EditPostContainer from './post/EditPostContainer';
 
 class Main extends React.Component {
-	constructor() {
-		super();
-	}
-	render() {
-		return (
-			<main>
-				<Switch>
-					<Route exact path='/' render={() => (
-						this.props.loggedIn ? (<MainFeedContainer />) : (<PublicLanding />)
-					)} />
-					<Route path='/discover' render={() => (
-						this.props.loggedIn ? (<DiscoverFeedContainer />) : (<PublicLanding />)
-					)} />
-					<Route path='/signup' component={SignUpForm} />
-					<Route path='/login' component={LoginFormContainer} />
-					<Route path='/user/:username' component={ProfilePageContainer} />
-					<Route path='/event/:event_id/edit' component={EditPostContainer} />
-					<Route path='/event/:event_id' component={PostPageContainer} />
-					<Route path='/settings' component={AccountSettings} />
-					<Route path='/create' render={(props) => (
+  constructor() {
+    super();
+  }
+  render() {
+    return (
+      <main>
+        <Switch>
+          <Route exact path='/' render={() => (
+            this.props.loggedIn ? (<MainFeedContainer />) : (<PublicLanding />)
+          )} />
+          <Route path='/discover' render={() => (
+            this.props.loggedIn ? (<DiscoverFeedContainer />) : (<PublicLanding />)
+          )} />
+          <Route path='/signup' component={SignUpForm} />
+          <Route path='/login' component={LoginFormContainer} />
+          <Route path='/user/:username' component={ProfilePageContainer} />
+          <Route path='/event/:event_id/edit' component={EditPostContainer} />
+          <Route path='/event/:event_id' component={PostPageContainer} />
+          <Route path='/settings' component={AccountSettings} />
+          <Route path='/create' render={(props) => (
             <EditPostContainer {...props} isNewEvent={true} />
           )} />
-					{ this.props.loaded && <Route path='/inbox' component={InboxContainer} /> }
-				</Switch>
-			</main>
-		);
-	}
+          { this.props.loaded && <Route path='/inbox' component={InboxContainer} /> }
+        </Switch>
+      </main>
+    );
+  }
 }
 
 export default Main;

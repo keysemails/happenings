@@ -9,15 +9,15 @@ import PostOptionsModal from './PostOptionsModal';
 // 4 - report event
 
 const mapStateToProps = (state) => ({
-	currentUser: state.session.currentUser,
-	postId: state.ui.modals.postOptionsModal
+  currentUser: state.session.currentUser,
+  postId: state.ui.modals.postOptionsModal
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	closeModal: (modalName) => dispatch(closeModal(modalName))
+  closeModal: (modalName) => dispatch(closeModal(modalName))
 });
 
 export default connect(
-	mapStateToProps,
-	mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(PostOptionsModal);
