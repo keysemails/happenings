@@ -21,11 +21,6 @@ class EditPostPage extends React.Component {
       window.URL.revokeObjectURL(this.state.eventImage);
     }
   }
-  addPost = () => {
-    const postId = this.props.match.params.event_id;
-    // passing in postId so the component can redirect if needed
-    return { ...this.props.posts[postId], postId };
-  }
   render() {
     const postId = this.props.match.params.event_id;
     if (this.props.loaded) {

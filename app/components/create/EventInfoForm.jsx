@@ -6,28 +6,30 @@ import moment from 'moment';
 import DateInput from './DateInput.jsx';
 import FormField from './FormField.jsx';
 
-class EventInfoForm extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      title: '',
-      location: '',
-      year: '',
-      month: '',
-      day: '',
-      hour: '',
-      minute: '',
-      description: '',
-      errorMsg: '',
+import * as AgeRestrictions from '../../constants/ageRestrictions';
+import * as DateUtil from '../../util/dates';
 
-      redirectToEventPage: false
-    }
-    // the ISO 8601 supported string format we use.
-    // TODO: move to constants file
-    this.DATE_FORMAT_STRING = 'YYYY-MM-DD HH:mm';
+class EventInfoForm extends React.Component {
+  state = {
+    title: '',
+    location: '',
+    year: '',
+    month: '',
+    day: '',
+    hour: '',
+    minute: '',
+    description: '',
+    errorMsg: '',
+
+    // for check boxes
+    private: false,
+    accessible: false,
+    guestsCanInvite: false,
+    ageRestriction: AgeRestrictions.AGES_ALL,
+    redirectToEventPage: false
   }
   componentDidMount() {
-    // TODO: be better
+    // TODO: be better. could use an explicit prop
     if (!!this.props.post) {
       this.fillForm(this.props.post);
     }
@@ -37,32 +39,22 @@ class EventInfoForm extends React.Component {
       [event.target.name]: event.target.value
     });
   }
-  separate = (datestr) => {
-    let [date, time] = datestr.split(' ');
-    let [year, month, day] = date.split('-');
-    let [hour, minute] = time.split(':');
-    return ({ year, month, day, hour, minute });
-  }
   // populates form with data if event exists already!
   fillForm = ({ title, description, location, date_string }) => {
-    const { year, month, day, hour, minute } = this.separate(date_string);
+    const { year, month, day, hour, minute } = DateUtil.separate(date_string);
     this.setState({
       title, description, location,
       year, month, day, hour, minute
     });
-    if (!this.isFutureEvent(this.parseDate(year, month, day, hour, minute))) {
+    if (!DateUtil.isFutureEvent(DateUtil.parseDate(year, month, day, hour, minute))) {
       this.setState({redirectToEventPage: true});
       console.error('cant edit past events!! they are immutably frozen in time :)');
     }
   }
-  parseDate = (year, month, day, hour, minute) => {
-    let dateStr = `${year}-${month}-${day} ${hour}:${minute}`;
-    return moment(dateStr, this.DATE_FORMAT_STRING);
-  }
-  getValidDate = () => {
-    let eventMomentObj = this.parseDate(this.state);
+  getValidDate = (state) => {
+    let eventMomentObj = DateUtil.parseDate(state);
     const isValid = eventMomentObj.isValid();
-    const isFutureEvent = this.isFutureEvent(eventMomentObj);
+    const isFutureEvent = DateUtil.isFutureEvent(eventMomentObj);
     let errorMsg;
     if (!isValid) {
       errorMsg = 'Invalid date format! Sorry we made it hard';
@@ -76,19 +68,15 @@ class EventInfoForm extends React.Component {
       return false;
     }
   }
-  isFutureEvent(eventMomentObj) {
-    const thisVeryMoment = moment();
-    return eventMomentObj > thisVeryMoment;
-  }
   handleSubmit = (event) => {
     event.preventDefault();
-    const dateObj = this.getValidDate();
+    const dateObj = this.getValidDate(this.state);
     if (dateObj == false) {
       console.error(this.state.errorMsg);
     } else {
       const { title, location, description } = this.state;
       const timestamp = dateObj.valueOf();  // UNIX timestamp for DB :)
-      const date_string = dateObj.format(this.DATE_FORMAT_STRING);
+      const date_string = dateObj.format(DateUtil.DATE_FORMAT_STRING);
       this.props.handleFormInput({
         title,
         location,
