@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 
 import moment from 'moment';
 import DateInput from './DateInput.jsx';
+import FormField from './FormField.jsx';
 
 class EventInfoForm extends React.Component {
   constructor() {
@@ -22,10 +23,11 @@ class EventInfoForm extends React.Component {
       redirectToEventPage: false
     }
     // the ISO 8601 supported string format we use.
+    // TODO: move to constants file
     this.DATE_FORMAT_STRING = 'YYYY-MM-DD HH:mm';
   }
   componentDidMount() {
-    // TODO be better
+    // TODO: be better
     if (!!this.props.post) {
       this.fillForm(this.props.post);
     }
@@ -41,7 +43,7 @@ class EventInfoForm extends React.Component {
     let [hour, minute] = time.split(':');
     return ({ year, month, day, hour, minute });
   }
-  // used when editing existing events with existing data!
+  // populates form with data if event exists already!
   fillForm = ({ title, description, location, date_string }) => {
     const { year, month, day, hour, minute } = this.separate(date_string);
     this.setState({
@@ -97,28 +99,24 @@ class EventInfoForm extends React.Component {
     }
   }
   render() {
-    // can't edit past events
+    // can't edit past events, redirect if they try to
     if (this.state.redirectToEventPage) {
       return (<Redirect to={`/event/${this.props.post.postId}`} />)
     }
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
-          <input
-            type="text"
+          <FormField
             name="title"
             value={this.state.title}
             placeholder="Title"
-            onChange={this.handleChange}
-            className='form-input'
+            handleChange={this.handleChange}
           />
-          <input
-            type="text"
+          <FormField
             name="location"
             value={this.state.location}
             placeholder="Location"
-            onChange={this.handleChange}
-            className='form-input'
+            handleChange={this.handleChange}
           />
           <section>
             <DateInput
@@ -129,13 +127,11 @@ class EventInfoForm extends React.Component {
               handleChange={this.handleChange}
             />
           </section>
-          <input
-            type="text"
+          <FormField
             name="description"
             value={this.state.description}
             placeholder="Description"
-            onChange={this.handleChange}
-            className='form-input'
+            handleChange={this.handleChange}
           />
           <button
             type="submit"

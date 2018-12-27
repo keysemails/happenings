@@ -45,6 +45,7 @@ class EditPostPage extends React.Component {
       );
       return (
         <div>
+          Edit your poster
           {imageContainer}
           <EventInfoForm post={{...post, postId}} />
         </div>
