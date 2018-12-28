@@ -12,9 +12,16 @@
 			width: 20px;
 			height: 20px;
 		}
+		.age-btn {
+			width: 24px;
+			height: 24px;
+			line-height: 24px;
+			text-align: center;
+			font-size: 10px;
+			margin-left: 10px;
+		}
 		.selected {
 			background-color: rgba(27, 240, 104, 0.3);
-			border: 2px solid black;
 		}
 	}
 }

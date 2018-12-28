@@ -1,5 +1,5 @@
 import * as types from '../constants/actionTypes.js';
-import { separate } from '../util/dates';
+import { separate } from '../utils/dates';
 
 export const fillFormData = (post) => {
   const { title, description, location, date_string } = post;

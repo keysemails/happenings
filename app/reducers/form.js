@@ -1,4 +1,5 @@
 import * as types from '../constants/actionTypes.js';
+import * as AgeRestrictions from '../constants/ageRestrictions.js';
 
 const INITIAL_FORM_STATE = {
     title: '',
@@ -12,7 +13,7 @@ const INITIAL_FORM_STATE = {
     private: false,
     accessible: false,
     guestsCanInvite: false,
-    ageRestriction: null
+    ageRestriction: AgeRestrictions.AGES_ALL
 };
 
 const formReducer = (state=INITIAL_FORM_STATE, action) => {

@@ -4,11 +4,11 @@ import moment from 'moment';
 import { Redirect } from 'react-router-dom';
 
 import * as AgeRestrictions from '../../constants/ageRestrictions';
-import * as DateUtil from '../../util/dates';
+import * as DateUtil from '../../utils/dates';
 
-import DateInput from './DateInput.jsx';
-import FormField from './FormField.jsx';
-import EventCheckboxForm from './EventCheckboxForm.jsx';
+import DateInput from './DateInput';
+import FormField from './FormField';
+import EventCheckboxForm from './EventCheckboxForm';
 
 class EventInfoForm extends React.Component {
   // TODO: wtf is this doing here

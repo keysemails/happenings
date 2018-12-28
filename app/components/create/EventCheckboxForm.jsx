@@ -1,12 +1,12 @@
 import React from 'react';
 import CheckBoxField from './CheckBoxField';
+import AgeRestrictionField from './AgeRestrictionField';
 
 const EventCheckboxForm = ({formData, handleChange}) => {
   const labelMap = {
     private: 'Private',
     guestsCanInvite: 'Guests can invite guests',
     accessible: 'This event is wheelchair accessible',
-    ageRestriction: 'Age restriction'
   }
   const generateCheckboxes = () => {
     return Object.keys(labelMap).map(field => {
@@ -24,6 +24,10 @@ const EventCheckboxForm = ({formData, handleChange}) => {
   return (
     <div>
       { generateCheckboxes() }
+      <AgeRestrictionField
+        ageRestriction={formData.ageRestriction}
+        handleChange={handleChange}
+      />
     </div>
   )
 }
