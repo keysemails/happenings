@@ -1,58 +1,83 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import EventInfoForm from '../create/EventInfoForm';
 import ImageUploader from '../create/ImageUploader';
 
+/**
+ * EditPostPage
+ * 
+ * Used for both creating new events
+ * as well as editing existing events :)
+ */
 class EditPostPage extends React.Component {
-  state = {
-    imageLoaded: false,
-    eventImage: null,
-    successFullyEditedEvent: false,
-    currentImageCleared: false
+  /** 
+   * ensure form fields are cleared when toggling between
+   * '/create' and '/event/<event_id>/edit'
+   */
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.location.pathname != this.props.location.pathname) {
+        this.props.clearFormFields();
+    }
   }
   componentDidMount() {
-    const id = this.props.match.params.event_id;
-    this.props.getPostData(id);
+    if (!this.props.isNewEvent) {
+      const id = this.props.match.params.event_id;
+      this.props.getPostData(id);
+    }
   }
   componentWillUnmount() {
-    if (this.state.eventImage) {
-      window.URL.revokeObjectURL(this.state.eventImage);
+    this.props.clearFormFields();
+    if (this.props.formData.eventImage != null) {
+      window.URL.revokeObjectURL(this.props.formData.eventImage);
+      this.props.clearLocalImage();
+    }
+  }
+  handleSubmit = () => {
+    if (this.props.isNewEvent) {
+      this.props.uploadEvent(this.props.currUser, this.props.history);
     }
   }
   render() {
     const postId = this.props.match.params.event_id;
     if (this.props.loaded) {
       const post = this.props.posts[postId];
+
+      const showUploader = (this.props.eventImageCleared || this.props.isNewEvent);
       const imageContainer = (
-        this.state.currentImageCleared ?
+        showUploader ?
         (
           <ImageUploader
-            onDrop={(file) => this.setState({eventImage: file, imageUploaded: true})}
+            clearLocalImage={this.props.clearLocalImage}
+            onDrop={(file) => this.props.loadLocalImage(file)}
           />
         ) : (
           <div>
-            <span onClick={() => this.setState({currentImageCleared: true})}>[x]</span>
+            <span onClick={this.props.clearEventImage}>[x]</span>
             <img src={post.full_url} width="300" />
           </div>
         )
       );
+      const btnText = this.props.isNewEvent ? 'Create' : 'Save Changes';
       return (
         <div className='create-container'>
           Edit your poster
           {imageContainer}
-          <EventInfoForm
-            post={{...post, postId}}
-            formData={this.props.formData}
-            fillFormData={this.props.fillFormData}
-            updateFormField={this.props.updateFormField}
-          />
+          <div className='form'>
+            <EventInfoForm
+              formData={this.props.formData}
+              updateFormField={this.props.updateFormField}
+            />
+            <div className='submit-btn' onClick={this.handleSubmit}>
+              {btnText}
+            </div>
+          </div>
         </div>
       )
     }
     else {
-      return (<div>loading...</div>)
+      return (<div className='loader'></div>)
     }
   }
 }

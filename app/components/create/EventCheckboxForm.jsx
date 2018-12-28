@@ -4,9 +4,9 @@ import AgeRestrictionField from './AgeRestrictionField';
 
 const EventCheckboxForm = ({formData, handleChange}) => {
   const labelMap = {
-    private: 'Private',
+    isPrivate: 'Private',
+    isAccessible: 'This event is wheelchair accessible',
     guestsCanInvite: 'Guests can invite guests',
-    accessible: 'This event is wheelchair accessible',
   }
   const generateCheckboxes = () => {
     return Object.keys(labelMap).map(field => {

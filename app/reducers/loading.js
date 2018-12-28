@@ -7,18 +7,20 @@ const INITIAL_STATE = {
 
   inboxLoaded: false,
   notificationsLoaded: false,
-  userLoaded: false
+  userLoaded: false,
+
+  eventUploading: false
 };
 const loadingReducer = (state = INITIAL_STATE, action) => {
   switch(action.type) {
     case types.BEGIN_PAGE_FETCH:
       return { ...state, postsLoading: true };
     case types.BEGIN_USER_INFO_FETCH:
-      return {...state, userLoading: true };
+      return { ...state, userLoading: true };
     case types.BEGIN_NOTIFICATION_FETCH:
       return { ...state, notificationsLoading: true };
     case types.BEGIN_INBOX_FETCH:
-      return {...state, inboxLoading: true };
+      return { ...state, inboxLoading: true };
     case types.RECEIVE_FEED_PAGE:
       return { ...state, postsLoading: false };
     case types.BEGIN_POST_FETCH:
@@ -43,6 +45,10 @@ const loadingReducer = (state = INITIAL_STATE, action) => {
         userLoading: false,
         userLoaded: true
       };
+    case types.BEGIN_EVENT_UPLOAD:
+      return { ...state, eventUploading: true };
+    case types.COMPLETE_EVENT_UPLOAD:
+      return { ...state, eventUploading: false };
     default:
       return state;
   }

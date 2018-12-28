@@ -2,20 +2,19 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { getAuth } from '../utils/auth';
 
-import DiscoverFeedContainer from './feed/DiscoverFeedContainer.js';
+import DiscoverFeedContainer from './feed/DiscoverFeedContainer';
 import MainFeedContainer from './feed/MainFeedContainer';
 
-import PublicLanding from './PublicLanding.jsx';
-import SignUpForm from './SignUpForm.jsx';
-import LoginFormContainer from './LoginFormContainer.js';
+import PublicLanding from './PublicLanding';
+import SignUpForm from './SignUpForm';
+import LoginFormContainer from './LoginFormContainer';
 
 import ProfilePageContainer from './profile/ProfilePageContainer';
 import PostPageContainer from './post/PostPageContainer';
 import AccountSettings from './account_settings/AccountSettings';
 
-import CreateEvent from './create/CreateEvent.jsx';
-import InboxContainer from './inbox/InboxContainer.js';
-import EditPostContainer from './post/EditPostContainer.js';
+import InboxContainer from './inbox/InboxContainer';
+import EditPostContainer from './post/EditPostContainer';
 
 class Main extends React.Component {
 	constructor() {
@@ -37,7 +36,9 @@ class Main extends React.Component {
 					<Route path='/event/:event_id/edit' component={EditPostContainer} />
 					<Route path='/event/:event_id' component={PostPageContainer} />
 					<Route path='/settings' component={AccountSettings} />
-					<Route path='/create' component={CreateEvent} />
+					<Route path='/create' render={(props) => (
+            <EditPostContainer {...props} isNewEvent={true} />
+          )} />
 					{ this.props.loaded && <Route path='/inbox' component={InboxContainer} /> }
 				</Switch>
 			</main>

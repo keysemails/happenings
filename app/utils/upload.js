@@ -1,87 +1,110 @@
 import firebase from 'firebase';
 import base from './rebase';
 
-import { getAuth } from './auth';
-import { getUsername } from './index';
+import * as DateUtil from './dates';
 
-export function uploadEvent(eventObj, pic, fileName, callback) {
-
-	/**
-	 * This function triggers a lot of different things related to uploading a new event:
-	 * 
-	 * 1. the event image is uploaded to cloud storage
-	 * 
-	 * 2. Upon this upload, the generateThumbnail cloud function is triggered.
-	 *    It does the following things:
-	 *		- creates a thumbnail from the image using ImageMagick
-	 *		- uploads that thumbnail to cloud storage
-	 *		- updates the DB record at `/posts/newPostKey` with the thumbnail location
-	 *
-	 * 3. After steps 1 & 2 complete, we add the rest of the event info at `/posts/newPostKey`
-	 *
-	 * 4. Only after steps 1, 2, and 3 complete, we report back to the frontend the
-	 * 	  status of the uploadEvent operation (success / error).
-	 */
-
-	let auth = getAuth();
+/**
+ * @param { object } currentUser: {
+ *    uid: string,
+ *    username: string
+ *  }
+ *  
+ *  @param { object } eventData: {
+ *    title: string,
+ *    location: string,
+ *    description: string,
+ *    author: {
+ *      uid: string,
+ *      username: string    
+ *    },
+ *    event_timestamp: int,
+ *    date_string: string,
+ *    isPrivate: bool,
+ *    isAccessible: bool,
+ *    guestsCanInvite: bool,
+ *    ageRestriction: enum('AGES_ALL', 'AGES_18', 'AGES_21')
+ *  }
+ *  
+ *  @param { File } localImage [the local image file]
+ *
+ *  @param { Function } callback
+ * 
+ */
+export function uploadEvent(currentUser, eventData, localImage, callback) {
+  const { uid, username } = currentUser;
 	let storage = base.initializedApp.storage();
 	let database = base.initializedApp.database();
 	const metadata = {
-		contentType: pic.type
+		contentType: localImage.type
 	};
-
 	const newPostKey = database.ref('/posts').push().key;
+  const fileName = localImage.name;
 
-	// start the pic upload to cloud storage
-	const imgRef = storage.ref(`${auth.currentUser.uid}/full/${newPostKey}/${fileName}`);
-
-	let imgUploadTask = imgRef.put(pic, metadata).then(snapshot => {
+	/**
+   * imgUploadTask is a promise for uploading a local image to cloud storage.
+   * Upon successful upload, the generateThumbnail cloud func will be triggered
+   */
+	const imgRef = storage.ref(`${uid}/full/${newPostKey}/${fileName}`);
+	const imgUploadTask = imgRef.put(localImage, metadata).then(snapshot => {
 		console.log('uploaded new pic of size ', snapshot.totalBytes, 'bytes.');
-		let url = snapshot.metadata.downloadURLs[0];
-		return url;
+		let imgUrl = snapshot.metadata.downloadURLs[0];
+		return imgUrl;
 	}).catch(error => {
 		callback({status: 'ERROR', 'message': error})
 	});
 
-	// sad.. if we use Redux we don't need to constantly ask DB for username.
-	const usernameTask = getUsername(auth.currentUser.uid).then(snapshot => {
-		const username = snapshot.val();
-		return username;
-	});
-
-	// This promise lets us know when the generateThumbnail cloud function
-	// has finished executing (it updates the DB record with thumb_url info).
-	const thumbTask = database.ref(`/posts${newPostKey}`).on('value', data => {
+  /** 
+   * This listener promise lets us know when the generateThumbnail cloud function
+   *  has finished executing (it updates the DB record with thumb_url info).
+   */
+	const thumbGenerationTask = database.ref(`/posts/${newPostKey}`).on('value', data => {
 		return true;
 	});
 
-	var promises = [imgUploadTask, usernameTask, thumbTask];
+  /**
+   * ensure that the upload and thumbnail generation complete successfully before
+   * gathering and writing the rest of the event's data to the DB.
+   */
+  var preconditions = [imgUploadTask, thumbGenerationTask];
+  return Promise.all(preconditions).then(data => {
+    const updates = {};
 
-	return Promise.all(promises).then(data => {
-		const updates = {};
-		updates[`/posts/${newPostKey}`] = {
-			// thumb_url and thumb_storage_uri
-			// should already be present in the DB. we're adding the rest now.
+    // get derived date fields from already-validated form
+    const dateObj = DateUtil.parseDate(eventData);
+    const event_timestamp = dateObj.valueOf();  // UNIX timestamp of event date
+    const date_string = dateObj.format(DateUtil.DATE_FORMAT_STRING);
+
+    updates[`/posts/${newPostKey}`] = {
 			full_url: data[0],
 			timestamp: firebase.database.ServerValue.TIMESTAMP,
 			full_storage_uri: imgRef.toString(),
 			author: {
-				uid: auth.currentUser.uid,
-				full_name: auth.currentUser.displayName,
-				profile_picture: auth.currentUser.photoURL,
-				username: data[1],
+				uid: uid,
+				username: username,
 			},
-			title: eventObj.title,
-			location: eventObj.location,
-			description: eventObj.description,
-			event_timestamp: eventObj.timestamp,
-			date_string: eventObj.date_string,
+			event_timestamp: event_timestamp,
+			date_string: date_string,
+
+      title: eventData.title,
+      location: eventData.location,
+      description: eventData.description,
+
+      isPrivate: eventData.isPrivate,
+      isAccessible: eventData.isAccessible,
+      guestsCanInvite: eventData.guestsCanInvite,
+      ageRestriction: eventData.ageRestriction
 		};
-		updates[`/people/${auth.currentUser.uid}/posts/${newPostKey}`] = true;
-		updates[`/feed/${auth.currentUser.uid}/${newPostKey}`] = true;
+
+    /**
+     * Add new post to the user's profile feed and to the user's feed
+     */
+		updates[`/people/${uid}/posts/${newPostKey}`] = true;
+		updates[`/feed/${uid}/${newPostKey}`] = true;
 
 		return database.ref().update(updates).then(() => {
 			callback({status: 'SUCCESS', message: newPostKey});
-		});
+		}).catch(error => {
+      callback({status: 'ERROR', message: error})
+    });
 	});
 }

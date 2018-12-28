@@ -3,6 +3,9 @@ import * as DiscoverUtil from '../utils/discover';
 import * as PostUtil from '../utils/post';
 import * as types from '../constants/actionTypes.js';
 
+import { fillFormData } from './form_actions';
+import { uploadEvent as _uploadEvent } from '../utils/upload';
+
 export const getUserPosts = (uid) => dispatch => (
     FeedUtil.getUserFeedPosts(uid).then(data => {
       dispatch(receiveFeedData(data))
@@ -71,7 +74,12 @@ export const receivePostData = (post) => ({
   post
 });
 
-// the postID here comes from a URL so 404's are definitely possible
+/**
+ * @param  {string} postID
+ * @return {[]}
+ *
+ * Called when the Edit Event page is opened for an existing event
+ */
 export const getPostData = (postID) => (dispatch) => {
   dispatch(beginPostFetch());
   PostUtil.getPostData(postID)
@@ -79,5 +87,37 @@ export const getPostData = (postID) => (dispatch) => {
     // TODO need redux thunk-y 404 handling here
     // the 404 action should clear out the store and go to a 404 page
     .then(post => ({[postID]: post}))
-    .then(post => dispatch(receivePostData(post)));
+    .then(post => dispatch(receivePostData(post)))
+    .then(() => dispatch(fillFormData(postID)));
 };
+
+export const beginEventUpload = () => ({
+  type: types.BEGIN_EVENT_UPLOAD
+});
+
+export const eventUploadCompleted = () => ({
+  type: types.COMPLETE_EVENT_UPLOAD
+});
+
+/**
+ * @param  {object} currentUser - the currentUser in the store
+ * @param { object } history - the history prop from React Router
+ */
+export const uploadEventData = (currentUser, history) => (dispatch, getState) => {
+  dispatch(beginEventUpload());
+  const store = getState();
+  const eventData = store.ui.form.fields;
+  const localImage = store.ui.form.localImage;
+
+  _uploadEvent(currentUser, eventData, localImage, (response) => {
+    if (response.status == 'SUCCESS') {
+      dispatch(eventUploadCompleted());
+      const newPostID = response.message;
+      // redirect to event page
+      history.push(`/event/${newPostID}`)
+    } else {
+      console.error(response.message);
+    }
+  });
+
+}

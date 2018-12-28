@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-const CheckBoxField = ({field, label, isSelected, handleChange}) => {
+const CheckBoxField = ({ field, label, isSelected, handleChange }) => {
   const boxClass = classNames('checkbox', {'selected': isSelected});
   return (
     <div className='checkbox-container'>
