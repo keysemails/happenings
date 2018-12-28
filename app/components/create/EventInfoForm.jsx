@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
-
 import moment from 'moment';
-import DateInput from './DateInput.jsx';
-import FormField from './FormField.jsx';
+import { Redirect } from 'react-router-dom';
 
 import * as AgeRestrictions from '../../constants/ageRestrictions';
 import * as DateUtil from '../../util/dates';
+
+import DateInput from './DateInput.jsx';
+import FormField from './FormField.jsx';
+import EventCheckboxForm from './EventCheckboxForm.jsx';
 
 class EventInfoForm extends React.Component {
   state = {
@@ -20,36 +21,26 @@ class EventInfoForm extends React.Component {
     minute: '',
     description: '',
     errorMsg: '',
+    redirectToEventPage: false,
 
-    // for check boxes
+    // these are checkbox form states
     private: false,
     accessible: false,
     guestsCanInvite: false,
     ageRestriction: AgeRestrictions.AGES_ALL,
-    redirectToEventPage: false
   }
   componentDidMount() {
     // TODO: be better. could use an explicit prop
     if (!!this.props.post) {
-      this.fillForm(this.props.post);
+      this.props.fillFormData(this.props.post);
+      // TODO: date validation
+      // if (!DateUtil.isFutureEvent(DateUtil.parseDate(year, month, day, hour, minute)))
     }
   }
   handleChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value
     });
-  }
-  // populates form with data if event exists already!
-  fillForm = ({ title, description, location, date_string }) => {
-    const { year, month, day, hour, minute } = DateUtil.separate(date_string);
-    this.setState({
-      title, description, location,
-      year, month, day, hour, minute
-    });
-    if (!DateUtil.isFutureEvent(DateUtil.parseDate(year, month, day, hour, minute))) {
-      this.setState({redirectToEventPage: true});
-      console.error('cant edit past events!! they are immutably frozen in time :)');
-    }
   }
   getValidDate = (state) => {
     let eventMomentObj = DateUtil.parseDate(state);
@@ -96,30 +87,34 @@ class EventInfoForm extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <FormField
             name="title"
-            value={this.state.title}
+            value={this.props.formData.title}
             placeholder="Title"
             handleChange={this.handleChange}
           />
           <FormField
             name="location"
-            value={this.state.location}
+            value={this.props.formData.location}
             placeholder="Location"
             handleChange={this.handleChange}
           />
           <section>
             <DateInput
-              year={this.state.year}
-              month={this.state.month}
-              day={this.state.day}
-              hour={this.state.hour}
+              year={this.props.formData.year}
+              month={this.props.formData.month}
+              day={this.props.formData.day}
+              hour={this.props.formData.hour}
               handleChange={this.handleChange}
             />
           </section>
           <FormField
             name="description"
-            value={this.state.description}
+            value={this.props.formData.description}
             placeholder="Description"
             handleChange={this.handleChange}
+          />
+          <EventCheckboxForm
+            checkboxStates={{...this.state.checkboxes}}
+            handleChange={(checkboxName, val) => this.setState([checkboxName]: val)}
           />
           <button
             type="submit"

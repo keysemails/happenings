@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 const FormField = ({name, value, placeholder, handleChange}) => {
   return (
