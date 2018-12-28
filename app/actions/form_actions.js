@@ -18,3 +18,9 @@ export const fillFormData = (post) => {
     }
   }
 };
+
+export const updateFormField = (fieldName, value) => ({
+  type: types.UPDATE_FORM_FIELD,
+  fieldName,
+  value
+});

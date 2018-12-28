@@ -8,7 +8,11 @@ const INITIAL_FORM_STATE = {
     day: '',
     hour: '',
     minute: '',
-    description: ''
+    description: '',
+    private: false,
+    accessible: false,
+    guestsCanInvite: false,
+    ageRestriction: null
 };
 
 const formReducer = (state=INITIAL_FORM_STATE, action) => {

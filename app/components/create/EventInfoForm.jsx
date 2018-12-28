@@ -11,23 +11,9 @@ import FormField from './FormField.jsx';
 import EventCheckboxForm from './EventCheckboxForm.jsx';
 
 class EventInfoForm extends React.Component {
+  // TODO: wtf is this doing here
   state = {
-    title: '',
-    location: '',
-    year: '',
-    month: '',
-    day: '',
-    hour: '',
-    minute: '',
-    description: '',
-    errorMsg: '',
     redirectToEventPage: false,
-
-    // these are checkbox form states
-    private: false,
-    accessible: false,
-    guestsCanInvite: false,
-    ageRestriction: AgeRestrictions.AGES_ALL,
   }
   componentDidMount() {
     // TODO: be better. could use an explicit prop
@@ -38,9 +24,9 @@ class EventInfoForm extends React.Component {
     }
   }
   handleChange = (event) => {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
+    const fieldName = event.target.name;
+    const value = event.target.value;
+    this.props.updateFormField(fieldName, value);
   }
   getValidDate = (state) => {
     let eventMomentObj = DateUtil.parseDate(state);
@@ -113,8 +99,8 @@ class EventInfoForm extends React.Component {
             handleChange={this.handleChange}
           />
           <EventCheckboxForm
-            checkboxStates={{...this.state.checkboxes}}
-            handleChange={(checkboxName, val) => this.setState([checkboxName]: val)}
+            formData={this.props.formData}
+            handleChange={this.props.updateFormField}
           />
           <button
             type="submit"

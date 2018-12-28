@@ -46,6 +46,7 @@ class EditPostPage extends React.Component {
             post={{...post, postId}}
             formData={this.props.formData}
             fillFormData={this.props.fillFormData}
+            updateFormField={this.props.updateFormField}
           />
         </div>
       )

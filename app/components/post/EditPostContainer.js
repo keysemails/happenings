@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import {getPostData } from '../../actions/post_actions';
-import { fillFormData } from '../../actions/form_actions';
+import { fillFormData, updateFormField } from '../../actions/form_actions';
 
 import EditPostPage from './EditPostPage';
 
@@ -16,7 +16,8 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = dispatch => ({
     getPostData: (postID) => dispatch(getPostData(postID)),
-    fillFormData: (post) => dispatch(fillFormData(post))
+    fillFormData: (post) => dispatch(fillFormData(post)),
+    updateFormField: (fieldName, value) => dispatch(updateFormField(fieldName, value))
 });
 
 export default withRouter(connect(
