@@ -1,0 +1,16 @@
+.create-container {
+	.checkbox-container {
+		margin-top: 10px;
+		.label {
+			float: left;
+			display: inline-block;
+		}
+		.checkbox {
+			display: inline-block;
+			float: right;
+			border: 1px solid black;
+			width: 20px;
+			height: 20px;
+		}
+	}
+}

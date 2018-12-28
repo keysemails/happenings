@@ -53,7 +53,7 @@ class CreateEvent extends React.Component {
 			return (<Redirect to={`/event/${this.state.newEventId}`} />)
 		}
 		return (
-			<div className='img-upload-container'>
+			<div className='create-container'>
 				create event here
 				<ImageUploader
 					onDrop={(f) => this.setState({eventImage: f, imageLoaded: true})}
