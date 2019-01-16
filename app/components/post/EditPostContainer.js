@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import {getPostData, uploadEventData } from '../../actions/post_actions';
+import {getPostData, uploadEventData, updateEventData } from '../../actions/post_actions';
 import { fillFormData, updateFormField, clearFormFields, clearEventImage,
   loadLocalImage, clearLocalImage, validateFormFields } from '../../actions/form_actions';
 
@@ -31,7 +31,8 @@ const mapDispatchToProps = dispatch => ({
     loadLocalImage: (imageFille) => dispatch(loadLocalImage(imageFille)),
 
     // passing history object so redux action can redirect to new event page
-    uploadEvent: (currUser, history) => dispatch(uploadEventData(currUser, history))
+    uploadEvent: (currUser, history) => dispatch(uploadEventData(currUser, history)),
+    updateEvent: (currUser, postID, history) => dispatch(updateEventData(currUser, postID, history))
 });
 
 export default withRouter(connect(

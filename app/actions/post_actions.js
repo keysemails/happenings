@@ -4,7 +4,7 @@ import * as PostUtil from '../utils/post';
 import * as types from '../constants/actionTypes.js';
 
 import { fillFormData } from './form_actions';
-import { uploadEvent as _uploadEvent } from '../utils/upload';
+import * as UploadUtil from '../utils/upload';
 
 export const getUserPosts = (uid) => dispatch => (
     FeedUtil.getUserFeedPosts(uid).then(data => {
@@ -109,15 +109,29 @@ export const uploadEventData = (currentUser, history) => (dispatch, getState) =>
   const eventData = store.ui.form.fields;
   const localImage = store.ui.form.localImage;
 
-  _uploadEvent(currentUser, eventData, localImage, (response) => {
+  UploadUtil.uploadEventData(currentUser, eventData, localImage, (response) => {
     if (response.status == 'SUCCESS') {
       dispatch(eventUploadCompleted());
       const newPostID = response.message;
       // redirect to event page
-      history.push(`/event/${newPostID}`)
+      history.push(`/event/${newPostID}`);
     } else {
       console.error(response.message);
     }
   });
+}
 
+export const updateEventData = (currentUser, postID, history) => (dispatch, getState) => {
+  const store = getState();
+  const oldEventData = store.entities.posts[postID];
+  const newEventData = store.ui.form.fields;
+  const localImage = store.ui.form.localImage;
+
+  UploadUtil.updateEventData(currentUser, postID, oldEventData, newEventData, localImage, (response) => {
+    if (response.status == 'SUCCESS') {
+      history.push(`/event/${response.message}`);
+    } else {
+      console.error(response.message);
+    }
+  });
 }

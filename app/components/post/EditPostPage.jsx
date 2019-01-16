@@ -12,19 +12,18 @@ import ImageUploader from '../create/ImageUploader';
  * as well as editing existing events :)
  */
 class EditPostPage extends React.Component {
-  /** 
-   * ensure form fields are cleared when toggling between
-   * '/create' and '/event/<event_id>/edit'
-   */
+  postID = this.props.match.params.event_id;
+
   componentWillReceiveProps(nextProps) {
+    // ensure form fields are cleared when toggling between
+    // routes '/event/<event_id>/edit' and '/create'
     if (nextProps.location.pathname != this.props.location.pathname) {
         this.props.clearFormFields();
     }
   }
   componentDidMount() {
     if (!this.props.isNewEvent) {
-      const id = this.props.match.params.event_id;
-      this.props.getPostData(id);
+      this.props.getPostData(this.postID);
     }
   }
   componentWillUnmount() {
@@ -37,10 +36,12 @@ class EditPostPage extends React.Component {
   handleSubmit = () => {
     if (this.props.isNewEvent) {
       this.props.uploadEvent(this.props.currUser, this.props.history);
+    } else {
+      this.props.updateEvent(this.props.currUser, this.postID, this.props.history)
     }
   }
   render() {
-    const postId = this.props.match.params.event_id;
+    const postId = this.postID;
     if (this.props.loaded) {
       const post = this.props.posts[postId];
 
