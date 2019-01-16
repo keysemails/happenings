@@ -22,6 +22,7 @@ class EditPostPage extends React.Component {
     }
   }
   componentDidMount() {
+    this.props.clearFormFields();
     if (!this.props.isNewEvent) {
       this.props.getPostData(this.postID);
     }

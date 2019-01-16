@@ -44,7 +44,7 @@ class SignUpForm extends React.Component {
 	}
 	render() {
 		return (
-			<div>
+			<div className='form'>
 				Create your account
 				<form onSubmit={this.handleSubmit}>
 					<input
