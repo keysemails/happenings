@@ -28,7 +28,7 @@ export const getDiscoverFeed = (uid) => dispatch => {
 };
 
 export const updateFeed = () => ({
-  type: type.FEED_UPDATED
+  type: types.FEED_UPDATED
 });
 
 export const receiveFeedData = (data) => ({

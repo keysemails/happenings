@@ -15,13 +15,14 @@ export const login = (email, password) => dispatch => (
   )
 );
 
-export const fetchCurrentUser = (email, uid) => dispatch => (
-  getUsername(uid).then((snapshot) => {
+export const fetchCurrentUser = (email, uid) => dispatch => {
+  dispatch(beginUserFetch());
+  return getUsername(uid).then((snapshot) => {
     const username = snapshot.val();
     const loggedInUser = { username, uid , email }
     dispatch(receiveCurrentUser(loggedInUser))
   })
-);
+};
 
 export const logOut = () => dispatch => (
   signUserOut().then(() => dispatch(clearCurrentUser()))
@@ -34,4 +35,12 @@ export const receiveCurrentUser = currentUser => ({
 
 export const clearCurrentUser = () => ({
   type: types.CLEAR_CURRENT_USER
+});
+
+export const beginUserFetch = () => ({
+  type: types.BEGIN_USER_INFO_FETCH
+});
+
+export const proceedWithoutLogin = () => ({
+  type: types.PROCEED_WITHOUT_USER_LOGIN
 });

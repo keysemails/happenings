@@ -1,7 +1,8 @@
 import * as types from '../constants/actionTypes.js';
 
 const defaultSession = {
-  currentUser: null
+  currentUser: null,
+  proceedWithoutLogin: false
 };
 
 const sessionReducer = (state = defaultSession, action) => {
@@ -10,6 +11,8 @@ const sessionReducer = (state = defaultSession, action) => {
       return { ...state, currentUser: action.currentUser };
     case types.CLEAR_CURRENT_USER:
       return defaultSession;
+     case types.PROCEED_WITHOUT_USER_LOGIN:
+       return { ...state, proceedWithoutLogin: true }
     default:
       return state;
   }

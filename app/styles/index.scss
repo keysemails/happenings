@@ -2,11 +2,13 @@
 @import 'themeColors';
 @import 'mixins';
 @import 'main';
-@import 'navbar';
+@import 'header';
 @import 'post';
 @import 'form';
 @import 'signup';
 @import 'loader';
+@import 'modal';
+@import 'inbox';
 
 $theme-font: verdana, sans-serif;
 

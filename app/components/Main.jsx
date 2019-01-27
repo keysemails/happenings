@@ -14,31 +14,33 @@ import PostPage from './post/PostPage.jsx';
 import AccountSettings from './account_settings/AccountSettings.jsx';
 
 import CreateEvent from './create/CreateEvent.jsx';
+import InboxContainer from './inbox/InboxContainer.js';
 
 class Main extends React.Component {
-	constructor() {
-		super();
-	}
-	render() {
-		return (
-			<main>
-				<Switch>
-					<Route exact path='/' render={() => (
-						this.props.loggedIn ? (<MainFeedContainer />) : (<PublicLanding />)
-					)} />
-					<Route path='/discover' render={() => (
-						this.props.loggedIn ? (<DiscoverFeedContainer />) : (<PublicLanding />)
-					)} />
-					<Route path='/signup' component={SignUpForm} />
-					<Route path='/login' component={LoginFormContainer} />
-					<Route path='/user/:username' component={ProfilePageContainer} />
-					<Route path='/event/:event_id' component={PostPage} />
-					<Route path='/settings' component={AccountSettings} />
-					<Route path='/create' component={CreateEvent} />
-				</Switch>
-			</main>
-		);
-	}
+  constructor() {
+    super();
+  }
+  render() {
+    return (
+      <main>
+        <Switch>
+          <Route exact path='/' render={() => (
+            this.props.loggedIn ? (<MainFeedContainer />) : (<PublicLanding />)
+          )} />
+          <Route path='/discover' render={() => (
+            this.props.loggedIn ? (<DiscoverFeedContainer />) : (<PublicLanding />)
+          )} />
+          <Route path='/signup' component={SignUpForm} />
+          <Route path='/login' component={LoginFormContainer} />
+          <Route path='/user/:username' component={ProfilePageContainer} />
+          <Route path='/event/:event_id' component={PostPage} />
+          <Route path='/settings' component={AccountSettings} />
+          <Route path='/create' component={CreateEvent} />
+          { this.props.loaded && <Route path='/inbox' component={InboxContainer} /> }
+        </Switch>
+      </main>
+    );
+  }
 }
 
 export default Main;

@@ -11,7 +11,7 @@
     },
     "posts": {
       ".read": true,
-      ".indexOn": ["author/uid", "title"], // Allow searching for posts by authors. Useful for deletion.
+      ".indexOn": ["author/uid", "title"], // Allow searching for posts by authors and title
       "$postId": {
         ".write": "!data.exists() || data.exists() && auth.uid === data.child('author').child('uid').val()", // Allow new writes and allow updates and deletes to own posts.
         "author": {
@@ -103,7 +103,7 @@
       "$followedUid": {
         "$followerUid": {
           ".write": "auth.uid !== $followedUid", // Cannot follow yourself
-          ".validate": "newData.val() === true && newData.parent().parent().parent().child('people').child($followerUid).child('following').child($followedUid).exists()" // Makes sure /people/.../following is in sync
+          ".validate": "newData.val() === true" // Makes sure /people/.../following is in sync
         }
       }
     },
@@ -140,6 +140,14 @@
               ".validate": "root.child('followers').child($followedUid).child($uid).val() === true" // Makes sure /followers is in sync
             }
           }
+        }
+      }
+    },
+    "notifications": {
+      ".read": true,
+      "$uid": {
+        "$notificationId": {
+          ".write": "root.child('people').child($uid).exists()"
         }
       }
     },

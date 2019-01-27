@@ -1,0 +1,30 @@
+// event notification types
+export const INVITE_TO_EVENT = 'INVITE_TO_EVENT'; // host invited u to event
+export const SHARE_EVENT = 'SHARE_EVENT'; // someone shared someone elses event with u
+export const EVENT_TIME_CHANGE = 'EVENT_TIME_CHANGE';
+export const EVENT_CANCELLED = 'EVENT_CANCELLED';
+
+// general notification types
+export const FOLLOWED_BY_USER = 'FOLLOWED_BY_USER';
+export const USER_ATTENDING = 'USER_ATTENDING';
+export const USER_COMMENTED = 'USER_COMMENTED';
+export const USER_STARRED = 'USER_STARRED';
+
+export const EVENT_NOTIFICATION_TYPES = [
+  INVITE_TO_EVENT,
+  SHARE_EVENT,
+  EVENT_TIME_CHANGE,
+  EVENT_CANCELLED
+];
+
+export const GENERAL_NOTIFICATION_TYPES = [
+  FOLLOWED_BY_USER,
+  USER_ATTENDING,
+  USER_COMMENTED,
+  USER_STARRED
+];
+
+export const ALL_NOTIFICATION_TYPES = [
+  ...EVENT_NOTIFICATION_TYPES,
+  ...GENERAL_NOTIFICATION_TYPES
+];

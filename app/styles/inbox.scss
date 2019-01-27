@@ -1,0 +1,56 @@
+.notification {
+  border: 1px solid black;
+  padding: 10px;
+  width: 380px;
+  height: auto;
+}
+.notification-body {
+  display: flex;
+}
+.notification-title {
+  padding-bottom: 10px;
+}
+.unread {
+  background-color: #eee;
+}
+.inbox-header {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.notification-count {
+  width: 20px;
+  height: 20px;
+  background-color: black;
+  color: white;
+  display: inline-block;
+  text-align: center;
+}
+
+.notification-img {
+  align-self: start;
+  max-width: 120px;
+  float: left;
+  height: auto;
+  display: inline-block;
+}
+.event-details {
+  min-height: 120px;
+  padding-left: 10px;
+  display: inline-block;
+  position: relative;
+}
+.notification-btn-container {
+  position: absolute;
+  bottom: 0;
+  padding-bottom: 5px;
+}
+.attend-btn {
+  padding: 5px;
+  border: 1px solid #1bf068;;
+  display: inline;
+  margin-right: 10px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

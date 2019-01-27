@@ -14,20 +14,31 @@ export const selectAuthoredPosts = (state, authorName) => {
   return res;
 }
 
-export const isUserAttendee = (state, ownProps) => {
-  if (state.listeners.attendees[ownProps.id]) {
+export const isUserAttendee = (state, postId) => {
+  if (state.listeners.attendees[postId] && !!state.session.currentUser) {
     const uid = state.session.currentUser.uid
-    return Object.keys(state.listeners.attendees[ownProps.id].items).includes(uid);
+    return Object.keys(state.listeners.attendees[postId].items).includes(uid);
   }
   return false;
 }
 
 export const isUserLiker = (state, ownProps) => {
-  if (state.listeners.likers[ownProps.id]) {
+  if (state.listeners.likers[ownProps.id] && state.session.currentUser) {
     const uid = state.session.currentUser.uid
     return Object.keys(state.listeners.likers[ownProps.id].items).includes(uid);
   }
   return false;
+}
+
+export const selectOpenModal = (state) => {
+  let retVal = false;
+  Object.keys(state.ui.modals).forEach(key => {
+    // modals[key] is either a stringtype (postId) or boolean (false)
+    if (!!state.ui.modals[key]) {
+      retVal = key;
+    }
+  });
+  return retVal;
 }
 
 export const selectUserResults = state => (
@@ -41,3 +52,12 @@ export const selectPostResults = state => (
     state.entities.posts[postId]
   ))
 )
+
+export const countUnreadNotifications = state => {
+  if (state.session.currentUser && !state.ui.loading.notificationsLoading) {
+    const count = Object.keys(state.entities.notifications).filter(
+      notification => state.entities.notifications[notification].read == false
+      ).length;
+    return count ? count : 0;
+  }
+}

@@ -6,11 +6,13 @@ const addId = (posts) => {
 }
 
 const postsReducer = (state = {}, action) => {
-  switch(action.type){
+  switch(action.type) {
     case types.RECEIVE_FEED_PAGE:
     // TODO normalize state and put authors in user slice of state
-      return addId(action.posts);
+      return { ...state, ...addId(action.posts) }
     case types.RECEIVE_SEARCHED_POSTS:
+      return { ...state, ...addId(action.posts) }
+    case types.RECEIVE_INBOX_EVENTS:
       return { ...state, ...addId(action.posts) }
     default:
       return state;
