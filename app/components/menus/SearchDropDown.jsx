@@ -38,7 +38,7 @@ class SearchResultDropdown extends React.Component {
     console.log(postResults);
 
     const postList = postResults.map((post, idx) => (
-      <Link to={ `/events/${idx}` } key={ idx }>
+      <Link to={ `/events/${post.id}` } key={ idx }>
         <li>
           <img src={ post.thumb_url } />
             <section className='post-result'>

@@ -7,19 +7,18 @@ import CopyEventLink from './CopyEventLink';
 // 2 - delete post
 // 3 - copy post URL
 class AuthorOptionsModal extends React.Component {
-	render() {
-		return (
-			<div>
-				<div className='modal-option border-bottom'>
-					[edit post]
-				</div>
-				<div className='modal-option border-bottom'>
-					<CopyEventLink postId={this.props.postId} />
-				</div>
-			</div>
-		)
-	}
+  render() {
+    return (
+      <div>
+        <div className='modal-option border-bottom'>
+          [edit post]
+        </div>
+        <div className='modal-option border-bottom'>
+          <CopyEventLink postId={this.props.postId} />
+        </div>
+      </div>
+    )
+  }
 }
 
 export default AuthorOptionsModal;
-

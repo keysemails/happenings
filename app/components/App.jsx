@@ -33,7 +33,7 @@ class App extends React.Component {
     } else {
       return (<div className='loader' />)
     }
-	}
+  }
 }
 
 export default App;

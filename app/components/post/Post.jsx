@@ -2,10 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { toArray } from '../../utils/index';
-import { fetchComments, addComment, subscribeToComments,
-  updateLike as _updateLike, deletePost as _deletePost,
-  updateAttending, deleteComment as _deleteComment
-} from '../../utils/post';
+import * as PostUtil from '../../utils/post';
 
 import PostHeader from './PostHeader.jsx';
 import PostStats from './PostStats.jsx';
@@ -15,6 +12,7 @@ import AddCommentInput from './AddCommentInput.jsx';
 class Post extends React.Component {
   constructor() {
     super();
+    // TODO: reduxify comments
     this.state = {
       comments: [],
       gotComments: false,
@@ -27,7 +25,7 @@ class Post extends React.Component {
     this.loadPostStats();
 
     const postId = this.props.id;
-    fetchComments(postId).then(data => {
+    PostUtil.fetchComments(postId).then(data => {
       const comments = toArray(data.entries);
       const latestId = Object.keys(data.entries)[comments.length - 1];
       this.safeSetState({
@@ -50,7 +48,7 @@ class Post extends React.Component {
     }
   }
   listenForNewComments = () => {
-    subscribeToComments(this.props.id, this.state.mostRecentComment,
+    PostUtil.subscribeToComments(this.props.id, this.state.mostRecentComment,
       (key, commentData) => {
         const newComment = {...commentData, key};
         const currentComments = this.state.comments;
@@ -96,7 +94,7 @@ class Post extends React.Component {
   updateLike(val) {
     if (this.props.currentUser) {
       const { currentUser, id, event_timestamp,} = this.props;
-      _updateLike(currentUser, id, event_timestamp, val);
+      PostUtil.updateLike(currentUser, id, event_timestamp, val);
     } else {
       // TODO: redirect to the public landing page
       console.log('create an account!');
@@ -105,7 +103,7 @@ class Post extends React.Component {
   updateAttend(postId, val) {
     if (this.props.currentUser) {
       const { currentUser, id, author, event_timestamp } = this.props;
-      updateAttending(currentUser, id, author.uid, event_timestamp, val);
+      PostUtil.updateAttending(currentUser, id, author.uid, event_timestamp, val);
     } else {
       // TODO redirect to the public landing page
       console.log('make an account!!');
@@ -114,11 +112,11 @@ class Post extends React.Component {
   submitComment = (text) => {
     if (this.props.currentUser) {
       const { currentUser, id, author, event_timestamp } = this.props;
-      addComment(currentUser, id, author.uid, event_timestamp, text);
+      PostUtil.addComment(currentUser, id, author.uid, event_timestamp, text);
     }
   }
   deleteComment = (commentId) => {
-    _deleteComment(this.props.id, commentId).then(res => {
+    PostUtil.deleteComment(this.props.id, commentId).then(res => {
       // TODO: this is kind of shitty in that
       // it assumes the DB update succeeds.
       let newComments = [];
@@ -134,7 +132,7 @@ class Post extends React.Component {
   }
   deletePost = () => {
     const {id, full_storage_uri, thumb_storage_uri } = this.props;
-    _deletePost(id, full_storage_uri, thumb_storage_uri).then(res => {
+    PostUtil.deletePost(id, full_storage_uri, thumb_storage_uri).then(res => {
       console.log('Deleted post ', id);
       //TODO: better handling of this
       window.location.reload();

@@ -3,23 +3,23 @@ import PropTypes from 'prop-types';
 import { NavLink, Link } from 'react-router-dom';
 
 class InboxHeader extends React.Component {
-	render() {
-		const back = '< back';
-		return (
-			<div className='nav-bar-container'>
-				<header>
-					<div className='inline-centered'>
-						<Link to='/'>{back}</Link>
-						<h1 className='logo inline-centered'>Inbox</h1>
-					</div>
-				</header>
-			</div>
-		)
-	}
+  render() {
+    const back = '< back';
+    return (
+      <div className='nav-bar-container'>
+        <header>
+          <div className='inline-centered'>
+            <Link to='/'>{back}</Link>
+            <h1 className='logo inline-centered'>Inbox</h1>
+          </div>
+        </header>
+      </div>
+    )
+  }
 }
 
 InboxHeader.propTypes = {
-	inviteCount: PropTypes.number,
+  inviteCount: PropTypes.number,
 }
 
 export default InboxHeader;
