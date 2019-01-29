@@ -6,14 +6,12 @@ import moment from 'moment';
 
 import { groupByGranularity } from '../../utils/dates';
 import { TIMELINE_GRANULARITIES } from '../../constants';
+
 /**
  * Publically viewable page, don't need to be signed in
  */
-
-const MILLISECONDS_IN_DAY = 86400000;
-
 class ProfilePosts extends React.Component {
-  componentDidMount() {``
+  componentDidMount() {
     this.props.getPosts();
   }
 
@@ -24,7 +22,7 @@ class ProfilePosts extends React.Component {
   }
 
   render() {
-    const gran = 'DAY';
+    const gran = 'YEAR';
     const { posts } = this.props;
     const groupedPosts = groupByGranularity(posts, gran);
     const sections = Object.keys(groupedPosts).sort();
@@ -33,23 +31,26 @@ class ProfilePosts extends React.Component {
         {
           sections.map(groupKey => {
             let posts = groupedPosts[groupKey];
+            let sectionTitle = this.formatSection(groupKey, gran);
             return (
               <div key={groupKey}>
-                {this.formatSection(groupKey, gran)}
+                {sectionTitle}
                 <ImageMasonry
                   numCols={3}
                   animate={false}
                   scrollable={false}
                   className='masonry-container'
                 >
-                  {posts.map((post, idx) => (
+                {
+                  posts.map((post, idx) => (
                     <Link key={idx} to={`/event/${post.id}`}>
                       <img
                         src={post.thumb_url}
                         alt={post.thumb_url}
                       />
                     </Link>
-                  ))}
+                  ))
+                }
                 </ImageMasonry>
               </div>
             )

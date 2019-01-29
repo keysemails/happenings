@@ -1,11 +1,12 @@
 import { connect } from 'react-redux';
 import { closeModal } from '../../actions/ui_actions';
+import { followPostAuthor } from '../../actions/user_actions';
 import PostOptionsModal from './PostOptionsModal';
 
 // functionalities:
 // 1 - copy post URL
 // 2 - send invite(s)
-// 3 - unfollow
+// 3 - follow post author
 // 4 - report event
 
 const mapStateToProps = (state) => ({
@@ -14,7 +15,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  closeModal: (modalName) => dispatch(closeModal(modalName))
+  followPostAuthor: (currUser, postId) => dispatch(followPostAuthor(currUser, postId))
 });
 
 export default connect(

@@ -27,6 +27,7 @@ export const FIREBASE_LISTEN_CHILD_CHANGED = 'FIREBASE_LISTEN_CHILD_CHANGED';
 
 // user actions
 export const RECEIVE_USER = 'RECEIVE_USER';
+export const UPDATE_FOLLOW_VAL = 'UPDATE_FOLLOW_VAL';
 
 // loading actions
 export const RECEIVE_FEED_PAGE = 'RECEIVE_FEED_PAGE';

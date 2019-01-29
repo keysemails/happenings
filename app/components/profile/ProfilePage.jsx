@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ProfilePostsContainer from './ProfilePostsContainer';
-import ProfileStats from './ProfileStats';
+import ProfileHeader from './ProfileHeader';
 
 /**
  * Publically viewable page, don't need to be signed in. Will redirect to
@@ -60,8 +60,8 @@ class ProfilePage extends React.Component {
 			<div>
 				{
 					<div>
-					{user.full_name} ({user.username})
-						<ProfileStats
+					{user.username}
+						<ProfileHeader
 							{...stats}
 							user={user}
 							isCurrUser={isCurrUser}
