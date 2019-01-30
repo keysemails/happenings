@@ -1,0 +1,32 @@
+.profile-container {
+  .profile-header-container {
+    margin-bottom: 15px;
+
+    .profile-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      .item {
+          flex-grow: 1;
+      }
+      .username {
+          font-weight: bold;
+          justify-content: flex-start;
+      }
+      .stats-container {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+
+        .follow-btn {
+            border: 1px solid black;
+            padding: 10px 20px 10px 20px;
+        }
+        .follow-stats {
+          background-color: rgba(27, 240, 104, 0.3);
+          padding: 10px 20px 10px 20px;
+        }
+      }
+    }
+  }
+}

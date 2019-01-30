@@ -25,28 +25,32 @@ const ProfileHeader = ({
   }
 
   const numFollowers = followers.length;
-  const numEvents = user.posts ? Object.keys(user.posts).length : 0;
   const isFollowing = currentUser ? followers.includes(currentUser.uid) : false;
 
   // grammar lol
-  const followNoun = numFollowers == 1 ? 'follower' : 'followers';
-  const eventsNoun = numEvents == 1 ? 'event' : 'events';
-  const followBtnText = isFollowing ? 'U R Following' : 'Follow';
+  const followBtnText = isFollowing ? 'Following' : 'Follow';
+  console.log(isFollowing)
 
   const settingsLink = (
-    <div><Link to='/settings'>settings</Link></div>
+    <div className='follow-btn'><Link to='/settings'>Settings</Link></div>
   );
   const followBtn = (
-    <div onClick={toggleFollow}>{followBtnText}</div>
+    <div className='follow-btn' onClick={toggleFollow}>{followBtnText}</div>
   );
-  const btn = isCurrUser ? settingsLink : followBtn;
+  const bigBtn = isCurrUser ? settingsLink : followBtn;
 
   return (
-    <div>
-      <div>{`${numEvents} ${eventsNoun}`}</div>
-      <div>{`${numFollowers} ${followNoun}`}</div>
-      <div>{`${numFollowing} following`}</div>
-      {btn}
+    <div className='profile-header-container'>
+      <div className='profile-header'>
+        <div className='item username'>{user.username}</div>
+        <div className='item stats-container'>
+          <div className='follow-stats'>{numFollowers} / {numFollowing}</div>
+          {bigBtn}
+        </div>
+      </div>
+      <div className='profile-bio'>
+        love waves, love music, hell yeah
+      </div>
     </div>
   );
 }
