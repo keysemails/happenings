@@ -29,10 +29,8 @@ const ProfileHeader = ({
 
   // grammar lol
   const followBtnText = isFollowing ? 'Following' : 'Follow';
-  console.log(isFollowing)
-
   const settingsLink = (
-    <div className='follow-btn'><Link to='/settings'>Settings</Link></div>
+    <Link to='/settings'><div className='follow-btn'>Settings</div></Link>
   );
   const followBtn = (
     <div className='follow-btn' onClick={toggleFollow}>{followBtnText}</div>

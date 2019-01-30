@@ -1,7 +1,8 @@
 import moment from 'moment';
-import { TIMELINE_GRANULARITIES } from '../constants';
+import { TIMELINE_GROUPBY_KEYS } from '../constants';
 
 // the ISO 8601 supported string format we use.
+// TODO: probably redundant, would suffice to use only event_timestamp.
 export const DATE_FORMAT_STRING = 'YYYY-MM-DD HH:mm';
 
 
@@ -33,7 +34,7 @@ export function separate(datestr) {
  */
 export function groupByGranularity(posts, granularity) {
   const grouped = {};
-  const groupByFormat = TIMELINE_GRANULARITIES[granularity];
+  const groupByFormat = TIMELINE_GROUPBY_KEYS[granularity];
 
   Object.keys(posts).forEach(postId => {
     let postData = posts[postId];
