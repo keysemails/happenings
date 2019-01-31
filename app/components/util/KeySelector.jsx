@@ -4,11 +4,13 @@ import classNames from 'classnames';
 /**
  * Utility code for building a 'KeySelector' component like when u select a size on an online store
  * [S] [M] [L] [XL] <-- u can only select one of these buttons at a time
- *                      and the selected option is stored in some parent state
+ *                      and the selected option is held in some parent state
  */
 
 /**
- * Config function that returns a function that can create 'selectable' JSX button elements
+ * Config function that returns a builder function to create 'selectable' JSX button elements.
+ * The returned function is then passed as a prop to the KeySelector component.
+ * 
  * @param  {object} displayNames      mapping of button key (as used in state) to display name (for UI)
  * @param  {string} btnClass          CSS classname of the button element
  * @param  {string} selectedClass     CSS classname for a selected button
@@ -29,7 +31,7 @@ export const getButtonBuilder = (displayNames, btnClass, selectedClass='selected
 }
 
 /**
- * A generic class to avoid duplicated logic. hopefully this can be widely reused
+ * KeySelector: A generic class to avoid duplicated logic. hopefully this can be widely reused
  * @param  {string} options.containerClass   CSS classname for the button group
  * @param  {array} options.keyList           list of keys that identify buttons
  * @param  {string} options.selection        the selected key (parent state passed as prop)

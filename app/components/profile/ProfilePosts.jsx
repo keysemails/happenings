@@ -10,7 +10,7 @@ import {
   TIMELINE_FEED_TYPES
 } from '../../constants';
 
-import ImageMasonry from './ImageMasonry';
+import ImageMasonry from '../util/ImageMasonry';
 import TimelineSelector from './TimelineSelector';
 import GranularitySelector from './GranularitySelector';
 
@@ -23,19 +23,46 @@ class ProfilePosts extends React.Component {
     granularity: TIMELINE_GRANULARITIES.MONTH,
   }
   state = {...this.DEFAULT_STATE};
+
   componentDidMount() {
     this.props.getPosts();
   }
-
+  // TODO: Finalize the date formatting here.
   formatSection = (groupKey, granularity) => {
-    return moment(groupKey, TIMELINE_GROUPBY_KEYS[granularity]).format(
-      'MMMM YYYY'
+    const formatKey = TIMELINE_GROUPBY_KEYS[granularity];
+    return moment(groupKey, formatKey).format(
+      formatKey
       );
   }
   render() {
     const { posts } = this.props;
     const groupedPosts = groupByGranularity(posts, this.state.granularity);
     const sections = Object.keys(groupedPosts).sort();
+
+    const masonrySections = sections.map(groupKey => {
+      let sectionPosts = groupedPosts[groupKey];
+      let sectionTitle = this.formatSection(groupKey, this.state.granularity);
+      let masonryBody = sectionPosts.map((post, idx) => (
+        <Link key={idx} to={`/event/${post.id}`}>
+          <img src={post.thumb_url} alt={post.thumb_url} />
+        </Link>
+        )
+      );
+      return (
+        <div key={groupKey}>
+          {sectionTitle}
+          <ImageMasonry
+            numCols={3}
+            animate={false}
+            scrollable={false}
+            className='masonry-container'
+          >
+            {masonryBody}
+          </ImageMasonry>
+        </div>
+      )
+    });
+
     return (
       <div className='timeline-container'>
         <TimelineSelector
@@ -46,35 +73,7 @@ class ProfilePosts extends React.Component {
           selection={this.state.granularity}
           onChange={(granularity) => this.setState({granularity})}
         />
-        {
-          sections.map(groupKey => {
-            let posts = groupedPosts[groupKey];
-            let sectionTitle = this.formatSection(groupKey, this.state.granularity);
-            return (
-              <div key={groupKey}>
-                {sectionTitle}
-                <ImageMasonry
-                  numCols={3}
-                  animate={false}
-                  scrollable={false}
-                  className='masonry-container'
-                >
-                {
-                  posts.map((post, idx) => (
-                    <Link key={idx} to={`/event/${post.id}`}>
-                      <img
-                        src={post.thumb_url}
-                        alt={post.thumb_url}
-                      />
-                    </Link>
-                  ))
-                }
-                </ImageMasonry>
-              </div>
-            )
-          }
-        )
-      }
+        {masonrySections}
       </div>
     );
   }
@@ -82,6 +81,7 @@ class ProfilePosts extends React.Component {
 
 ProfilePosts.propTypes = {
   posts: PropTypes.object,
+  getPosts: PropTypes.func,
 }
 
 export default ProfilePosts;
