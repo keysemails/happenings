@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 /**
@@ -16,7 +17,7 @@ import classNames from 'classnames';
  * @param  {string} selectedClass     CSS classname for a selected button
  * @return {function}                 the button builder function that takes 3 args
  */
-export const getButtonBuilder = (displayNames, btnClass, selectedClass='selected') => {
+const getButtonBuilder = (displayNames, btnClass, selectedClass='selected') => {
   return (key, selection, onSelect) => {
     return (
       <div
@@ -39,7 +40,8 @@ export const getButtonBuilder = (displayNames, btnClass, selectedClass='selected
  * @param  {function} options.onChange       callback to register selected key change w/ parent state
  * @return {React Component}                 Returns a component with clickable button-tab-things
  */
-export const KeySelector = ({containerClass, keyList, selection, buttonBuilder, onChange}) => {
+const KeySelector = ({containerClass, keyList, selection, onChange, btnNameMap, btnClass}) => {
+  const buttonBuilder = getButtonBuilder(btnNameMap, btnClass);
   return (
     <div className={containerClass}>
       {
@@ -48,3 +50,14 @@ export const KeySelector = ({containerClass, keyList, selection, buttonBuilder, 
     </div>
   )
 };
+
+KeySelector.propTypes = {
+  containerClass: PropTypes.string,
+  keyList: PropTypes.array,
+  selection: PropTypes.string,
+  onChange: PropTypes.func,
+  btnNameMap: PropTypes.object,
+  btnClass: PropTypes.string
+}
+
+export default KeySelector;
