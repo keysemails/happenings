@@ -19,13 +19,13 @@ import GranularitySelector from './GranularitySelector';
  */
 class ProfilePosts extends React.Component {
   DEFAULT_STATE = {
-    selection: TIMELINE_FEED_TYPES.ATTENDING,
+    feedType: TIMELINE_FEED_TYPES.ATTENDING,
     granularity: TIMELINE_GRANULARITIES.MONTH,
   }
   state = {...this.DEFAULT_STATE};
 
   componentDidMount() {
-    this.props.getPosts();
+    this.props.getProfilePosts(this.state.feedType);
   }
   // TODO: Finalize the date formatting here.
   formatSection = (groupKey, granularity) => {
@@ -69,8 +69,8 @@ class ProfilePosts extends React.Component {
     return (
       <div className='timeline-container'>
         <TimelineFeedSelector
-          selection={this.state.selection}
-          onChange={(selection) => this.setState({selection})}
+          selection={this.state.feedType}
+          onChange={(feedType) => this.setState({feedType})}
         />
         <GranularitySelector
           selection={this.state.granularity}
@@ -84,7 +84,7 @@ class ProfilePosts extends React.Component {
 
 ProfilePosts.propTypes = {
   posts: PropTypes.object,
-  getPosts: PropTypes.func,
+  getProfilePosts: PropTypes.func,
 }
 
 export default ProfilePosts;

@@ -6,6 +6,7 @@ import { getAuth } from './auth';
 
 const db = base.initializedApp.database();
 
+// TODO: implement delete from feed.
 export function deleteFromFeed(uri, key) {
   return uri;
 }

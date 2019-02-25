@@ -6,11 +6,6 @@ import * as types from '../constants/actionTypes.js';
 import { fillFormData } from './form_actions';
 import * as UploadUtil from '../utils/upload';
 
-export const getUserPosts = (uid) => dispatch => (
-    FeedUtil.getUserFeedPosts(uid).then(data => {
-      dispatch(receiveFeedData(data))
-    })
-);
 
 export const getMainFeed = (uid) => dispatch => {
   dispatch(startLoadingPosts());

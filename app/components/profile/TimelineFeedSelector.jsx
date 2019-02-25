@@ -19,7 +19,7 @@ const TimelineFeedSelector = ({selection, onChange}) => {
   )
 };
 
-TimelineSelector.propTypes = {
+TimelineFeedSelector.propTypes = {
   selection: PropTypes.string,
   onChange: PropTypes.func
 }
