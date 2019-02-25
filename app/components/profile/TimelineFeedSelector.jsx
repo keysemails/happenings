@@ -5,7 +5,7 @@ import {
 
 import KeySelector from '../util/KeySelector';
 
-const TimelineSelector = ({selection, onChange}) => {
+const TimelineFeedSelector = ({selection, onChange}) => {
   const props = {
     keyList: TIMELINE_OPTIONS,
     containerClass: 'timeline-selector',
@@ -24,4 +24,4 @@ TimelineSelector.propTypes = {
   onChange: PropTypes.func
 }
 
-export default TimelineSelector;
+export default TimelineFeedSelector;

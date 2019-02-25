@@ -11,7 +11,7 @@ import {
 } from '../../constants';
 
 import ImageMasonry from '../util/ImageMasonry';
-import TimelineSelector from './TimelineSelector';
+import TimelineFeedSelector from './TimelineFeedSelector';
 import GranularitySelector from './GranularitySelector';
 
 /**
@@ -29,6 +29,7 @@ class ProfilePosts extends React.Component {
   }
   // TODO: Finalize the date formatting here.
   formatSection = (groupKey, granularity) => {
+    // 'YYYY-MM-DD', 'YYYY-MM', etc
     const formatKey = TIMELINE_GROUPBY_KEYS[granularity];
     return moment(groupKey, formatKey).format(
       formatKey
@@ -42,12 +43,14 @@ class ProfilePosts extends React.Component {
     const masonrySections = sections.map(groupKey => {
       let sectionPosts = groupedPosts[groupKey];
       let sectionTitle = this.formatSection(groupKey, this.state.granularity);
-      let masonryBody = sectionPosts.map((post, idx) => (
+
+      let masonryBodyContent = sectionPosts.map((post, idx) => (
         <Link key={idx} to={`/event/${post.id}`}>
           <img src={post.thumb_url} alt={post.thumb_url} />
         </Link>
         )
       );
+
       return (
         <div key={groupKey}>
           {sectionTitle}
@@ -57,7 +60,7 @@ class ProfilePosts extends React.Component {
             scrollable={false}
             className='masonry-container'
           >
-            {masonryBody}
+            {masonryBodyContent}
           </ImageMasonry>
         </div>
       )
@@ -65,7 +68,7 @@ class ProfilePosts extends React.Component {
 
     return (
       <div className='timeline-container'>
-        <TimelineSelector
+        <TimelineFeedSelector
           selection={this.state.selection}
           onChange={(selection) => this.setState({selection})}
         />

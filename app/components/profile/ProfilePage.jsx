@@ -2,7 +2,6 @@ import React from 'react';
 
 import ProfilePostsContainer from './ProfilePostsContainer';
 import ProfileHeader from './ProfileHeader';
-import TimelineSelector from './TimelineSelector';
 
 /**
  * Publically viewable page, don't need to be signed in. Will redirect to

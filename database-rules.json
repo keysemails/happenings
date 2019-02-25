@@ -90,6 +90,7 @@
     "attends_user": {
       ".read": true,
       "$uid": {
+        ".indexOn": [".value"],
         ".write": "auth.uid === $uid",
         ".validate": "true",
         "$postId": {

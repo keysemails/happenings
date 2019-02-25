@@ -1,12 +1,18 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-// Simple Masonry component for images
-// Expects props:
-//      imageUrls: array of image urls--this overrides any children passed in
-//      children: an array of children to render as tiles
-//      [required] numCols: number of columns
-//      containerWidth: width of mansonry component, default 100%
-//      animate: whether or not to animate components fading in, default true
+/**
+ * ImageMasonry Component that takes image URLS, waits for images to load,
+ * and then applies masonry formatting logic after all images have loaded.
+ * 
+ * Adapted by @tgoodwin from https://github.com/christikaes/react-image-masonry
+
+ * props:
+ *   children: React element children that contain images
+ *   numCols: number of columns in masonry layout
+ *   containerWidth: width of masonry component, default 100%
+ */
+
 class ImageMasonry extends React.Component {
   constructor(props) {
     super(props);
@@ -73,40 +79,6 @@ class ImageMasonry extends React.Component {
     this.addTiles(tiles);
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   try {
-  //     // If any of these props changed, recalculate the tiles
-  //     if (nextProps.numCols !== this.props.numCols
-  //       || !this.areArraysEqual(nextProps.imageUrls, this.props.imageUrls)
-  //       || (nextProps.children || []).length !== (this.props.children || []).length
-  //       || !(nextProps.children || []).every((child, i) => { return nextProps.children[i].key === this.props.children[i].key })
-  //     ) {
-
-  //       // Reset the state
-  //       let newState = {}
-  //       for (var i = 0; i < nextProps.numCols; i++) {
-  //         newState["col-" + i] = [];
-  //       }
-  //       this.setState(newState);
-
-  //       // Cancel any images that were loading
-  //       this.cancel();
-
-  //       // Get tiles based on props
-  //       const tiles = this.getTiles(nextProps);
-  //       // Add tiles to state
-  //       this.addTiles(tiles);
-  //     }
-  //   } catch (error) {
-  //     console.warn(error.message);
-  //   }
-  // }
-
-  areArraysEqual(array1, array2) {
-    // Note: This only works on scalar arrays
-    return array1.length === array2.length && array1.sort().every(function (value, index) { return value === array2.sort()[index] });
-  }
-
   // Gets tiles based on the props passed in
   getTiles(props) {
     let tiles = [];
@@ -160,22 +132,21 @@ class ImageMasonry extends React.Component {
     return [];
   }
 
-  // Expects an array of imageUrls
-  // Returns a promise that resolves when all of the images are loaded
+  /**
+   * loadImages
+   * @param  {[type]} imageUrls [description]
+   * @return {[type]}           [description]
+   */
   loadImages(imageUrls) {
-    const imagesLoaded = [];
-    imageUrls.forEach(src => {
-      imagesLoaded.push(new Promise((resolve, reject) => {
+    const imageLoadFutures = imageUrls.map(imgSrc => (
+      new Promise((resolve, reject) => {
         let image = new Image();
         image.onload = resolve;
         image.onerror = reject;
-        image.src = src
-        this.cancel = function () {
-          image.src = ""
-        }
-      }))
-    });
-    return Promise.all(imagesLoaded);
+        image.src = imgSrc;
+      })
+    ));
+    return Promise.all(imageLoadFutures);
   }
 
   // Returns the index of the shortest column
@@ -202,12 +173,6 @@ class ImageMasonry extends React.Component {
       }
 
       let style = {};
-
-      // If animation is turned on add the style (on by default)
-      let animate = this.props.hasOwnProperty('animate') ? this.props.animate : true;
-      if (animate) {
-        style.animation = "fadeIn 1s ease-in"
-      }
 
       // If forceOrder is turned on maintain the order of the tiles
       if (this.props.forceOrder) {
@@ -239,6 +204,14 @@ class ImageMasonry extends React.Component {
       });
     })
   }
+}
+
+ImageMasonry.propTypes = {
+  imageUrls: PropTypes.array,
+  children: PropTypes.array,
+  numCols: PropTypes.number,
+  containerWidth: PropTypes.string,
+
 }
 
 export default ImageMasonry;
