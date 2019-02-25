@@ -25,7 +25,7 @@ class ProfilePosts extends React.Component {
   state = {...this.DEFAULT_STATE};
 
   componentDidMount() {
-    this.props.getProfilePosts(this.state.feedType);
+    this.pullFeed(this.state.feedType);
   }
   // TODO: Finalize the date formatting here.
   formatSection = (groupKey, granularity) => {
@@ -34,6 +34,11 @@ class ProfilePosts extends React.Component {
     return moment(groupKey, formatKey).format(
       formatKey
       );
+  }
+  pullFeed = (feedType) => {
+    this.setState({feedType}, () =>
+      this.props.getProfilePosts(this.state.feedType)
+    );
   }
   render() {
     const { posts } = this.props;
@@ -56,8 +61,6 @@ class ProfilePosts extends React.Component {
           {sectionTitle}
           <ImageMasonry
             numCols={3}
-            animate={false}
-            scrollable={false}
             className='masonry-container'
           >
             {masonryBodyContent}
@@ -70,7 +73,7 @@ class ProfilePosts extends React.Component {
       <div className='timeline-container'>
         <TimelineFeedSelector
           selection={this.state.feedType}
-          onChange={(feedType) => this.setState({feedType})}
+          onChange={(feedType) => this.pullFeed(feedType)}
         />
         <GranularitySelector
           selection={this.state.granularity}

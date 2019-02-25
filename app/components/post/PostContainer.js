@@ -26,8 +26,12 @@ const mapDispatchToProps = dispatch => ({
   openPostOptionsModal: (postId) => dispatch(openModal(MODAL_TYPES.POST_OPTIONS_MODAL, postId)),
   closePostOptionsModal: () => dispatch(closeModal(MODAL_TYPES.POST_OPTIONS_MODAL)),
   openAuthorOptionsModal: (postId) => dispatch(openModal(MODAL_TYPES.AUTHOR_OPTIONS_MODAL, postId)),
-  registerForLikesCount: (postId) => dispatch(listenToPath(`/likes/${postId}`, 'likers', postId)),
-  registerForAttendingCount: (postId) => dispatch(listenToPath(`/attends_post/${postId}`, 'attendees', postId)),
+  registerForLikesCount: (postId) => dispatch(
+    listenToPath(`/stars_post/${postId}`, 'likers', postId)
+  ),
+  registerForAttendingCount: (postId) => dispatch(
+    listenToPath(`/attends_post/${postId}`, 'attendees', postId)
+  ),
   removeListener: (metaType, postId) => dispatch(removeListener(metaType, postId))
 });
 

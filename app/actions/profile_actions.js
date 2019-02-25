@@ -1,33 +1,36 @@
 import { TIMELINE_FEED_TYPES } from '../constants';
 import { getUserHostedPosts, getFeedPostData } from '../utils/feed';
-import { getUpcomingEvents } from '../utils/timeline'
-import { receiveFeedData } from './post_actions';
+import { getUpcomingAttending, getUpcomingStarred } from '../utils/timeline'
+import { beginPostFetch, receiveFeedData } from './post_actions';
 
-export const getHostedPosts = (uid) => dispatch => (
+export const getHostedPosts = (uid) => dispatch => {
+    dispatch(beginPostFetch());
     getUserHostedPosts(uid).then(data => {
-      console.log(data);
       dispatch(receiveFeedData(data))
     })
-);
+};
 
-export const getAttendingPosts = (uid) => dispatch => (
-  getUpcomingEvents(uid).then(data => {
-    console.log(data);
+export const getAttendingPosts = (uid) => dispatch => {
+  dispatch(beginPostFetch());
+  getUpcomingAttending(uid).then(data => {
     dispatch(receiveFeedData(data));
   })
-);
+};
 
-export const getStarredPosts = (uid) => dispatch => (
-  console.log('not implemented yet')
-);
+export const getStarredPosts = (uid) => dispatch => {
+  dispatch(beginPostFetch());
+  getUpcomingStarred(uid).then(data => {
+    dispatch(receiveFeedData(data));
+  })
+};
 
-export const getTimelinePosts = (uid, feedType) => dispatch => {
+export const getTimelinePosts = (uid, feedType) => {
   switch(feedType) {
     case TIMELINE_FEED_TYPES.HOST:
-      return dispatch(getHostedPosts(uid));
+      return getHostedPosts(uid);
     case TIMELINE_FEED_TYPES.ATTENDING:
-      return dispatch(getAttendingPosts(uid));
+      return getAttendingPosts(uid);
     case TIMELINE_FEED_TYPES.STARRED:
-      return dispatch(getStarredPosts(uid));
+      return getStarredPosts(uid);
   }
 }

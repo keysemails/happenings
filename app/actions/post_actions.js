@@ -8,7 +8,7 @@ import * as UploadUtil from '../utils/upload';
 
 
 export const getMainFeed = (uid) => dispatch => {
-  dispatch(startLoadingPosts());
+  dispatch(beginPostFetch());
   return FeedUtil.updateMainFeed(uid).then(() => {
     FeedUtil.getMainFeedPosts(uid).then((data) => {
       dispatch(receiveFeedData(data))
@@ -17,7 +17,7 @@ export const getMainFeed = (uid) => dispatch => {
 };
 
 export const getDiscoverFeed = (uid) => dispatch => {
-  dispatch(startLoadingPosts());
+  dispatch(beginPostFetch());
   return DiscoverUtil.updateDiscoverFeed(uid).then(() => {
     DiscoverUtil.getDiscoverFeedPosts(uid).then((data) => {
       dispatch(receiveFeedData(data))
@@ -33,10 +33,6 @@ export const receiveFeedData = (data) => ({
   type: types.RECEIVE_FEED_PAGE,
   posts: data.entries,
   nextPage: data.nextPage
-});
-
-export const startLoadingPosts = () => ({
-  type: types.BEGIN_PAGE_FETCH
 });
 
 export const receiveDiscoverFeedData = (data) => ({
