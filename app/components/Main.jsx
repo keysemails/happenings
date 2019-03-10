@@ -39,6 +39,7 @@ class Main extends React.Component {
           <Route path='/create' render={(props) => (
             <EditPostContainer {...props} isNewEvent={true} />
           )} />
+
           { this.props.loaded && <Route path='/inbox' component={InboxContainer} /> }
         </Switch>
       </main>

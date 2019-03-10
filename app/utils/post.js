@@ -25,7 +25,6 @@ export function subscribeToComments(postId, latestCommentId, callback) {
   return subscribeToFeed(`/comments/${postId}`, callback, latestCommentId, false);
 }
 
-
  /**
   * determine if the current user has liked a given post
   */
