@@ -24,6 +24,8 @@ class ImageUploader extends React.Component {
 		files.forEach(file => {
 			window.URL.revokeObjectURL(file);
 		});
+    // clears the file reference in the store
+    this.props.clearLocalImage();
 	}
 	componentWillUnmount() {
 		if (this.state.fileLoaded) {

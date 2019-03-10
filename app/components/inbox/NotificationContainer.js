@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { listenToPath, removeListener } from '../../actions/listener_actions';
-import { markAsRead, removeNotification } from '../../actions/inbox';
+import { markAsRead, removeNotification } from '../../actions/inbox_actions';
 import { isUserAttendee } from '../../reducers/selectors';
 import Notification from './Notification';
 

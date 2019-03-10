@@ -10,62 +10,49 @@ import PostContainer from './PostContainer';
  */
 
 class PostPage extends React.Component {
-	constructor() {
-		super();
-		this.state = {
-			gotPostData: false
-		}
-	}
-	componentWillReceiveProps(nextProps) {
-		if (nextProps.location.pathname != this.props.location.pathname) {
-			window.location.reload();
-		}
-	}
-	componentDidMount() {
-		_getPostData(this.props.match.params.event_id).then(snapshot => {
-			console.log(snapshot);
-			const post = snapshot.val();
-			console.log(post);
-			if (!post) {
-				this.setState({
-					postNotFound: true
-				});
-			} else {
-				this.setState({
-					postData: post,
-					gotPostData: true
-				});
-			}
-		});
-	}
-	addPost = () => {
-		const postData = this.state.postData;
-		return (
-			<PostContainer
-				id={this.props.match.params.event_id} // :'(
-				author={postData.author}
-				full_storage_uri={postData.full_storage_uri}
-				full_url={postData.full_url}
-				caption={postData.text}
-				thumb_storage_uri={postData.thumb_storage_uri}
-				thumb_url={postData.thumb_url}
-				event_timestamp={postData.event_timestamp}
-				title={postData.title}
-				location={postData.location}
-				description={postData.description}
-			/>
-		)
-	}
-	render() {
-		if (this.state.postNotFound) {
-			return (<Redirect to='/' />);
-		}
-		return (
-			<div>
-				{this.state.gotPostData && this.addPost()}
-			</div>
-		)
-	}
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.location.pathname != this.props.location.pathname) {
+            window.location.reload();
+        }
+    }
+    componentDidMount() {
+        const id = this.props.match.params.event_id;
+        this.props.getPostData(id);
+    }
+    addPost = () => {
+        const id = this.props.match.params.event_id;
+        const postData = this.props.posts[id];
+
+        // TODO: ACTUAL 404 HANDLING -- in some global reduxy way!
+        // should not be handled at the component level
+        // in Main.jsx we can have a check if some
+        // this.props.404 = true, redirect to 404 page
+        if (!postData) {
+            return (<Redirect to='/' />); 
+        }
+        return (
+            <PostContainer
+                id={id} // :'(
+                author={postData.author}
+                full_storage_uri={postData.full_storage_uri}
+                full_url={postData.full_url}
+                caption={postData.text}
+                thumb_storage_uri={postData.thumb_storage_uri}
+                thumb_url={postData.thumb_url}
+                event_timestamp={postData.event_timestamp}
+                title={postData.title}
+                location={postData.location}
+                description={postData.description}
+            />
+        )
+    }
+    render() {
+        return (
+            <div>
+                {this.props.loaded && this.addPost()}
+            </div>
+        )
+    }
 }
 
 export default PostPage;

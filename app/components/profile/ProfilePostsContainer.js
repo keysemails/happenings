@@ -2,14 +2,14 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ProfilePosts from './ProfilePosts';
 import { selectAuthoredPosts } from '../../reducers/selectors';
-import { getUserPosts } from '../../actions/post_actions';
+import { getTimelinePosts } from '../../actions/profile_actions';
 
 const mapStateToProps = (state, ownProps) => ({
   posts: selectAuthoredPosts(state, ownProps.match.params.username)
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  getPosts: (uid) => dispatch(getUserPosts(ownProps.uid))
+  getProfilePosts: (feedType) => dispatch(getTimelinePosts(ownProps.uid, feedType))
 });
 
 export default withRouter(connect(

@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import {
   getUserNotifications, getNotificationEventData
-} from '../../actions/inbox';
+} from '../../actions/inbox_actions';
 import { countUnreadNotifications } from '../../reducers/selectors';
 import Inbox from './Inbox.jsx';
 

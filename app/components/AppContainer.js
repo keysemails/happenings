@@ -2,7 +2,8 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import App from './App';
 import { fetchCurrentUser, proceedWithoutLogin } from '../actions/session_actions';
-import { getUserNotifications } from '../actions/inbox';
+import { getUserNotifications } from '../actions/inbox_actions';
+
 
 const mapStateToProps = state => ({
   loggedIn: !!state.session.currentUser,

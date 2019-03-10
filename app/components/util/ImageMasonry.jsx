@@ -1,0 +1,217 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
+/**
+ * ImageMasonry Component that takes image URLS, waits for images to load,
+ * and then applies masonry formatting logic after all images have loaded.
+ * 
+ * Adapted by @tgoodwin from https://github.com/christikaes/react-image-masonry
+
+ * props:
+ *   children: React element children that contain images
+ *   numCols: number of columns in masonry layout
+ *   containerWidth: width of masonry component, default 100%
+ */
+
+class ImageMasonry extends React.Component {
+  constructor(props) {
+    super(props);
+
+    let state = {}
+    for (var i = 0; i < this.props.numCols; i++) {
+      state["col-" + i] = [];
+    }
+    this.state = state;
+
+    this.cancel = function () { console.log("Cancelation not set yet") }
+  }
+
+  render() {
+    // Create all of the columns
+    let columns = []
+    for (var i = 0; i < this.props.numCols; i++) {
+      columns.push(
+        <div
+          style={{
+            width: (100 / this.props.numCols) + "%",
+            display: "flex",
+            flexDirection: "column",
+            float: "left"
+          }}
+          className="react-image-masonry-col"
+          key={"col-" + i}
+        >{Object.values(this.state["col-" + i])}</div>
+      )
+    }
+
+    const styles = `
+      .react-image-masonry-col * { width: 100%; box-sizing: border-box; }
+      @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    `;
+
+    // Set the container width ( default to 100% )
+    const containerWidth = this.props.hasOwnProperty('containerWidth') ? this.props.containerWidth : '100%';
+    // Set the container height, if it is scrollable and no height was given, default to 500px
+    const containerHeight = this.props.hasOwnProperty('containerHeight') ? this.props.containerHeight : (this.props.scrollable ? '500px' : 'auto');
+    const overflowY = this.props.scrollable ? "scroll" : "hidden"
+
+    return (
+      <div
+        ref="container"
+        style={{
+          width: containerWidth,
+          height: containerHeight,
+          overflowX: "hidden",
+          overflowY: overflowY,
+          margin: "auto"
+        }}
+        className={this.props.className}>
+        <style>{styles}</style>
+        {columns}
+      </div>
+    )
+  }
+
+  componentDidMount() {
+    // Get tiles based on props
+    const tiles = this.getTiles(this.props);
+    // Add tiles to state
+    this.addTiles(tiles);
+  }
+
+  // Gets tiles based on the props passed in
+  getTiles(props) {
+    let tiles = [];
+    if (props.imageUrls) {
+      // If imageUrls is defined, generate img tags
+      tiles = props.imageUrls.map((imageUrl, index) => {
+        return <img
+          src={imageUrl}
+          alt={imageUrl}
+          key={"img-" + index + Date.now()}
+          style={{
+            border: "2px solid transparent",
+            boxSizing: "border-box"
+          }}
+        />
+      })
+    } else if (props.children) {
+      // Otherwise use the children components
+      tiles = props.children
+    } else {
+      // imageUrls or children must be passed in
+      console.warn("No images were passed into react-image-masonry")
+    }
+
+    return tiles;
+  }
+
+  // Expects react Element
+  // Returns an array of all the image urls
+  getAllImageUrls(reactEl) {
+    if (!reactEl) {
+      return [];
+    }
+
+    // If the element is an image, return the src
+    if (reactEl.type === "img") {
+      return [reactEl.props.src];
+    }
+
+    // Otherwise, if the element has children, get the imageUrls from them
+    let children = reactEl.props ? reactEl.props.children : false;
+    if (children) {
+      let imageUrls = [];
+      React.Children.forEach(children, child => {
+        imageUrls = imageUrls.concat(this.getAllImageUrls(child))
+      })
+      return imageUrls;
+    }
+
+    // There were no images
+    return [];
+  }
+
+  /**
+   * loadImages
+   * @param  {[type]} imageUrls [description]
+   * @return {[type]}           [description]
+   */
+  loadImages(imageUrls) {
+    const imageLoadFutures = imageUrls.map(imgSrc => (
+      new Promise((resolve, reject) => {
+        let image = new Image();
+        image.onload = resolve;
+        image.onerror = reject;
+        image.src = imgSrc;
+      })
+    ));
+    return Promise.all(imageLoadFutures);
+  }
+
+  // Returns the index of the shortest column
+  getShortestCol(containerEl) {
+    const cols = containerEl.querySelectorAll(".react-image-masonry-col");
+
+    // Get the shortestColumn
+    let shortestCol = 0;
+    cols.forEach((column, index) => {
+      if (column.offsetHeight < cols[shortestCol].offsetHeight) {
+        shortestCol = index
+      }
+    });
+
+    return shortestCol;
+  }
+
+  // Adds the given tiles to the state
+  addTiles(tiles) {
+    // For each tileComponent, get all of the images and load them
+    tiles.forEach((tile, index) => {
+      if (!tile) {
+        return;
+      }
+
+      let style = {};
+
+      // If forceOrder is turned on maintain the order of the tiles
+      if (this.props.forceOrder) {
+        style.order = index;
+      }
+
+      // Copy over any styles that were set on the tile
+      if (tile && tile.props && tile.props.style) {
+        style = Object.assign({}, tile.props.style, style)
+      }
+      tile = React.cloneElement(tile, { style });
+
+      // Once all of the images have been loaded, then add the tile to the shortest column
+      const imageUrls = this.getAllImageUrls(tile)
+      this.loadImages(imageUrls).then(() => {
+        const containerEl = this.refs.container;
+        if (!containerEl) {
+          return;
+        }
+
+        const shortestCol = this.getShortestCol(containerEl)
+
+        // Add the element to the column
+        this.setState({
+          ["col-" + shortestCol]: this.state["col-" + shortestCol].concat([tile])
+        })
+      }).catch(error => {
+        console.error(error)
+      });
+    })
+  }
+}
+
+ImageMasonry.propTypes = {
+  imageUrls: PropTypes.array,
+  children: PropTypes.array,
+  numCols: PropTypes.number,
+  containerWidth: PropTypes.string,
+
+}
+
+export default ImageMasonry;

@@ -1,6 +1,7 @@
 import firebase from 'firebase';
 import base from './rebase';
 import { getPaginatedFeed } from './index';
+import { getPostData } from './post';
 import { PAGE_SIZES } from '../constants';
 
 const db = base.initializedApp.database();
@@ -9,10 +10,29 @@ export function getPosts(uri, pageSize) {
 	return getPaginatedFeed(uri, pageSize, null, true);
 }
 
-// get posts of a given user
-export function getUserFeedPosts(uid) {
+// get posts created by a given user (events user is hosting)
+export function getUserHostedPosts(uid) {
 	return getPosts(`/people/${uid}/posts`,
 		PAGE_SIZES.DISCOVER_FEED);
+}
+
+/**
+ * [getFeedPostData gets postData for a list of postIds. will SKIP deleted postIds]
+ * @param  {array} postIds [description]
+ * @return {object}         key = postId and val = postData
+ */
+export function getFeedPostData(postIds) {
+  const queries = postIds.map(postId => getPostData(postId));
+  return Promise.all(queries).then(results => {
+    const entries = {};
+
+    results.forEach(result => {
+      if (result.val()) {
+        entries[result.key] = result.val()
+      }
+    });
+    return entries;
+  });
 }
 
 /**
@@ -59,7 +79,7 @@ export function updateMainFeed(currentUserUid) {
 }
 
 /**
- * Paginates posts from the user's home feed.
+ * Paginates posts from the user's home feed. This contains posts from people you follow.
  *
  * We return a `Promise` which resolves with an Map of posts and a function to the next page or
  * `null` if there is no next page.

@@ -76,6 +76,29 @@
         }
       }
     },
+    "stars_post": {
+      ".read": true,
+      "$postId": {
+        ".write": "!newData.exists() && !newData.parent().parent().child('posts').child($postId).exists()",
+        ".validate": "root.child('posts').child($postId).exists()", // Check that the post exists
+        "$uid": {
+          ".write": "auth.uid === $uid",
+          ".validate": "newData.val() === now"
+        }
+      }
+    },
+    "stars_user": {
+      ".read": true,
+      "$uid": {
+        ".write": "!newData.exists() && !newData.parent().parent().child('people').child($uid).exists()",
+        ".validate": "root.child('people').child($uid).exists()", // Check that the post exists
+        "$postId": {
+          ".indexOn": ".value", // event_timestamp
+          ".write": "auth.uid === $uid",
+          ".validate": "newData.val() === root.child('posts').child($postId).child('event_timestamp').val()"
+        }
+      }
+    },
     "attends_post": {
       ".read": true,
       "$postId": {
@@ -90,6 +113,7 @@
     "attends_user": {
       ".read": true,
       "$uid": {
+        ".indexOn": [".value"],
         ".write": "auth.uid === $uid",
         ".validate": "true",
         "$postId": {
