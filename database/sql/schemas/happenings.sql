@@ -5,8 +5,8 @@ create table happenings.users(
     username varchar(64) not null,
     user_type happenings.user_t default 'PERSON',
     email varchar(256) not null,
-    private boolean not null default false,
     bio varchar(1024),
+    is_private boolean not null default false,
     created timestamptz not null default current_timestamp,
     modified timestamptz not null default current_timestamp
 );
