@@ -1,6 +1,6 @@
 -- base entity tables
 
-create table happenings.user(
+create table happenings.users(
     id serial primary key,
     username varchar(64) not null,
     user_type happenings.user_t default 'PERSON',
@@ -9,14 +9,14 @@ create table happenings.user(
     bio varchar(1024),
     created timestamptz not null default current_timestamp
 );
-    comment on table happenings.user is 'happenings users';
-    create unique index on happenings.user(username);
-    create unique index on happenings.user(email);
+    comment on table happenings.users is 'happenings users';
+    create unique index on happenings.users(username);
+    create unique index on happenings.users(email);
 
 
-create table happenings.post(
+create table happenings.posts(
     id serial primary key,
-    user_id integer not null references happenings.user(id),
+    user_id integer not null references happenings.users(id),
     username varchar(64) not null,
     event_timestamp integer not null,
     title varchar(256) not null,
@@ -32,16 +32,16 @@ create table happenings.post(
     location varchar(1024), -- STRING LOCATION FOR NOW
     created timestamptz not null default current_timestamp
 );
-    comment on table happenings.post is 'Posts (events)';
-    create index on happenings.post(id, event_timestamp);
+    comment on table happenings.posts is 'Posts (events)';
+    create index on happenings.posts(id, event_timestamp);
 
 
 create table happenings.activity(
     id serial primary key,
     event_timestamp integer not null,
     activity_type happenings.activity_t not null,
-    post_id integer not null references happenings.post(id),
-    user_id integer not null references happenings.user(id),
+    post_id integer not null references happenings.posts(id),
+    user_id integer not null references happenings.users(id),
     username varchar(64) not null,
     created timestamptz not null default current_timestamp
 );
@@ -51,8 +51,8 @@ create table happenings.activity(
 
 create table happenings.comments(
     id serial primary key,
-    post_id integer not null references happenings.post(id),
-    user_id integer not null references happenings.user(id),
+    post_id integer not null references happenings.posts(id),
+    user_id integer not null references happenings.users(id),
     username varchar(64) not null,
     text varchar(1024) not null,
     created timestamptz not null default current_timestamp
@@ -63,12 +63,12 @@ create table happenings.comments(
 
 create table happenings.notifications(
     id serial primary key,
-    user_id integer not null references happenings.user(id),
-    post_id integer references happenings.post(id),
+    user_id integer not null references happenings.users(id),
+    post_id integer references happenings.posts(id),
     read boolean not null default false,
     created timestamptz not null default current_timestamp,
     notification_type happenings.notification_t not null,
-    notifier_id integer references happenings.user(id)
+    notifier_id integer references happenings.users(id)
 );
     comment on table happenings.notifications is 'notifications for inbox';
     create index on happenings.notifications(user_id);
@@ -77,8 +77,8 @@ create table happenings.notifications(
 -- tables for relational data
 
 create table happenings.stars(
-    user_id integer not null references happenings.user(id),
-    post_id integer not null references happenings.post(id),
+    user_id integer not null references happenings.users(id),
+    post_id integer not null references happenings.posts(id),
     created timestamptz not null default current_timestamp,
     primary key (user_id, post_id)
 );
@@ -87,8 +87,8 @@ create table happenings.stars(
 
 
 create table happenings.attendance(
-    user_id integer not null references happenings.user(id),
-    post_id integer not null references happenings.post(id),
+    user_id integer not null references happenings.users(id),
+    post_id integer not null references happenings.posts(id),
     event_timestamp integer not null,
     created timestamptz not null default current_timestamp,
     primary key (user_id, post_id)
@@ -98,10 +98,10 @@ create table happenings.attendance(
 
 
 create table happenings.followers(
-    user_id integer not null references happenings.user(id),
-    follower_id integer not null references happenings.user(id),
+    user_id integer not null references happenings.users(id),
+    follower_id integer not null references happenings.users(id),
 
-    last_seen_post_id integer default null references happenings.post(id),
+    last_seen_post_id integer default null references happenings.posts(id),
     last_seen_activity_id integer default null references happenings.activity(id),
     primary key (user_id, follower_id)
 );
@@ -116,8 +116,8 @@ create table happenings.followers(
 -- "feeds" that should probably be mviews updated by triggers!
 
 create table happenings.main_feed(
-    user_id integer not null references happenings.user(id),
-    post_id integer not null references happenings.post(id),
+    user_id integer not null references happenings.users(id),
+    post_id integer not null references happenings.posts(id),
     created timestamptz not null,
     primary key (user_id, post_id)
 );
@@ -130,8 +130,8 @@ create table happenings.main_feed(
 -- TODO make this an mview that gets updated by a trigger on the activity table
 create table happenings.discover_feed(
     id serial primary key,
-    user_id integer not null references happenings.user(id),
-    post_id integer not null references happenings.post(id),
+    user_id integer not null references happenings.users(id),
+    post_id integer not null references happenings.posts(id),
     activity_type happenings.activity_t,
     event_timestamp integer not null,
     username varchar(64) not null
