@@ -7,11 +7,16 @@ create table happenings.users(
     email varchar(256) not null,
     private boolean not null default false,
     bio varchar(1024),
-    created timestamptz not null default current_timestamp
+    created timestamptz not null default current_timestamp,
+    modified timestamptz not null default current_timestamp
 );
     comment on table happenings.users is 'happenings users';
     create unique index on happenings.users(username);
     create unique index on happenings.users(email);
+
+    create trigger happenings_user_modified
+    before update on happenings.users
+    for each row execute procedure set_modified_timestamp();
 
 
 create table happenings.posts(
@@ -30,10 +35,15 @@ create table happenings.posts(
     is_private boolean default false,
     age_restriction happenings.age_restriction_t not null default 'AGES_ALL',
     location varchar(1024), -- STRING LOCATION FOR NOW
-    created timestamptz not null default current_timestamp
+    created timestamptz not null default current_timestamp,
+    modified timestamptz not null default current_timestamp
 );
     comment on table happenings.posts is 'Posts (events)';
     create index on happenings.posts(id, event_timestamp);
+
+    create trigger happenings_post_modified
+    before update on happenings.posts
+    for each row execute procedure set_modified_timestamp();
 
 
 create table happenings.activity(
