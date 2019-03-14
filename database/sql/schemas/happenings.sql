@@ -23,7 +23,7 @@ create table happenings.posts(
     id serial primary key,
     user_id integer not null references happenings.users(id),
     username varchar(64) not null,
-    event_timestamp integer not null,
+    event_timestamp timestamptz not null,
     title varchar(256) not null,
     description varchar(2048),
     full_storage_uri varchar(1024) not null,
