@@ -27,8 +27,7 @@ const updateUser = (uid, username, email, user_type, bio, is_private) => {
 }
 
 
-const deleteUser = (request, response) => {
-  const uid = parseInt(request.params.uid);
+const deleteUser = (uid) => {
   return pool.query('delete from users where id = $1',
     [uid]
   )
@@ -39,13 +38,17 @@ const getUsers = () => {
   return pool.query('select * from users order by id asc')
     .then(result => {
       return result.rows
-    })
+  }).catch(err => {
+      throw err
+  });
 }
 
 
 const getUserByUid = (request, response) => {
   const uid = request.params.uid;
-  pool.query('select * from users where id = $1',
+  pool.query(
+    'select id, username, email, user_type, bio,\
+    is_private from users where id = $1',
     [id]
   ).then(results => {
     response.status(200).json(results.rows)
@@ -54,7 +57,9 @@ const getUserByUid = (request, response) => {
 
 
 const getUserByUsername = (username) => {
-  return pool.query('select * from users where username = $1',
+  return pool.query(
+    'select id, username, email, user_type, bio, \
+    is_private from users where username = $1',
     [username]
   ).then(result => result.rows).catch(err => {throw err})
 }
