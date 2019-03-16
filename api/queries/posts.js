@@ -5,7 +5,6 @@ const pool = getPool();
 const _getPostFields = (postData) => {
   return [
     postData.user_id,
-    postData.username,
     postData.event_timestamp,
     postData.title,
     postData.description,
@@ -31,7 +30,9 @@ const createPost = (postData) => {
       is_accessible, guests_can_invite, age_restriction
     )
     values (
-      $1, $2, to_timestamp($3), $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14
+      $1, (select username from users where id = $1),
+      to_timestamp($2),
+      $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13
     ) returning id`,
     postDataCols
   ).then(result => {

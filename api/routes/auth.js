@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { secret } = require('../conf/secret.json');
 const createUser = require('../queries/users').createUser;
-
+const { UNIQUE_VIOLATION } = require('pg-error-constants');
 const router = express.Router();
 const MILLISECONDS_IN_DAY = 86400000
 
@@ -24,6 +24,9 @@ router.post('/register', async (req, res) => {
 
   } catch (err) {
     console.error(err);
+    if (err.code === UNIQUE_VIOLATION) {
+      res.status(400).send({error: 'username or email already exists'})
+    }
     res.status(400).send({
       error: 'req body should take the form { username, email, password }'
     });
