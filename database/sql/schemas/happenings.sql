@@ -3,12 +3,15 @@
 create table happenings.users(
     id serial primary key,
     username varchar(64) not null,
-    user_type happenings.user_t default 'PERSON',
     email varchar(256) not null,
+    password_hash varchar(256) not null,
+    user_type happenings.user_t default 'PERSON',
     bio varchar(1024),
     is_private boolean not null default false,
     created timestamptz not null default current_timestamp,
-    modified timestamptz not null default current_timestamp
+    modified timestamptz not null default current_timestamp,
+    is_email_verified boolean not null default false,
+    disabled boolean not null default false
 );
     comment on table happenings.users is 'happenings users';
     create unique index on happenings.users(username);
