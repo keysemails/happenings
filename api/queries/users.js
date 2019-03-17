@@ -2,9 +2,6 @@ const getPool = require('../connection').getConnectionPool;
 const pool = getPool();
 
 
-/**
- * method - POST
- */
 const createUser = (username, email, passwordHash) => {
   return pool.query(
     'insert into users (username, email, password_hash) \
@@ -35,12 +32,7 @@ const deleteUser = (uid) => {
 
 
 const getUsers = () => {
-  return pool.query('select * from users order by id asc')
-    .then(result => {
-      return result.rows
-  }).catch(err => {
-      throw err
-  });
+  return pool.query('select * from users order by id asc');
 }
 
 
