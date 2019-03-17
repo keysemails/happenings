@@ -1,7 +1,10 @@
 const express = require('express');
+
 const Posts = require('../queries/posts');
 const Comments = require('../queries/comments');
-const { FOREIGN_KEY_VIOLATION } = require('pg-error-constants');
+const Stars = require('../queries/stars');
+
+const { FOREIGN_KEY_VIOLATION, UNIQUE_VIOLATION } = require('pg-error-constants');
 
 const router = express.Router();
 
@@ -102,6 +105,65 @@ router.delete('/:post_id/comments', (req, res) => {
   }).catch(err => {
     res.status(500);
   });
-})
+});
+
+
+/**
+ * STARS STARS STARS
+ */
+ router.get('/:post_id/stars', (req, res) => {
+   const postId = parseInt(req.params['post_id']);
+   Stars.getPostStars(postId).then(result => {
+     res.status(200).send(result.rows)
+   }).catch(err => {
+     console.error(err);
+     res.status(500);
+   });
+ });
+
+
+ router.get('/:post_id/star_count', (req, res) => {
+  const postId = parseInt(req.params['post_id']);
+  Stars.getPostStarCount(postId).then(result => {
+    res.status(200).send(result.rows[0])
+  }).catch(err => {
+    console.error(err);
+    if (err.code == FOREIGN_KEY_VIOLATION) {
+      return res.status(400).send({error: 'post_id not found'})
+    }
+    return res.status(500)
+  });
+ });
+
+
+ router.post('/:post_id/stars', (req, res) => {
+   const postId = parseInt(req.params['post_id']);
+   const userId = parseInt(req.query['user_id']);
+   Stars.addPostStar(userId, postId).then(result => {
+     res.status(201).send({message: 'created star'})
+   }).catch(err => {
+      console.error(err);
+      if (err.code == FOREIGN_KEY_VIOLATION) {
+       return res.status(400).send({error: 'post_id not found'})
+      } else if (err.code == UNIQUE_VIOLATION) {
+        return res.status(400).send({
+          error: 'star already exists for user_id, post_id pair'
+        })
+      }
+      res.status(500);
+   })
+ });
+
+
+ router.delete('/:post_id/stars', (req, res) => {
+   const postId = parseInt(req.params['post_id']);
+   const userId = parseInt(req.query['user_id']);
+   Stars.deletePostStar(postId, userId).then(result => {
+     res.status(200).send({message: 'star deleted'});
+   }).catch(err => {
+      console.error(err);
+     res.status(500);
+   });
+ });
 
 module.exports = router;
