@@ -1,9 +1,11 @@
 const LocalStrategy = require('passport-local').Strategy;
 const JWTStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
+
 const bcrypt = require('bcrypt');
 
 const { secret } = require('./secret.json');
-const getUserByUsername = require('../queries/users').getUserByUsername;
+const lookupUser = require('../queries/users').lookupUserPasswordHash;
 
 /**
  * This module holds the configuration
@@ -19,33 +21,33 @@ module.exports = (passport) => {
     passwordField: 'password',
   }, async (username, password, done) => {
     try {
-      const userLookup = await getUserByUsername(username);
-      const userDoc = userLookup[0];
+      const userLookup = await lookupUser(username);
+      const userDoc = userLookup.rows[0];
       const passwordsMatch = await bcrypt.compare(password, userDoc.password_hash);
       if (passwordsMatch) {
         return done(null, userDoc);
       } else {
-        return done('Incorrect Username / Password');
+        return done({error: 'Incorrect Username / Password'});
       }
     } catch (err) {
+      console.error(err);
       done({error: err})
     }
   }));
 
 
   /**
-   * extrats the JWT from the COOKIE and uses this
+   * extracts the JWT from the Authorization header and uses this
    * application's secret to verify its signature.
    */
   passport.use(new JWTStrategy({
-    jwtFromRequest: req => req.cookies.jwt,
-    secretOrKey: secret,
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: secret
     },
     (jwtPayload, done) => {
-      if (Date.now() > jwtPayload.expires) {
-        return done({error: 'jwt expired'});
+      if (Date.now() > jwtPayload.expiresIn) {
+        return done({error: 'jwt expired'}, false);
       }
-
       return done(null, jwtPayload);
     }
   ));
