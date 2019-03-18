@@ -57,6 +57,14 @@ const getUserByUsername = (username) => {
 }
 
 
+const lookupUserPasswordHash = (username) => {
+  return pool.query(
+    'select id, username, password_hash from users where username = $1',
+    [username]
+  );
+}
+
+
 module.exports = {
     createUser,
     updateUser,
@@ -64,4 +72,5 @@ module.exports = {
     getUsers,
     getUserByUid,
     getUserByUsername,
+    lookupUserPasswordHash
 }
