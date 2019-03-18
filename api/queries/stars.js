@@ -1,4 +1,4 @@
-const getPool = require('../connection').getConnectionPool;
+const getPool = require('../util/connection').getConnectionPool;
 const pool = getPool();
 
 

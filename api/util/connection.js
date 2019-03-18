@@ -1,4 +1,4 @@
-const PG_CONFIG_DEV = require('./conf/happenings-dev.json');
+const PG_CONFIG_DEV = require('../conf/happenings-dev.json');
 const Pool = require('pg').Pool;
 
 const pool = new Pool(PG_CONFIG_DEV);
