@@ -30,8 +30,7 @@ module.exports = (passport) => {
         return done({error: 'Incorrect Username / Password'});
       }
     } catch (err) {
-      console.error(err);
-      done({error: err})
+      next(err);
     }
   }));
 
@@ -46,7 +45,8 @@ module.exports = (passport) => {
     },
     (jwtPayload, done) => {
       if (Date.now() > jwtPayload.expiresIn) {
-        return done({error: 'jwt expired'}, false);
+        let error = 'jwt expired';
+        return done(error, false);
       }
       return done(null, jwtPayload);
     }

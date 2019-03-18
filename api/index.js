@@ -3,10 +3,11 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const { secret } = require('./conf/secret.json');
-
-const app = express();
+const { errorLogger, clientErrorHandler,
+  pgErrorHandler, final500ErrorHandler } = require('./middleware');
 
 const port = 3000;
+const app = express();
 
 /** 
  * Configure request parsing middleware
@@ -44,6 +45,15 @@ app.use('/users',
   passport.authenticate('jwt', {session: false}),
   require('./routes/users')
 );
+
+/** 
+ * Error handler middlewares! Our routes are generally
+ * designed to pass along errors to the next handler in
+ * the chain, and here is where those errors get dealt with.
+ */
+app.use(errorLogger);
+app.use(pgErrorHandler);
+app.use(final500ErrorHandler);
 
 
 app.listen(port, () => {

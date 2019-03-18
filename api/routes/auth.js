@@ -6,13 +6,13 @@ const { secret } = require('../conf/secret.json');
 const createUser = require('../queries/users').createUser;
 const { UNIQUE_VIOLATION } = require('pg-error-constants');
 const router = express.Router();
-const MILLISECONDS_IN_DAY = 86400000
+const MILLISECONDS_IN_DAY = 86400000;
 
 
 /**
  *  ACCOUNT REGISTRATION (CREATE USER)
  */
-router.post('/register', async (req, res) => {
+router.post('/register', async (req, res, next) => {
   const { username, email, password } = req.body;
 
   const HASH_COST = 10;
@@ -23,18 +23,14 @@ router.post('/register', async (req, res) => {
     res.status(200).send({ username, uid })
 
   } catch (err) {
-    console.error(err);
-    if (err.code === UNIQUE_VIOLATION) {
-      res.status(400).send({error: 'username or email already exists'})
-    }
-    res.status(400).send({
-      error: 'req body should take the form { username, email, password }'
-    });
+    next(err);
   }
 });
 
 
 /**
+ * LOG IN USER
+ * 
  * authenticating with the local strategy
  * if authentication succeeds, compose a payload for a JWT
  * and call req.login to assign the payload to req.user.
@@ -44,29 +40,28 @@ router.post('/login', (req, res, next) => {
     'local',
     { session: false },
     (error, user) => {
-      console.log(user);
       if (error || !user) {
-        res.status(400).json({ error });
+        return res.status(400).json({ error: 'username and/or password incorrect' });
       }
 
       /** this is what ends up in the JWT */
       const payload = {
+        user_id: user.id,
         username: user.username,
-        expires: Date.now() + parseInt(process.env.JWT_EXPIRATION_MS || MILLISECONDS_IN_DAY),
+        expiresIn: Date.now() + parseInt(process.env.JWT_EXPIRATION_MS || MILLISECONDS_IN_DAY),
       };
 
       /** assigns payload to req.user */
-      req.login(payload, { session: false }, (error) => {
+      req.login(user, { session: false }, (error) => {
         if (error) {
-          res.status(400).send({ error });
+          next(error);
         }
-
         /** generate a signed JWT and return it in the response */
-        const token = jwt.sign(JSON.stringify(payload), secret);
+        const token = jwt.sign(payload, secret);
 
         /** assign our jwt to the cookie */
-        res.cookie('jwt', jwt, { httpOnly: true, secure: true });
-        res.status(200).send({ username: user.username });
+        res.cookie('jwt', token, { httpOnly: true, secure: true });
+        return res.status(200).send({ token: token });
       });
     },
   )(req, res, next);
