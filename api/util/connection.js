@@ -1,19 +1,13 @@
-const PG_CONFIG_DEV = require('../conf/happenings-dev.json');
+const envConfig = require('../conf');
 const Pool = require('pg').Pool;
-
-const pool = new Pool(PG_CONFIG_DEV);
-
-const getConnInfo = (stage='dev') => {
-  return PG_CONFIG_DEV;
-}
 
 /**
  * returns a connection pool
  * @param  {[string]} stage {'dev', 'prod'}
  * @return {Pool}       connection pool
  */
-const getConnectionPool = (stage) => {
-  const pgConf = getConnInfo(stage);
+const getConnectionPool = () => {
+  const pgConf = envConfig.db;
   return new Pool(pgConf)
 }
 

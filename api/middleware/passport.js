@@ -4,7 +4,7 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 
 const bcrypt = require('bcrypt');
 
-const { secret } = require('./secret.json');
+const { secret } = require('../conf/secret.json');
 const lookupUser = require('../queries/users').lookupUserPasswordHash;
 
 /**
