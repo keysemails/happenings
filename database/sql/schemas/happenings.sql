@@ -24,7 +24,7 @@ create table happenings.users(
 
 create table happenings.posts(
     id serial primary key,
-    user_id integer not null references happenings.users(id),
+    user_id integer not null references happenings.users(id) on delete cascade,
     username varchar(64) not null,
     event_timestamp timestamptz not null,
     title varchar(256) not null,
@@ -54,7 +54,7 @@ create table happenings.activity(
     event_timestamp integer not null,
     activity_type happenings.activity_t not null,
     post_id integer not null references happenings.posts(id),
-    user_id integer not null references happenings.users(id),
+    user_id integer not null references happenings.users(id) on delete cascade,
     username varchar(64) not null,
     created timestamptz not null default current_timestamp
 );
@@ -65,7 +65,7 @@ create table happenings.activity(
 create table happenings.comments(
     id serial primary key,
     post_id integer not null references happenings.posts(id),
-    user_id integer not null references happenings.users(id),
+    user_id integer not null references happenings.users(id) on delete cascade,
     username varchar(64) not null,
     text varchar(1024) not null,
     created timestamptz not null default current_timestamp
@@ -76,7 +76,7 @@ create table happenings.comments(
 
 create table happenings.notifications(
     id serial primary key,
-    user_id integer not null references happenings.users(id),
+    user_id integer not null references happenings.users(id) on delete cascade,
     post_id integer references happenings.posts(id),
     read boolean not null default false,
     created timestamptz not null default current_timestamp,
@@ -90,7 +90,7 @@ create table happenings.notifications(
 -- tables for relational data
 
 create table happenings.stars(
-    user_id integer not null references happenings.users(id),
+    user_id integer not null references happenings.users(id) on delete cascade,
     post_id integer not null references happenings.posts(id),
     created timestamptz not null default current_timestamp,
     primary key (user_id, post_id)
@@ -100,7 +100,7 @@ create table happenings.stars(
 
 
 create table happenings.attendance(
-    user_id integer not null references happenings.users(id),
+    user_id integer not null references happenings.users(id) on delete cascade,
     post_id integer not null references happenings.posts(id),
     event_timestamp integer not null,
     created timestamptz not null default current_timestamp,
@@ -111,11 +111,12 @@ create table happenings.attendance(
 
 
 create table happenings.followers(
-    user_id integer not null references happenings.users(id),
-    follower_id integer not null references happenings.users(id),
+    user_id integer not null references happenings.users(id) on delete cascade,
+    follower_id integer not null references happenings.users(id) on delete cascade,
 
     last_seen_post_id integer default null references happenings.posts(id),
     last_seen_activity_id integer default null references happenings.activity(id),
+    created timestamptz not null default current_timestamp,
     primary key (user_id, follower_id)
 );
     comment on table happenings.followers is 'users that follow a given user_id';

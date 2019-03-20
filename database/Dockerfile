@@ -6,5 +6,6 @@ RUN apt-get update && apt-get install -y \
 
 ADD . /src
 WORKDIR /src/
+RUN chmod -R 777 /src/
 
 ADD ./sql/init.sql /docker-entrypoint-initdb.d/
