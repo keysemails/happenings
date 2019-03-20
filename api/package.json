@@ -7,6 +7,12 @@
     "start": "NODE_ENV=dev nodemon index.js",
     "test": "NODE_ENV=test jest --coverage --forceExit --detectOpenHandles"
   },
+  "jest": {
+    "verbose": true,
+    "modulePathIgnorePatterns": ["conf"],
+    "globalSetup": "./util/jest-setup.js",
+    "globalTeardown": "./util/jest-teardown.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

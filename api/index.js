@@ -4,7 +4,7 @@ const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const { secret } = require('./conf/secret.json');
 const { errorLogger, clientErrorHandler,
-  pgErrorHandler, final500ErrorHandler } = require('./middleware');
+  pgErrorHandler, final500ErrorHandler } = require('./middleware/errors');
 
 const conf = require('./conf');
 const app = express();

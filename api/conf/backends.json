@@ -14,10 +14,10 @@
         "port": 5432
     },
     "test": {
-        "user": "happenings",
+        "user": "postgres",
         "host": "localhost",
         "database": "happenings",
         "password": "chateau430",
-        "port": 5432
+        "port": 5678
     }
 }

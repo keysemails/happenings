@@ -1,9 +1,11 @@
 const express = require('express');
 const passport = require('passport');
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { secret } = require('../conf/secret.json');
+
+const hashPassword = require('../util/auth').hashPassword;
 const createUser = require('../queries/users').createUser;
+
 const { UNIQUE_VIOLATION } = require('pg-error-constants');
 const router = express.Router();
 const MILLISECONDS_IN_DAY = 86400000;
@@ -18,7 +20,7 @@ router.post('/register', async (req, res, next) => {
   const HASH_COST = 10;
 
   try {
-    const passwordHash = await bcrypt.hash(password, HASH_COST);
+    const passwordHash = await hashPassword(password);
     const uid = await createUser(username, email, passwordHash);
     res.status(200).send({ username, uid })
 

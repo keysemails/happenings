@@ -27,10 +27,10 @@ module.exports = (passport) => {
       if (passwordsMatch) {
         return done(null, userDoc);
       } else {
-        return done({error: 'Incorrect Username / Password'});
+        return done('Incorrect Username / Password');
       }
     } catch (err) {
-      next(err);
+      done(err);
     }
   }));
 
