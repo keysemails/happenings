@@ -6,7 +6,7 @@ const { secret } = require('./conf/secret.json');
 const { errorLogger, clientErrorHandler,
   pgErrorHandler, final500ErrorHandler } = require('./middleware');
 
-const port = 3000;
+const conf = require('./conf');
 const app = express();
 
 /** 
@@ -24,7 +24,7 @@ app.use(
  * Configure authentication middleware
  */
 app.use(passport.initialize());
-require('./conf/passport.js')(passport);
+require('./middleware/passport.js')(passport);
 app.disable('x-powered-by');
 
 
@@ -55,7 +55,13 @@ app.use(errorLogger);
 app.use(pgErrorHandler);
 app.use(final500ErrorHandler);
 
+const PORT = conf.port || 3000;
 
-app.listen(port, () => {
-  console.log(`app running on port ${port}.`);
-});
+/** avoid EADDRINUSE error when watching tests */
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`app running on port ${PORT}.`);
+  });
+}
+
+module.exports = app;
