@@ -10,27 +10,27 @@ const router = express.Router();
  * found in routes/auth.js
  */
 
+/**
+ * Helper to check if the requesting client
+ * corresponds to the UID on the requested resource
+ */
 const _UIDisCurrUser = (req) => {
   const uid = parseInt(req.params['uid']);
   const isCurrUser = (uid === req.user.user_id);
   return [uid, isCurrUser];
 }
 
-
-router.get('/', (req, res, next) => {
-  User.getUsers()
-    .then(result => {
-      res.status(200).json(result.rows)
-  }).catch(err => next(err));
-});
-
-
+/**
+ * GET USER INTO BY USERNAME
+ * @param  {[type]} '/:username' [description]
+ * @return {[type]}              [description]
+ */
 router.get('/:username', (req, res, next) => {
   const username = req.params.username;
   User.getUserByUsername(username)
     .then(result => {
       if (result.length === 0) {
-        res.status(404).send({error: 'not found'});
+        return res.status(404).send({error: 'not found'});
       }
       res.status(200).json(result);
   }).catch(err => next(err));
@@ -45,17 +45,16 @@ router.put('/:uid', (req, res, next) => {
     const { username, email, user_type, bio, is_private } = req.body;
     User.updateUser(uid, username, email, user_type, bio, is_private)
       .then(result => {
-        res.status(200).send({ messsage: `user ${uid} updated.`})
+        res.status(200).json({message: `user ${uid} updated.`})
     }).catch(err => next(err));
   } else {
-    res.status(403).send({error: 'Unauthorized'});
+    res.status(401).send('Unauthorized');
   }
 });
 
 
 /*
  * DELETE - delete a user's account.
- * TODO: delete all associated posts, comments, stars
  */
 router.delete('/:uid', (req, res, next) => {
   const [uid, isCurrUser] = _UIDisCurrUser(req);
@@ -65,7 +64,7 @@ router.delete('/:uid', (req, res, next) => {
         res.status(200).send({ message: 'user deleted'})
     }).catch(err => next(err));
   } else {
-    res.status(403).send({error: 'Unauthorized'})
+    res.status(401).send({error: 'Unauthorized'})
   }
 });
 
@@ -74,6 +73,11 @@ router.delete('/:uid', (req, res, next) => {
  * ---------- FOLLOWERS / FOLLOWING ROUTES ---------
  */
 
+/**
+ * GET FOLLOWERS
+ * @param  {[type]} '/:uid/followers' [description]
+ * @return {Array}                   list of (user_id, username)
+ */
 router.get('/:uid/followers', (req, res, next) => {
   const userId = parseInt(req.params.uid);
   Follow.getUserFollowers(userId).then(result => {
@@ -82,6 +86,24 @@ router.get('/:uid/followers', (req, res, next) => {
 });
 
 
+/**
+ * GET FOLLOWING
+ * @param  {[type]} '/:uid/following' uid doing the following
+ * @return {Array}                   list of (user_id, username)
+ */
+router.get('/:uid/following', (req, res, next) => {
+  const userId = parseInt(req.params.uid);
+  Follow.getUserFollowing(userId).then(result => {
+    res.status(200).json(result.rows)
+  }).catch(err => next(err));
+});
+
+
+/**
+ * FOLLOW USER '/:uid/followers?follower_id'
+ * @param {str} 'uid' the user to be followed
+ * @param {str} 'follower_id' the user doing the following
+ */
 router.post('/:uid/followers', (req, res, next) => {
   const followeeId = parseInt(req.params.uid);
   const followerId = parseInt(req.query['follower_id']);
@@ -99,14 +121,10 @@ router.post('/:uid/followers', (req, res, next) => {
 });
 
 
-router.get('/:uid/following', (req, res, next) => {
-  const userId = parseInt(req.params.uid);
-  Follow.getUserFollowing(userId).then(result => {
-    res.status(200).json(result.rows)
-  }).catch(err => next(err));
-});
-
-
+/**
+ * GET FOLLOWER COUNT
+ * @param  {[type]} '/:uid/follower_count'
+ */
 router.get('/:uid/follower_count', (req, res, next) => {
   const userId = parseInt(req.params.uid);
   Follow.getUserFollowerCount(userId).then(result => {
@@ -114,7 +132,10 @@ router.get('/:uid/follower_count', (req, res, next) => {
   }).catch(err => next(err));
 });
 
-
+/**
+ * GET FOLLOWING COUNT
+ * @param  {[type]} '/:uid/following_count'
+ */
 router.get('/:uid/following_count', (req, res, next) => {
   const userId = parseInt(req.params.uid);
   Follow.getUserFollowingCount(userId).then(result => {
@@ -123,17 +144,27 @@ router.get('/:uid/following_count', (req, res, next) => {
 });
 
 
+/**
+ * @description UNFOLLOW A USER
+ * @param { } [follower_id] [id of the person doing the unfollow]
+ * constraint: follower_id === req.user.user_id
+ */
 router.delete('/:uid/followers', (req, res, next) => {
   const userId = parseInt(req.params.uid);
   const followerId = parseInt(req.query['follower_id']);
-  Follow.deleteFollow(userId, followerId).then(result => {
-    if (result.rowCount === 0) {
-      return res.status(400).send({error: 'follow not found'})
-    }
-    res.status(200).send({
-      message: `user ${followerId} no longer following user ${userId}`
-    })
-  }).catch(err => next(err));
+
+  if (req.user.user_id === followerId) {
+    Follow.deleteFollow(userId, followerId).then(result => {
+      if (result.rowCount === 0) {
+        return res.status(400).send({error: 'follow not found'})
+      }
+      res.status(200).send({
+        message: `user ${followerId} no longer following user ${userId}`
+      })
+    }).catch(err => next(err));
+  } else {
+    res.status(401).send('Unauthorized');
+  }
 });
 
 

@@ -6,10 +6,12 @@ const {
  */
 
 const errorLogger = (err, req, res, next) => {
-  if ('stack' in err) {
-    console.error(err.stack);
-  } else {
-    console.error(err);
+  if (process.env.NODE_ENV !== 'test') {
+    if ('stack' in err) {
+      console.error(err.stack);
+    } else {
+      console.error(err);
+    }
   }
   next(err);
 }
@@ -17,7 +19,7 @@ const errorLogger = (err, req, res, next) => {
 const pgErrorHandler = (err, req, res, next) => {
   if (err.code === FOREIGN_KEY_VIOLATION) {
     res.status(400).send({
-      error: 'foreign key violation (related entity does not exist'
+      error: 'foreign key violation (related entity does not exist)'
     })
   } else if (err.code === UNIQUE_VIOLATION) {
     res.status(400).send({
