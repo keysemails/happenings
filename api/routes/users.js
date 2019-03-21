@@ -76,7 +76,7 @@ router.delete('/:uid', (req, res, next) => {
 /**
  * GET FOLLOWERS
  * @param  {[type]} '/:uid/followers' [description]
- * @return {Array}                   list of (user_id, username)
+ * @return {Array}                   list of (follower_id, username)
  */
 router.get('/:uid/followers', (req, res, next) => {
   const userId = parseInt(req.params.uid);
@@ -117,6 +117,8 @@ router.post('/:uid/followers', (req, res, next) => {
         message: `user ${followerId} now following user ${followeeId}`
       })
     }).catch(err => next(err));
+  } else {
+    res.status(401).send('Unauthorized');
   }
 });
 
