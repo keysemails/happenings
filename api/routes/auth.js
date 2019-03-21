@@ -22,7 +22,7 @@ router.post('/register', async (req, res, next) => {
   try {
     const passwordHash = await hashPassword(password);
     const uid = await createUser(username, email, passwordHash);
-    res.status(200).send({ username, uid })
+    res.status(201).send({ username, uid })
 
   } catch (err) {
     next(err);
