@@ -68,7 +68,7 @@ describe('user routes integration tests', () => {
         .set('Authorization', `Bearer ${token}`)
         .set('Accept', 'application/json')
         .send({
-          username: 'TEST_USER_1',
+          username: TEST_AUTHENTICATED_USERNAME,
           email: 'TEST_EMAIL1',
           user_type: 'THING',
           bio: 'loves to chill',
@@ -78,6 +78,23 @@ describe('user routes integration tests', () => {
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
           expect(res.body).to.have.property('message', 'user 1 updated.');
+          done();
+        });
+    });
+    it('should fail to update an invalid option', (done) => {
+      request(app).put(`/users/${TEST_AUTH_USERID}`)
+        .set('Authorization', `Bearer ${token}`)
+        .set('Accept', 'application/json')
+        .send({
+          username: TEST_AUTHENTICATED_USERNAME,
+          email: 'TEST_EMAIL1',
+          user_type: 'INVALID OPTION',
+          bio: 'loves to chill',
+          is_private: true
+        })
+        .expect('Content-Type', /json/)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(400);
           done();
         });
     });
@@ -111,15 +128,23 @@ describe('user routes integration tests', () => {
         });
     });
     it('should let you delete your own account', (done) => {
-      request(app).delete(`/users/${TEST_AUTH_USERID}`)
-        .set('Authorization', `Bearer ${token}`)
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /json/)
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(200);
-          expect(res.body).to.have.property('message', 'user deleted');
-          done();
-        });
+      const DELETE_TEST_ACCT = 'DELETE_IN_TEST';
+      const DELETE_TEST_ACCT_ID = 4;
+      request(app).post('/auth/login')
+        .send({
+          username: DELETE_TEST_ACCT,
+          password: 'TEST_PASSWORD',
+        }).then(tokenResponse => {
+          request(app).delete(`/users/${DELETE_TEST_ACCT_ID}`)
+            .set('Authorization', `Bearer ${tokenResponse.body.token}`)
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .end((err, res) => {
+              expect(res.statusCode).to.equal(200);
+              expect(res.body).to.have.property('message', 'user deleted');
+              done();
+            });
+        })
     });
   });
 });
