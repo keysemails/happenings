@@ -53,7 +53,7 @@ create table happenings.activity(
     id serial primary key,
     event_timestamp integer not null,
     activity_type happenings.activity_t not null,
-    post_id integer not null references happenings.posts(id),
+    post_id integer not null references happenings.posts(id) on delete cascade,
     user_id integer not null references happenings.users(id) on delete cascade,
     username varchar(64) not null,
     created timestamptz not null default current_timestamp
@@ -64,7 +64,7 @@ create table happenings.activity(
 
 create table happenings.comments(
     id serial primary key,
-    post_id integer not null references happenings.posts(id),
+    post_id integer not null references happenings.posts(id) on delete cascade,
     user_id integer not null references happenings.users(id) on delete cascade,
     username varchar(64) not null,
     text varchar(1024) not null,
@@ -74,6 +74,7 @@ create table happenings.comments(
     create index on happenings.comments(post_id);
 
 
+-- dont do post_id on delete cascade, lets let the notifications hang around.
 create table happenings.notifications(
     id serial primary key,
     user_id integer not null references happenings.users(id) on delete cascade,
@@ -88,10 +89,9 @@ create table happenings.notifications(
 
 
 -- tables for relational data
-
 create table happenings.stars(
     user_id integer not null references happenings.users(id) on delete cascade,
-    post_id integer not null references happenings.posts(id),
+    post_id integer not null references happenings.posts(id) on delete cascade,
     created timestamptz not null default current_timestamp,
     primary key (user_id, post_id)
 );
@@ -101,7 +101,7 @@ create table happenings.stars(
 
 create table happenings.attendance(
     user_id integer not null references happenings.users(id) on delete cascade,
-    post_id integer not null references happenings.posts(id),
+    post_id integer not null references happenings.posts(id) on delete cascade,
     event_timestamp integer not null,
     created timestamptz not null default current_timestamp,
     primary key (user_id, post_id)
@@ -117,7 +117,8 @@ create table happenings.followers(
     last_seen_post_id integer default null references happenings.posts(id),
     last_seen_activity_id integer default null references happenings.activity(id),
     created timestamptz not null default current_timestamp,
-    primary key (user_id, follower_id)
+    primary key (user_id, follower_id),
+    constraint cant_follow_yourself check (user_id <> follower_id)
 );
     comment on table happenings.followers is 'users that follow a given user_id';
 
@@ -130,8 +131,8 @@ create table happenings.followers(
 -- "feeds" that should probably be mviews updated by triggers!
 
 create table happenings.main_feed(
-    user_id integer not null references happenings.users(id),
-    post_id integer not null references happenings.posts(id),
+    user_id integer not null references happenings.users(id) on delete cascade,
+    post_id integer not null references happenings.posts(id) on delete cascade,
     created timestamptz not null,
     primary key (user_id, post_id)
 );
@@ -144,8 +145,8 @@ create table happenings.main_feed(
 -- TODO make this an mview that gets updated by a trigger on the activity table
 create table happenings.discover_feed(
     id serial primary key,
-    user_id integer not null references happenings.users(id),
-    post_id integer not null references happenings.posts(id),
+    user_id integer not null references happenings.users(id) on delete cascade,
+    post_id integer not null references happenings.posts(id) on delete cascade,
     activity_type happenings.activity_t,
     event_timestamp integer not null,
     username varchar(64) not null
