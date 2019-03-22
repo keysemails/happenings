@@ -44,7 +44,6 @@ const createPost = (postData) => {
 
 
 const updatePost = (postId, postData) => {
-  const postDataCols = _getPostFields(postData);
   return pool.query(
     `update happenings.posts set title = $1, description = $2, location = $3,
       event_timestamp = to_timestamp($4), is_private = $5, is_accessible = $6,

@@ -40,7 +40,7 @@ app.use('/auth', require('./routes/auth'));
 app.use('/public', require('./routes/public'));
 
 
-app.use('/posts', require('./routes/posts'));
+app.use('/posts', requireAuth, require('./routes/posts'));
 app.use('/posts', requireAuth, require('./routes/comments'));
 app.use('/posts', requireAuth, require('./routes/stars'));
 

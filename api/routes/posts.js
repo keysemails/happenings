@@ -11,27 +11,42 @@ const router = express.Router();
  require('../middleware/params')(router);
 
 router.post('/', (req, res, next) => {
-  const postData = req.body;
-  Posts.createPost(postData).then(postId => {
-    res.status(201).send({message: `created post with id ${postId}`})
-  }).catch(err => next(err));
+  const userIsAuthor = (req.user.user_id === req.body.user_id);
+  if (userIsAuthor) {
+    const postData = req.body;
+    Posts.createPost(postData).then(postId => {
+      res.status(201).send({message: `created post with id ${postId}`})
+    }).catch(err => next(err));
+  } else {
+    res.status(401).send('Unauthorized');
+  }
 });
 
 
 router.put('/:post_id', (req, res, next) => {
-  const postId = req.post.id;
-  const postData = req.body;
-  Posts.updatePost(postId, postData).then(result => {
-    res.status(201).send(`updated post with id ${postId}`)
-  }).catch(err => next(err));
+  const userIsAuthor = (req.post.user_id === req.user.user_id);
+  if (userIsAuthor) {
+    const postId = req.post.id;
+    const postData = req.body;
+    Posts.updatePost(postId, postData).then(result => {
+      res.status(201).send(`updated post with id ${postId}`)
+    }).catch(err => next(err));
+  } else {
+    res.status(401).send('Unauthorized');
+  }
 });
 
 
 router.delete('/:post_id', (req, res, next) => {
-  const postId = req.post.id;
-  Posts.deletePost(postId).then(result => {
-    res.status(200).send(`deleted post with id ${postId}`)
-  }).catch(err => next(err));
+  const userIsAuthor = (req.post.user_id === req.user.user_id)
+  if (userIsAuthor) {
+    const postId = req.post.id;
+    Posts.deletePost(postId).then(result => {
+      res.status(200).send({message: `deleted post with id ${postId}`})
+    }).catch(err => next(err));
+  } else {
+    res.status(401).send('Unauthorized');
+  }
 });
 
 
