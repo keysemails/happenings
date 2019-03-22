@@ -4,17 +4,20 @@ const Stars = require('../queries/stars');
 const router = express.Router({mergeParams: true});
 
 /**
- * ----- STARS STARS STARS ------
+ * pass router through param middlewares to do post lookup
+ * and 404 handling for all routes with 'post_id' param
  */
- router.get('/', (req, res, next) => {
-   const postId = parseInt(req.params['post_id']);
+require('../middleware/params')(router);
+
+ router.get('/:post_id/stars/', (req, res, next) => {
+   const postId = req.params['post_id'];
    Stars.getPostStars(postId).then(result => {
      res.status(200).send(result.rows)
    }).catch(err => next(err));
  });
 
 
- router.get('/count', (req, res, next) => {
+ router.get('/:post_id/stars/count', (req, res, next) => {
   const postId = parseInt(req.params['post_id']);
   Stars.getPostStarCount(postId).then(result => {
     res.status(200).send(result.rows[0])
@@ -22,7 +25,7 @@ const router = express.Router({mergeParams: true});
  });
 
 
- router.post('/', (req, res) => {
+ router.post('/:post_id/stars/', (req, res) => {
    const postId = parseInt(req.params['post_id']);
    const userId = parseInt(req.query['user_id']);
    Stars.addPostStar(userId, postId).then(result => {
@@ -31,7 +34,7 @@ const router = express.Router({mergeParams: true});
  });
 
 
- router.delete('/', (req, res) => {
+ router.delete('/:post_id/stars/', (req, res) => {
    const postId = parseInt(req.params['post_id']);
    const userId = parseInt(req.query['user_id']);
    Stars.deletePostStar(postId, userId).then(result => {

@@ -9,7 +9,7 @@ const router = express.Router({mergeParams: true});
  * @param  {[type]} '/:uid/followers' [description]
  * @return {Array}                   list of (follower_id, username)
  */
-router.get('/followers', (req, res, next) => {
+router.get('/:uid/followers', (req, res, next) => {
   const userId = parseInt(req.params.uid);
   Follow.getUserFollowers(userId).then(result => {
     res.status(200).json(result.rows)
@@ -22,7 +22,7 @@ router.get('/followers', (req, res, next) => {
  * @param  {[type]} '/following' uid doing the following
  * @return {Array}                   list of (user_id, username)
  */
-router.get('/following', (req, res, next) => {
+router.get('/:uid/following', (req, res, next) => {
   const userId = parseInt(req.params.uid);
   Follow.getUserFollowing(userId).then(result => {
     res.status(200).json(result.rows)
@@ -35,7 +35,7 @@ router.get('/following', (req, res, next) => {
  * @param {str} 'uid' the user to be followed
  * @param {str} 'follower_id' the user doing the following
  */
-router.post('/followers', (req, res, next) => {
+router.post('/:uid/followers', (req, res, next) => {
   const followeeId = parseInt(req.params.uid);
   const followerId = parseInt(req.query['follower_id']);
 
@@ -58,7 +58,7 @@ router.post('/followers', (req, res, next) => {
  * GET FOLLOWER COUNT
  * @param  {[type]} '/follower_count'
  */
-router.get('/follower_count', (req, res, next) => {
+router.get('/:uid/follower_count', (req, res, next) => {
   const userId = parseInt(req.params.uid);
   Follow.getUserFollowerCount(userId).then(result => {
     res.status(200).json(result.rows[0])
@@ -69,7 +69,7 @@ router.get('/follower_count', (req, res, next) => {
  * GET FOLLOWING COUNT
  * @param  {[type]} '/following_count'
  */
-router.get('/following_count', (req, res, next) => {
+router.get('/:uid/following_count', (req, res, next) => {
   const userId = parseInt(req.params.uid);
   Follow.getUserFollowingCount(userId).then(result => {
     res.status(200).json(result.rows[0])
@@ -82,7 +82,7 @@ router.get('/following_count', (req, res, next) => {
  * @param { } [follower_id] [id of the person doing the unfollow]
  * constraint: follower_id === req.user.user_id
  */
-router.delete('/followers', (req, res, next) => {
+router.delete('/:uid/followers', (req, res, next) => {
   const userId = parseInt(req.params.uid);
   const followerId = parseInt(req.query['follower_id']);
 

@@ -27,6 +27,7 @@ app.use(passport.initialize());
 require('./middleware/passport.js')(passport);
 app.disable('x-powered-by');
 
+const requireAuth = passport.authenticate('jwt', {session: false});
 
 app.get('/', (req, res) => {
   res.json({info: 'node.js, express, and postgres api'})
@@ -36,28 +37,16 @@ app.get('/', (req, res) => {
  * PUBLIC ROUTES
  */
 app.use('/auth', require('./routes/auth'));
+app.use('/public', require('./routes/public'));
+
+
 app.use('/posts', require('./routes/posts'));
+app.use('/posts', requireAuth, require('./routes/comments'));
+app.use('/posts', requireAuth, require('./routes/stars'));
 
-app.use('/posts/:post_id/comments',
-  passport.authenticate('jwt', {session: false}),
-  require('./routes/comments')
-);
-app.use('/posts/:post_id/stars',
-  passport.authenticate('jwt', {session: false}),
-  require('./routes/stars')
-);
+app.use('/users', requireAuth, require('./routes/users'));
+app.use('/users', requireAuth, require('./routes/followers'));
 
-/**
- * PRIVATE ROUTES
- */
-app.use('/users',
-  passport.authenticate('jwt', {session: false}),
-  require('./routes/users')
-);
-app.use('/users/:uid',
-  passport.authenticate('jwt', {session: false}),
-  require('./routes/followers')
-);
 
 /** 
  * Error handler middlewares! Our routes are generally

@@ -36,15 +36,13 @@ const getUsers = () => {
 }
 
 
-const getUserByUid = (request, response) => {
-  const uid = request.params.uid;
+const getUserByUid = (uid) => {
+
   pool.query(
     'select id, username, email, user_type, bio,\
     is_private from happenings.users where id = $1',
-    [id]
-  ).then(results => {
-    response.status(200).json(results.rows)
-  }).catch(err => handle500(err, response));
+    [uid]
+  ).then(result => result.rows).catch(err => { throw err });
 }
 
 
@@ -53,7 +51,7 @@ const getUserByUsername = (username) => {
     'select id, username, email, user_type, bio, \
     is_private from happenings.users where username = $1',
     [username]
-  ).then(result => result.rows).catch(err => {throw err})
+  ).then(result => result.rows).catch(err => { throw err })
 }
 
 

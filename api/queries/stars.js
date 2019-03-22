@@ -7,7 +7,8 @@ const getPostStars = (postId) => {
     `select u.username, s.user_id
       from happenings.stars s
       inner join happenings.users u on s.user_id = u.id
-      where s.post_id = $1`
+      where s.post_id = $1`,
+    [postId]
   );
 }
 
