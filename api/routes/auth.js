@@ -17,13 +17,10 @@ const MILLISECONDS_IN_DAY = 86400000;
 router.post('/register', async (req, res, next) => {
   const { username, email, password } = req.body;
 
-  const HASH_COST = 10;
-
   try {
     const passwordHash = await hashPassword(password);
     const uid = await createUser(username, email, passwordHash);
     res.status(201).send({ username, uid })
-
   } catch (err) {
     next(err);
   }

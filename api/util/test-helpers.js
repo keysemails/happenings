@@ -36,7 +36,7 @@ const createFakeUserData = async (username, email, password) => {
 }
 
 
-const createFakePostData = (uid) => {
+const createFakePostData = (uid, is_private=false) => {
   console.log('creating post for uid', uid);
   const payload = {
     user_id: uid,
@@ -49,7 +49,7 @@ const createFakePostData = (uid) => {
     thumb_url: 'https://fakesite.com/test_poster.png',
     thumb_storage_uri: 'https://fakesite.com/test_poster.png',
     location: 'TEST_PLACE',
-    is_private: false,
+    is_private: is_private,
     is_accessible: true,
     guests_can_invite: false,
     age_restriction: 'AGES_ALL'
@@ -71,10 +71,9 @@ const createFakeData = async () => {
     const postId2 = await createFakePostData(uid2);
     const postId3 = await createFakePostData(uid3);
     const postId4 = await createFakePostData(uid4);
-
-    return [
-      uid1, uid2, uid3
-    ]
+    const postId5 = await createFakePostData(uid3, true);
+    console.log('post ids')
+    console.log(postId1, postId2, postId3, postId4, postId5);
 
   } catch (err) {
     throw err;
