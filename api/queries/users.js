@@ -4,7 +4,7 @@ const pool = getPool();
 
 const createUser = (username, email, passwordHash) => {
   return pool.query(
-    'insert into users (username, email, password_hash) \
+    'insert into happenings.users (username, email, password_hash) \
     values ($1, $2, $3) returning id',
     [username, email, passwordHash]
   ).then(result => {
@@ -17,7 +17,7 @@ const createUser = (username, email, passwordHash) => {
 
 const updateUser = (uid, username, email, user_type, bio, is_private) => {
   return pool.query(
-    `update users set username = $1, email = $2,
+    `update happenings.users set username = $1, email = $2,
       user_type = $3, bio = $4, is_private = $5 where id = $6`,
     [username, email, user_type, bio, is_private, uid]
   )
@@ -25,14 +25,14 @@ const updateUser = (uid, username, email, user_type, bio, is_private) => {
 
 
 const deleteUser = (uid) => {
-  return pool.query('delete from users where id = $1',
+  return pool.query('delete from happenings.users where id = $1',
     [uid]
   )
 }
 
 
 const getUsers = () => {
-  return pool.query('select * from users order by id asc');
+  return pool.query('select * from happenings.users order by id asc');
 }
 
 
@@ -40,7 +40,7 @@ const getUserByUid = (request, response) => {
   const uid = request.params.uid;
   pool.query(
     'select id, username, email, user_type, bio,\
-    is_private from users where id = $1',
+    is_private from happenings.users where id = $1',
     [id]
   ).then(results => {
     response.status(200).json(results.rows)
@@ -51,7 +51,7 @@ const getUserByUid = (request, response) => {
 const getUserByUsername = (username) => {
   return pool.query(
     'select id, username, email, user_type, bio, \
-    is_private from users where username = $1',
+    is_private from happenings.users where username = $1',
     [username]
   ).then(result => result.rows).catch(err => {throw err})
 }
@@ -59,7 +59,7 @@ const getUserByUsername = (username) => {
 
 const lookupUserPasswordHash = (username) => {
   return pool.query(
-    'select id, username, password_hash from users where username = $1',
+    'select id, username, password_hash from happenings.users where username = $1',
     [username]
   );
 }

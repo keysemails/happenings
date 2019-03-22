@@ -24,13 +24,13 @@ const _getPostFields = (postData) => {
 const createPost = (postData) => {
   const postDataCols = _getPostFields(postData);
   return pool.query(
-    `insert into posts (
+    `insert into happenings.posts (
       user_id, username, event_timestamp, title, description, full_url,
       full_storage_uri, thumb_url, thumb_storage_uri, location, is_private,
       is_accessible, guests_can_invite, age_restriction
     )
     values (
-      $1, (select username from users where id = $1),
+      $1, (select username from happenings.users where id = $1),
       to_timestamp($2),
       $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13
     ) returning id`,
@@ -46,7 +46,7 @@ const createPost = (postData) => {
 const updatePost = (postId, postData) => {
   const postDataCols = _getPostFields(postData);
   return pool.query(
-    `update posts set title = $1, description = $2, location = $3,
+    `update happenings.posts set title = $1, description = $2, location = $3,
       event_timestamp = to_timestamp($4), is_private = $5, is_accessible = $6,
       guests_can_invite = $7, age_restriction = $8 where id = $9`,
     [
@@ -66,14 +66,14 @@ const updatePost = (postId, postData) => {
 
 const deletePost = (postId) => {
   return pool.query(
-    'delete from posts where id = $1',
+    'delete from happenings.posts where id = $1',
     [postId]
   );
 }
 
 
 const getPost = (postId) => {
-  return pool.query('select * from posts where id = $1',
+  return pool.query('select * from happenings.posts where id = $1',
     [postId]
   ).then(results => results.rows)
     .catch(err => {

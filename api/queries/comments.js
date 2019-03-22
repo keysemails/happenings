@@ -4,7 +4,7 @@ const pool = getPool();
 
 const getPostComments = (postId) => {
   return pool.query(
-    'select * from comments where post_id = $1 order by created desc',
+    'select * from happenings.comments where post_id = $1 order by created desc',
     [postId]
   );
 }
@@ -12,8 +12,8 @@ const getPostComments = (postId) => {
 
 const addPostComment = (postId, userId, text) => {
   return pool.query(
-    `insert into comments (post_id, user_id, username, text)
-    values ($1, $2, (select username from users where id = $2), $3)
+    `insert into happenings.comments (post_id, user_id, username, text)
+    values ($1, $2, (select username from happenings.users where id = $2), $3)
     returning id`,
     [postId, userId, text]
   ).then(result => {
@@ -26,7 +26,7 @@ const addPostComment = (postId, userId, text) => {
 
 const deletePostComment = (postId, commentId) => {
   return pool.query(
-    'delete from comments where id = $1 and post_id = $2',
+    'delete from happenings.comments where id = $1 and post_id = $2',
     [commentId, postId]
   );
 }
