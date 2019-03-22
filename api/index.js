@@ -38,12 +38,25 @@ app.get('/', (req, res) => {
 app.use('/auth', require('./routes/auth'));
 app.use('/posts', require('./routes/posts'));
 
+app.use('/posts/:post_id/comments',
+  passport.authenticate('jwt', {session: false}),
+  require('./routes/comments')
+);
+app.use('/posts/:post_id/stars',
+  passport.authenticate('jwt', {session: false}),
+  require('./routes/stars')
+);
+
 /**
  * PRIVATE ROUTES
  */
 app.use('/users',
   passport.authenticate('jwt', {session: false}),
   require('./routes/users')
+);
+app.use('/users/:uid',
+  passport.authenticate('jwt', {session: false}),
+  require('./routes/followers')
 );
 
 /** 
