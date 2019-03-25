@@ -50,6 +50,7 @@ app.use('/users', requireAuth, require('./routes/followers'));
 app.use('/activity', requireAuth, require('./routes/activity'));
 app.use('/attendance', requireAuth, require('./routes/attendance'));
 
+app.use('/inbox', requireAuth, require('./routes/inbox'));
 
 /** 
  * Error handler middlewares! Our routes are generally
