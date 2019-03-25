@@ -82,7 +82,7 @@ create table happenings.notifications(
     read boolean not null default false,
     created timestamptz not null default current_timestamp,
     notification_type happenings.notification_t not null,
-    notifier_id integer references happenings.users(id)
+    notifier_id integer references happenings.users(id) on delete cascade,
 );
     comment on table happenings.notifications is 'notifications for inbox';
     create index on happenings.notifications(user_id);

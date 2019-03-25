@@ -71,7 +71,6 @@ describe('inbox routes integration tests', () => {
             .end((err, res) => {
               expect(res.statusCode).to.equal(200);
               expect(res.body).to.be.an('array');
-              console.error(res.body);
               expect(res.body[0]).to.have.property('read', true);
               done();
             });
