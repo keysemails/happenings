@@ -18,7 +18,7 @@ beforeAll((done) => {
     });
 });
 
-describe ('activity post route integration test', () => {
+describe('activity post route integration test', () => {
   let DISCOVER_TEST_ID = 5;
   let OTHER_PERSON_ID = 1;
   let TEST_ID_OF_POST_TO_LIKE = 3;

@@ -48,6 +48,7 @@ app.use('/users', requireAuth, require('./routes/users'));
 app.use('/users', requireAuth, require('./routes/followers'));
 
 app.use('/activity', requireAuth, require('./routes/activity'));
+app.use('/attendance', requireAuth, require('./routes/attendance'));
 
 
 /** 
