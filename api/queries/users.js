@@ -37,8 +37,7 @@ const getUsers = () => {
 
 
 const getUserByUid = (uid) => {
-
-  pool.query(
+  return pool.query(
     'select id, username, email, user_type, bio,\
     is_private from happenings.users where id = $1',
     [uid]

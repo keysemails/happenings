@@ -66,6 +66,7 @@ const createFakeData = async () => {
     const uid2 = await createFakeUserData('TEST_USER2', 'TEST_EMAIL2', 'TEST_PASSWORD');
     const uid3 = await createFakeUserData('TEST_USER3', 'TEST_EMAIL3', 'TEST_PASSWORD');
     const uid4 = await createFakeUserData('DELETE_IN_TEST', 'TEST_EMAIL4', 'TEST_PASSWORD');
+    const uid5 = await createFakeUserData('DISCOVER_TEST', 'DISCOVER_TEST', 'TEST_PASSWORD')
 
     const postId1 = await createFakePostData(uid1);
     const postId2 = await createFakePostData(uid2);

@@ -47,6 +47,8 @@ app.use('/posts', requireAuth, require('./routes/stars'));
 app.use('/users', requireAuth, require('./routes/users'));
 app.use('/users', requireAuth, require('./routes/followers'));
 
+app.use('/activity', requireAuth, require('./routes/activity'));
+
 
 /** 
  * Error handler middlewares! Our routes are generally

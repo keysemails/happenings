@@ -51,15 +51,15 @@ create table happenings.posts(
 
 create table happenings.activity(
     id serial primary key,
-    event_timestamp integer not null,
+    event_timestamp timestamptz not null,
     activity_type happenings.activity_t not null,
     post_id integer not null references happenings.posts(id) on delete cascade,
     user_id integer not null references happenings.users(id) on delete cascade,
-    username varchar(64) not null,
     created timestamptz not null default current_timestamp
 );
     comment on table happenings.activity is 'recorded user activity for discover feed';
     create index on happenings.activity(user_id);
+    create index on happenings.activity(event_timestamp);
 
 
 create table happenings.comments(
