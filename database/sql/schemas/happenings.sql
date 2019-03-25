@@ -102,7 +102,7 @@ create table happenings.stars(
 create table happenings.attendance(
     user_id integer not null references happenings.users(id) on delete cascade,
     post_id integer not null references happenings.posts(id) on delete cascade,
-    event_timestamp integer not null,
+    event_timestamp timestamptz not null,
     created timestamptz not null default current_timestamp,
     primary key (user_id, post_id)
 );
@@ -148,8 +148,7 @@ create table happenings.discover_feed(
     user_id integer not null references happenings.users(id) on delete cascade,
     post_id integer not null references happenings.posts(id) on delete cascade,
     activity_type happenings.activity_t,
-    event_timestamp integer not null,
-    username varchar(64) not null
+    event_timestamp timestamptz not null
 );
     comment on table happenings.discover_feed is 'posts that people you follow interacted with';
     create index on happenings.discover_feed(user_id);
