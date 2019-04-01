@@ -12,6 +12,9 @@ create schema happenings;
 \ir /src/sql/functions.sql;
 \ir /src/sql/schemas/happenings.sql;
 
+-- create our feed fanout stored procedures
+\ir /src/sql/feed.sql;
+
 grant usage on schema happenings to happenings;
 grant select, insert, update, delete on all tables in schema happenings to happenings;
 grant select, usage on all sequences in schema happenings to happenings;

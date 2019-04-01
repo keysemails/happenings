@@ -82,7 +82,7 @@ create table happenings.notifications(
     read boolean not null default false,
     created timestamptz not null default current_timestamp,
     notification_type happenings.notification_t not null,
-    notifier_id integer references happenings.users(id) on delete cascade,
+    notifier_id integer references happenings.users(id) on delete cascade
 );
     comment on table happenings.notifications is 'notifications for inbox';
     create index on happenings.notifications(user_id);
@@ -113,9 +113,6 @@ create table happenings.attendance(
 create table happenings.followers(
     user_id integer not null references happenings.users(id) on delete cascade,
     follower_id integer not null references happenings.users(id) on delete cascade,
-
-    last_seen_post_id integer default null references happenings.posts(id),
-    last_seen_activity_id integer default null references happenings.activity(id),
     created timestamptz not null default current_timestamp,
     primary key (user_id, follower_id),
     constraint cant_follow_yourself check (user_id <> follower_id)
@@ -133,22 +130,20 @@ create table happenings.followers(
 create table happenings.main_feed(
     user_id integer not null references happenings.users(id) on delete cascade,
     post_id integer not null references happenings.posts(id) on delete cascade,
-    created timestamptz not null,
+    created timestamptz not null default current_timestamp,
     primary key (user_id, post_id)
 );
     comment on table happenings.main_feed is 'post_ids from people you follow';
     create index on happenings.main_feed(user_id);
 
 -- contains posts that have been interacted with by ppl u follow
--- uses the activity table which records user interactions
--- this table is populated by application code
--- TODO make this an mview that gets updated by a trigger on the activity table
 create table happenings.discover_feed(
-    id serial primary key,
     user_id integer not null references happenings.users(id) on delete cascade,
     post_id integer not null references happenings.posts(id) on delete cascade,
+    followee_id integer references happenings.users(id),
     activity_type happenings.activity_t,
-    event_timestamp timestamptz not null
+    event_timestamp timestamptz not null,
+    primary key (user_id, post_id)
 );
     comment on table happenings.discover_feed is 'posts that people you follow interacted with';
     create index on happenings.discover_feed(user_id);

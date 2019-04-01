@@ -6,7 +6,6 @@ const { secret } = require('../conf/secret.json');
 const hashPassword = require('../util/auth').hashPassword;
 const createUser = require('../queries/users').createUser;
 
-const { UNIQUE_VIOLATION } = require('pg-error-constants');
 const router = express.Router();
 const MILLISECONDS_IN_DAY = 86400000;
 
