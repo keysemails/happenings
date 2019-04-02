@@ -1,6 +1,8 @@
 const express = require('express');
 const Comments = require('../queries/comments');
 
+const asyncWrap = require('../middleware/wrap');
+
 // lets us access path params from parent router
 const router = express.Router({mergeParams: true});
 
@@ -10,29 +12,26 @@ const router = express.Router({mergeParams: true});
  */
 require('../middleware/params')(router);
 
-router.get('/:post_id/comments', (req, res, next) => {
+router.get('/:post_id/comments', asyncWrap(async (req, res, next) => {
   const postId = req.post.id;
-  Comments.getPostComments(postId).then(result => {
-    res.status(200).send(result.rows)
-  }).catch(err => next(err));
-});
+  const result = await Comments.getPostComments(postId);
+  return res.status(200).send(result.rows);
+}));
 
-
-router.post('/:post_id/comments', (req, res, next) => {
+// TODO make this an async route that also does a discover feed fanout
+router.post('/:post_id/comments', asyncWrap(async (req, res, next) => {
   const postId = req.post.id;
   const { user_id, text } = req.body;
-  Comments.addPostComment(postId, user_id, text).then(result => {
-    res.status(201).send({message: `created comment with id ${result}`})
-  }).catch(err => next(err));
-});
+  const result = await Comments.addPostComment(postId, user_id, text);
+  return res.status(201).send({message: `created comment with id ${result}`});
+}));
 
 
-router.delete('/:post_id/comments', (req, res, next) => {
+router.delete('/:post_id/comments', asyncWrap(async (req, res, next) => {
   const postId = req.post.id;
   const commentId = parseInt(req.query['comment_id']);
-  Comments.deletePostComment(postId, commentId).then(result => {
-    res.status(200).send({message: 'comment deleted'});
-  }).catch(err => next(err));
-});
+  const result = await Comments.deletePostComment(postId, commentId);
+  return res.status(200).send({message: 'comment deleted'});
+}));
 
 module.exports = router;
