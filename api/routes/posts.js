@@ -13,8 +13,7 @@ const router = express.Router();
 
  require('../middleware/params')(router);
 
-//TODO: make this an async route that also
-// does a main feed fanout
+
 router.post('/', asyncWrap(async (req, res, next) => {
   const userIsAuthor = (req.user.user_id === req.body.user_id);
   if (userIsAuthor) {
@@ -22,7 +21,7 @@ router.post('/', asyncWrap(async (req, res, next) => {
     const postData = req.body;
     const postId = await Posts.createPost(postData);
     const fanout = await Feed.mainFeedFanOut(userId, postId);
-    return res.status(201).send({message: `created post with id ${postId}`});
+    return res.status(201).send({post_id: postId});
   } else {
     res.status(401).send('Unauthorized');
   }

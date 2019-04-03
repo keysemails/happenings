@@ -6,7 +6,11 @@ const pool = getPool();
  * to all the users followers
  */
 const mainFeedFanOut = (userId, postId) => {
-  return pool.query('select happenings.main_feed_fanout($1, $2)', [userId, postId]);
+  console.log('fanning out to', userId, postId);
+  return pool.query(
+    'select happenings.main_feed_fanout($1, $2)',
+    [userId, postId]
+  );
 }
 
 
@@ -19,7 +23,29 @@ const discoverFeedFanout = (userId, postId, activityType) => {
     [userId, postId, activityType]);
 }
 
+// TODO: pagination
+const getMainFeed = (userId) => {
+  return pool.query(
+    `select post_id
+      from happenings.main_feed
+      where user_id = $1`,
+      [userId]
+    );
+}
+
+//TODO: pagination
+const getDiscoverFeed = (userId) => {
+  return pool.query(
+    `select post_id, followee_id, activity_type, event_timestamp
+      from happenings.discover_feed
+      where user_id = $1`,
+      [userId]
+    );
+}
+
 module.exports = {
   mainFeedFanOut,
-  discoverFeedFanout
+  discoverFeedFanout,
+  getMainFeed,
+  getDiscoverFeed
 }

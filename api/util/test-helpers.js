@@ -62,16 +62,24 @@ const createFakePostData = (uid, is_private=false) => {
 const createFakeData = async () => {
   try {
     console.log('creating fake data...');
+    /* doin all these manually before any tests run
+     * so we can have predictible and deterministic uids */
     const uid1 = await createFakeUserData('TEST_USER1', 'TEST_EMAIL1', 'TEST_PASSWORD');
     const uid2 = await createFakeUserData('TEST_USER2', 'TEST_EMAIL2', 'TEST_PASSWORD');
     const uid3 = await createFakeUserData('TEST_USER3', 'TEST_EMAIL3', 'TEST_PASSWORD');
     const uid4 = await createFakeUserData('DELETE_IN_TEST', 'TEST_EMAIL4', 'TEST_PASSWORD');
-    const uid5 = await createFakeUserData('DISCOVER_TEST', 'DISCOVER_TEST', 'TEST_PASSWORD')
+    const uid5 = await createFakeUserData('DISCOVER_TEST', 'DISCOVER_TEST', 'TEST_PASSWORD');
+
+    // entities for testing feed fanout on write
+    const uid6 = await createFakeUserData('TEST_FOLLOWER_6', 'TEST_EMAIL6', 'TEST_PASSWORD');
+    const uid7 = await createFakeUserData('TEST_FOLLOWER_7', 'TEST_EMAIL7', 'TEST_PASSWORD');
+    const uid8 = await createFakeUserData('TEST_INFLUENCER_8', 'TEST_EMAIL8', 'TEST_PASSWORD');
 
     const postId1 = await createFakePostData(uid1);
     const postId2 = await createFakePostData(uid2);
     const postId3 = await createFakePostData(uid3);
     const postId4 = await createFakePostData(uid4);
+    // for testing of private events
     const postId5 = await createFakePostData(uid3, true);
     console.log('post ids')
     console.log(postId1, postId2, postId3, postId4, postId5);
