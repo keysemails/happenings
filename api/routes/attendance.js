@@ -1,5 +1,9 @@
 const express = require('express');
 const AttendanceService = require('../queries/attendance');
+const { discoverFeedFanout } = require('../queries/feed');
+const { ACTIVITY_TYPES } = require('../util/constants');
+
+const asyncWrap = require('../middleware/wrap');
 
 const router = express.Router({mergeParams: true});
 
@@ -78,17 +82,20 @@ const _queryParamHelper = (req) => {
 }
 
 
-router.post('/', (req, res, next) => {
+router.post('/', asyncWrap(async (req, res, next) => {
   const { userId, postId } = req.body;
   const isCurrUser = (userId === req.user.user_id);
   if (isCurrUser) {
-    AttendanceService.attendEvent(userId, postId).then(result => {
-      res.status(201).send({message: `user ${userId} now attending post ${postId}`});
-    }).catch(err => next(err));
+    Promise.all([
+      AttendanceService.attendEvent(userId, postId),
+      discoverFeedFanout(userId, postId, ACTIVITY_TYPES.ATTEND)
+    ]).then(() => res.status(201).send(
+      {message: `user ${userId} now attending post ${postId}`}
+    ))
   } else {
     res.status(403).send('Forbidden');
   }
-});
+}));
 
 
 router.delete('/', (req, res, next) => {

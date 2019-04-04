@@ -1,6 +1,9 @@
 const express = require('express');
 const Stars = require('../queries/stars');
+const { discoverFeedFanout } = require('../queries/feed');
+const { ACTIVITY_TYPES } = require('../util/constants');
 
+const asyncWrap = require('../middleware/wrap');
 const router = express.Router({mergeParams: true});
 
 /**
@@ -9,33 +12,36 @@ const router = express.Router({mergeParams: true});
  */
 require('../middleware/params')(router);
 
- router.get('/:post_id/stars/', (req, res, next) => {
-   const postId = req.params['post_id'];
-   Stars.getPostStars(postId).then(result => {
-     res.status(200).send(result.rows)
-   }).catch(err => next(err));
- });
+router.get('/:post_id/stars/', asyncWrap(async (req, res, next) => {
+  const postId = req.post.id;
+  const result = await Stars.getPostStars(postId);
+  res.status(200).send(result.rows);
+}));
 
 
- router.get('/:post_id/stars/count', (req, res, next) => {
-  const postId = parseInt(req.params['post_id']);
-  Stars.getPostStarCount(postId).then(result => {
-    res.status(200).send(result.rows[0])
-  }).catch(err => next(err));
- });
+router.get('/:post_id/stars/count', asyncWrap(async (req, res, next) => {
+  const postId = req.post.id;
+  const result = await Stars.getPostStarCount(postId);
+  res.status(200).send(result.rows[0]);
+}));
+
+/**
+ * star a post
+ * body params:
+ *   user_id: the id of the user
+ */
+router.post('/:post_id/stars', asyncWrap(async (req, res, next) => {
+  const postId = req.post.id;
+  const userId = req.user.user_id;
+  Promise.all([
+    Stars.addPostStar(userId, postId),
+    discoverFeedFanout(userId, postId, ACTIVITY_TYPES.STAR)
+  ]).then(() => res.status(201).send({message: 'created star'}));
+}));
 
 
- router.post('/:post_id/stars/', (req, res) => {
-   const postId = parseInt(req.params['post_id']);
-   const userId = parseInt(req.query['user_id']);
-   Stars.addPostStar(userId, postId).then(result => {
-     res.status(201).send({message: 'created star'})
-   }).catch(err => next(err));
- });
-
-
- router.delete('/:post_id/stars/', (req, res) => {
-   const postId = parseInt(req.params['post_id']);
+ router.delete('/:post_id/stars/', (req, res, next) => {
+   const postId = req.post.id;
    const userId = parseInt(req.query['user_id']);
    Stars.deletePostStar(postId, userId).then(result => {
      res.status(200).send({message: 'star deleted'});

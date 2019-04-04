@@ -1,5 +1,7 @@
 const express = require('express');
 const Comments = require('../queries/comments');
+const { discoverFeedFanout } = require('../queries/feed');
+const { ACTIVITY_TYPES } = require('../util/constants');
 
 const asyncWrap = require('../middleware/wrap');
 
@@ -18,12 +20,20 @@ router.get('/:post_id/comments', asyncWrap(async (req, res, next) => {
   return res.status(200).send(result.rows);
 }));
 
-// TODO make this an async route that also does a discover feed fanout
+/**
+ * create a comment
+ * body params:
+ *   text: the comment text
+ */
 router.post('/:post_id/comments', asyncWrap(async (req, res, next) => {
   const postId = req.post.id;
-  const { user_id, text } = req.body;
-  const result = await Comments.addPostComment(postId, user_id, text);
-  return res.status(201).send({message: `created comment with id ${result}`});
+  const userId = req.user.user_id;
+  Promise.all([
+    Comments.addPostComment(postId, userId, req.body.text),
+    discoverFeedFanout(userId, postId, ACTIVITY_TYPES.COMMENT)
+  ]).then(result => res.status(201).send(
+    {message: `created comment with id ${result[0]}`}
+    ));
 }));
 
 

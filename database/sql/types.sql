@@ -1,6 +1,6 @@
 -- enumerated types
 
-create type happenings.activity_t as enum('LIKE', 'COMMENT', 'ATTEND');
+create type happenings.activity_t as enum('STAR', 'COMMENT', 'ATTEND');
 create type happenings.user_t as enum('PERSON', 'PLACE', 'THING');
 create type happenings.notification_t as enum(
 	'FOLLOWED_BY_USER', 'USER_ATTENDING', 'USER_COMMENTED', 'USER_STARRED',

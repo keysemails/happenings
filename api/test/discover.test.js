@@ -29,7 +29,7 @@ describe('activity post route integration test', () => {
         .set('Accept', 'application/json')
         .send({
           post_id: TEST_ID_OF_POST_TO_LIKE,
-          activity_type: 'LIKE'
+          activity_type: 'STAR'
         })
         .expect('Content-Type', /json/)
         .end((err, res) => {
@@ -43,7 +43,7 @@ describe('activity post route integration test', () => {
         .set('Accept', 'application/json')
         .send({
           post_id: TEST_ID_OF_POST_TO_LIKE,
-          activity_type: 'LIKE'
+          activity_type: 'STAR'
         })
         .expect('Content-Type', /json/)
         .end((err, res) => {

@@ -6,7 +6,6 @@ const pool = getPool();
  * to all the users followers
  */
 const mainFeedFanOut = (userId, postId) => {
-  console.log('fanning out to', userId, postId);
   return pool.query(
     'select happenings.main_feed_fanout($1, $2)',
     [userId, postId]
