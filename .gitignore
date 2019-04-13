@@ -1,0 +1,16 @@
+*/.idea
+.idea
+gen/
+.DS_Store
+xcuserdata/
+*.xcworkspace/
+GoogleService-Info.plist
+npm-debug.log
+bower_components/**
+**/node_modules/**
+.firebaserc
+firebase-debug.log
+functions/node_modules/**
+build/bundle.js
+api/test/coverage/**
+package-lock.json

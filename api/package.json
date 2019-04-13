@@ -1,0 +1,37 @@
+{
+  "name": "happenings-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_ENV=dev nodemon index.js",
+    "test": "NODE_ENV=test jest --coverage --forceExit --detectOpenHandles"
+  },
+  "jest": {
+    "verbose": true,
+    "modulePathIgnorePatterns": ["conf"],
+    "globalSetup": "./util/jest-setup.js",
+    "globalTeardown": "./util/jest-teardown.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^3.0.4",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.5.0",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "pg": "^7.8.2",
+    "pg-error-constants": "^1.0.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "jest": "^24.5.0",
+    "mocha": "^6.0.2",
+    "nodemon": "^1.18.10",
+    "supertest": "^4.0.2"
+  }
+}

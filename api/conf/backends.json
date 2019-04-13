@@ -1,0 +1,23 @@
+{
+    "prod": {
+        "user": "happenings",
+        "host": "localhost",
+        "database": "happenings",
+        "password": "chateau430",
+        "port": 5432
+    },
+    "dev": {
+        "user": "happenings",
+        "host": "localhost",
+        "database": "happenings",
+        "password": "chateau430",
+        "port": 5432
+    },
+    "test": {
+        "user": "postgres",
+        "host": "localhost",
+        "database": "happenings",
+        "password": "chateau430",
+        "port": 5678
+    }
+}
