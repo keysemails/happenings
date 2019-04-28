@@ -1,6 +1,22 @@
 # happenings
 TODO: brief explanation of file structure
 
+## Running the web app locally
+The web app to "run" is a webpack server that simply builds and compiles assets. The JS code uses a client side library to connect to firebase, which provides the data store and authentication service. Thus, internet is required to run the web app locally.
+
+### Requirements
+Node 11
+`brew install node` perhaps? You should see something like this eventually:
+```
+tgoodwin@sky:/mnt/happenings$ node -v
+v11.12.0
+```
+In the same directory as `package.json` (top level directory), run `npm install`.
+
+Then, run `npm start`, which is an npm script to boot webpack defined in the `package.json`. If compilation succeeds, you should see something like "app running on port 3000"
+
+Note: currently migrating off firebase to a hand-rolled API that wraps postgres. That code is under `happenings/api`, but it's currently not needed to run the webserver!
+
 ## DB "Tables" (nodes):
 The current design of our data layer is pretty arcane, as we're currently developing a social media (read: _highly relational_) data model against a NoSQL database (firebase realtime database). Get wrecked! Read more about this type of pain below. Builds character maybe?
 
